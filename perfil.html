@@ -14,24 +14,44 @@
 
     <!-- CABEÇALHO -->
     <header>
+
         <div class="header-container">
 
+            <!-- LOGO -->
             <a href="index.html" class="logo">
                 Entre Nós ♡
             </a>
 
+
+            <!-- MENU -->
             <nav>
-                <a href="index.html">Início</a>
-                <a href="index.html#explorar">Explorar</a>
-                <a href="index.html#categorias">Categorias</a>
-                <a href="index.html#posts">Posts</a>
+
+                <a href="index.html">
+                    Início
+                </a>
+
+                <a href="index.html#explorar">
+                    Explorar
+                </a>
+
+                <a href="index.html#categorias">
+                    Categorias
+                </a>
+
+                <a href="index.html#posts">
+                    Posts
+                </a>
+
             </nav>
 
-            <button class="btn btn-principal" id="botao-perfil">
+
+            <!-- MEU PERFIL -->
+            <a href="perfil.html" class="btn btn-principal">
                 Meu perfil
-            </button>
+            </a>
 
         </div>
+
     </header>
 
 
@@ -40,19 +60,30 @@
         <!-- PERFIL -->
         <section class="perfil-card">
 
-            <div class="perfil-avatar" id="avatar-perfil">
+            <!-- AVATAR -->
+            <div
+                class="perfil-avatar"
+                id="avatar-perfil"
+            >
                 🩷
             </div>
 
+
+            <!-- NOME -->
             <h1 id="nome-perfil">
                 Meu Perfil
             </h1>
 
+
+            <!-- BIO -->
             <p id="bio-perfil">
+
                 Conte um pouquinho sobre você ♡
+
             </p>
 
 
+            <!-- EDITAR -->
             <button
                 class="btn btn-secundario"
                 id="editar-perfil"
@@ -63,7 +94,8 @@
         </section>
 
 
-        <!-- ÁREA DE EDIÇÃO -->
+
+        <!-- EDITAR PERFIL -->
         <section
             class="criar-post"
             id="area-editar-perfil"
@@ -75,14 +107,19 @@
             </h2>
 
 
+            <!-- NOME -->
+
             <input
                 type="text"
                 id="input-nome"
                 placeholder="Seu nome ou apelido"
             >
 
+
             <br><br>
 
+
+            <!-- BIO -->
 
             <textarea
                 id="input-bio"
@@ -90,16 +127,38 @@
             ></textarea>
 
 
+            <br><br>
+
+
+            <!-- AVATAR E SALVAR -->
+
             <div class="post-opcoes">
 
                 <select id="input-avatar">
 
-                    <option value="🩷">🩷 Coração</option>
-                    <option value="🌸">🌸 Flor</option>
-                    <option value="🌙">🌙 Lua</option>
-                    <option value="💌">💌 Carta</option>
-                    <option value="🦋">🦋 Borboleta</option>
-                    <option value="✨">✨ Estrela</option>
+                    <option value="🩷">
+                        🩷 Coração
+                    </option>
+
+                    <option value="🌸">
+                        🌸 Flor
+                    </option>
+
+                    <option value="🌙">
+                        🌙 Lua
+                    </option>
+
+                    <option value="💌">
+                        💌 Carta
+                    </option>
+
+                    <option value="🦋">
+                        🦋 Borboleta
+                    </option>
+
+                    <option value="✨">
+                        ✨ Estrela
+                    </option>
 
                 </select>
 
@@ -116,19 +175,37 @@
         </section>
 
 
+
         <!-- MEUS POSTS -->
-        <section class="posts" id="meus-posts">
+
+        <section
+            class="posts"
+            id="meus-posts"
+        >
 
             <h2 class="titulo-secao">
                 Meus posts ♡
             </h2>
 
-            <!-- Os posts serão adicionados pelo JavaScript -->
+
+            <!--
+                Os posts criados pela usuária
+                aparecerão aqui futuramente
+                pelo JavaScript.
+            -->
+
+            <div id="lista-meus-posts">
+
+            </div>
 
         </section>
 
+
     </main>
 
+
+
+    <!-- RODAPÉ -->
 
     <footer>
 
@@ -141,6 +218,9 @@
 
     </footer>
 
+
+
+    <!-- JAVASCRIPT -->
 
     <script src="script.js"></script>
 
