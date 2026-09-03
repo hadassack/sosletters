@@ -1,10 +1,9 @@
 /* =========================================================
    ENTRE NÓS — APP.JS
-   Funcionalidades principais da página inicial
+   Funcionalidades principais
    ========================================================= */
 
 "use strict";
-
 
 /* =========================================================
    CONFIGURAÇÕES
@@ -14,6 +13,7 @@ const STORAGE_KEYS = {
     savedPosts: "entreNos_savedPosts",
     reactions: "entreNos_reactions",
     hiddenPosts: "entreNos_hiddenPosts",
+    userPosts: "entreNos_userPosts",
     theme: "entreNos_theme"
 };
 
@@ -44,12 +44,13 @@ function setStorage(key, value) {
         localStorage.setItem(key, JSON.stringify(value));
 
     } catch (error) {
-        console.warn("Erro ao salvar no localStorage:", error);
+        console.warn("Erro ao salvar localStorage:", error);
     }
 }
 
 
 function showToast(message, icon = "♥") {
+
     const toast = document.getElementById("toast");
     const toastMessage = document.getElementById("toast-message");
     const toastIcon = document.querySelector(".toast-icon");
@@ -100,13 +101,11 @@ let hiddenPosts = getStorage(
 
 function updateSaveButtons() {
 
-    const buttons =
-        document.querySelectorAll(".save-button");
+    document.querySelectorAll(".save-button").forEach(button => {
 
-    buttons.forEach(button => {
-
-        const postId =
-            String(button.dataset.postId);
+        const postId = String(
+            button.dataset.postId
+        );
 
         if (savedPosts.includes(postId)) {
 
@@ -119,8 +118,7 @@ function updateSaveButtons() {
                 "Remover dos salvos"
             );
 
-            button.title =
-                "Remover dos salvos";
+            button.title = "Remover dos salvos";
 
         } else {
 
@@ -133,8 +131,7 @@ function updateSaveButtons() {
                 "Salvar publicação"
             );
 
-            button.title =
-                "Salvar publicação";
+            button.title = "Salvar publicação";
         }
 
     });
@@ -145,26 +142,19 @@ function toggleSave(postId) {
 
     postId = String(postId);
 
-    const buttons =
-        document.querySelectorAll(
-            `.save-button[data-post-id="${postId}"]`
-        );
+    const buttons = document.querySelectorAll(
+        `.save-button[data-post-id="${postId}"]`
+    );
 
-    const wasSaved =
+    const alreadySaved =
         savedPosts.includes(postId);
 
 
-    /* =====================================================
-       REMOVER DOS SALVOS
-       ===================================================== */
+    if (alreadySaved) {
 
-    if (wasSaved) {
-
-        savedPosts =
-            savedPosts.filter(
-                id => id !== postId
-            );
-
+        savedPosts = savedPosts.filter(
+            id => id !== postId
+        );
 
         buttons.forEach(button => {
 
@@ -177,39 +167,27 @@ function toggleSave(postId) {
 
             button.animate(
                 [
-                    {
-                        transform: "scale(1)"
-                    },
-                    {
-                        transform: "scale(.82)"
-                    },
-                    {
-                        transform: "scale(1)"
-                    }
+                    { transform: "scale(1)" },
+                    { transform: "scale(.82)" },
+                    { transform: "scale(1)" }
                 ],
                 {
                     duration: 280,
-                    easing: "cubic-bezier(.34,1.56,.64,1)"
+                    easing:
+                        "cubic-bezier(.34,1.56,.64,1)"
                 }
             );
 
         });
-
 
         showToast(
             "Removido dos salvos",
             "♡"
         );
 
-
-    /* =====================================================
-       SALVAR
-       ===================================================== */
-
     } else {
 
         savedPosts.push(postId);
-
 
         buttons.forEach(button => {
 
@@ -220,49 +198,34 @@ function toggleSave(postId) {
 
             button.textContent = "♥";
 
-
             button.animate(
                 [
-                    {
-                        transform: "scale(1)"
-                    },
-                    {
-                        transform: "scale(1.35)"
-                    },
-                    {
-                        transform: "scale(.92)"
-                    },
-                    {
-                        transform: "scale(1.08)"
-                    },
-                    {
-                        transform: "scale(1)"
-                    }
+                    { transform: "scale(1)" },
+                    { transform: "scale(1.35)" },
+                    { transform: "scale(.92)" },
+                    { transform: "scale(1.08)" },
+                    { transform: "scale(1)" }
                 ],
                 {
                     duration: 500,
-                    easing: "cubic-bezier(.34,1.56,.64,1)"
+                    easing:
+                        "cubic-bezier(.34,1.56,.64,1)"
                 }
             );
 
-
             setTimeout(() => {
-
                 button.classList.remove(
                     "save-pop"
                 );
-
             }, 550);
 
         });
-
 
         showToast(
             "Publicação salva ♥",
             "♥"
         );
     }
-
 
     setStorage(
         STORAGE_KEYS.savedPosts,
@@ -279,139 +242,99 @@ function toggleSave(postId) {
 
 function initializeReactionCounts() {
 
-    document
-        .querySelectorAll(".reaction-count")
-        .forEach(count => {
+    document.querySelectorAll(
+        ".reaction-count"
+    ).forEach(count => {
 
-            if (!count.dataset.originalCount) {
+        if (!count.dataset.originalCount) {
 
-                count.dataset.originalCount =
-                    count.textContent.trim();
+            count.dataset.originalCount =
+                count.textContent.trim() || "0";
+        }
 
-            }
-
-        });
+    });
 }
 
 
-/* =========================================================
-   CORAÇÃO FLUTUANTE
-   ========================================================= */
-
 function createFloatingHeart(button) {
 
-    if (!button) {
+    const heart = document.createElement("span");
+
+    heart.className = "floating-heart";
+    heart.textContent = "♥";
+
+    heart.style.position = "absolute";
+    heart.style.pointerEvents = "none";
+    heart.style.fontSize = "18px";
+    heart.style.left = "50%";
+    heart.style.top = "50%";
+    heart.style.zIndex = "20";
+
+    const parent = button.parentElement;
+
+    if (!parent) {
         return;
     }
 
+    if (
+        getComputedStyle(parent).position ===
+        "static"
+    ) {
+        parent.style.position = "relative";
+    }
 
-    const heart =
-        document.createElement("span");
+    parent.appendChild(heart);
 
-    heart.className =
-        "floating-heart";
-
-    heart.textContent = "♥";
-
-
-    const rect =
-        button.getBoundingClientRect();
-
-
-    heart.style.position = "fixed";
-
-    heart.style.left =
-        `${rect.left + rect.width / 2}px`;
-
-    heart.style.top =
-        `${rect.top + rect.height / 2}px`;
-
-    heart.style.pointerEvents =
-        "none";
-
-    heart.style.zIndex =
-        "9999";
-
-    heart.style.fontSize =
-        "20px";
-
-
-    document.body.appendChild(
-        heart
-    );
-
-
-    const animation =
-        heart.animate(
-            [
-                {
-                    transform:
-                        "translate(-50%, -50%) scale(.6)",
-                    opacity: 0
-                },
-                {
-                    transform:
-                        "translate(-50%, -75%) scale(1)",
-                    opacity: 1
-                },
-                {
-                    transform:
-                        "translate(-50%, -150%) scale(1.25)",
-                    opacity: 0
-                }
-            ],
+    heart.animate(
+        [
             {
-                duration: 700,
-                easing:
-                    "cubic-bezier(.2,.8,.2,1)"
+                transform:
+                    "translate(-50%, -20%) scale(.7)",
+                opacity: 1
+            },
+            {
+                transform:
+                    "translate(-50%, -65px) scale(1.2)",
+                opacity: 0
             }
-        );
-
-
-    animation.onfinish = () => {
+        ],
+        {
+            duration: 850,
+            easing: "ease-out"
+        }
+    ).onfinish = () => {
         heart.remove();
     };
 }
 
-
-/* =========================================================
-   BOTÃO DE REAÇÃO
-   ========================================================= */
 
 function toggleReaction(button) {
 
     const card =
         button.closest(".post-card");
 
-
     if (!card) {
         return;
     }
 
-
     const postId =
         String(card.dataset.postId);
-
 
     const icon =
         button.querySelector(
             "span:first-child"
         );
 
-
     const count =
         button.querySelector(
             ".reaction-count"
         );
 
-
     const wasReacted =
         reactions[postId] === true;
 
-
     reactions[postId] =
         !wasReacted;
-
 
     setStorage(
         STORAGE_KEYS.reactions,
@@ -419,16 +342,11 @@ function toggleReaction(button) {
     );
 
 
-    const originalCount =
-        parseInt(
-            count?.dataset.originalCount || "0",
-            10
-        );
+    const originalCount = parseInt(
+        count?.dataset.originalCount || "0",
+        10
+    );
 
-
-    /* =====================================================
-       APOIAR
-       ===================================================== */
 
     if (!wasReacted) {
 
@@ -436,40 +354,23 @@ function toggleReaction(button) {
             "reacted"
         );
 
-
         if (icon) {
             icon.textContent = "❤️";
         }
-
 
         if (count) {
             count.textContent =
                 originalCount + 1;
         }
 
-
-        /* Animação principal */
-
         button.animate(
             [
-                {
-                    transform: "scale(1)"
-                },
-                {
-                    transform: "scale(.88)"
-                },
-                {
-                    transform: "scale(1.35)"
-                },
-                {
-                    transform: "scale(.95)"
-                },
-                {
-                    transform: "scale(1.08)"
-                },
-                {
-                    transform: "scale(1)"
-                }
+                { transform: "scale(1)" },
+                { transform: "scale(.88)" },
+                { transform: "scale(1.3)" },
+                { transform: "scale(.95)" },
+                { transform: "scale(1.08)" },
+                { transform: "scale(1)" }
             ],
             {
                 duration: 600,
@@ -478,23 +379,12 @@ function toggleReaction(button) {
             }
         );
 
-
-        /* Pequenos corações */
-
-        createFloatingHeart(
-            button
-        );
-
+        createFloatingHeart(button);
 
         showToast(
             "Você apoiou essa história ❤️",
             "♥"
         );
-
-
-    /* =====================================================
-       REMOVER APOIO
-       ===================================================== */
 
     } else {
 
@@ -502,36 +392,26 @@ function toggleReaction(button) {
             "reacted"
         );
 
-
         if (icon) {
             icon.textContent = "♥";
         }
-
 
         if (count) {
             count.textContent =
                 originalCount;
         }
 
-
         button.animate(
             [
-                {
-                    transform: "scale(1)"
-                },
-                {
-                    transform: "scale(.85)"
-                },
-                {
-                    transform: "scale(1)"
-                }
+                { transform: "scale(1)" },
+                { transform: "scale(.85)" },
+                { transform: "scale(1)" }
             ],
             {
                 duration: 300,
                 easing: "ease-out"
             }
         );
-
 
         showToast(
             "Apoio removido",
@@ -550,26 +430,16 @@ async function sharePost(postId) {
     const url =
         window.location.origin +
         window.location.pathname
-            .replace(
-                "index.html",
-                "post.html"
-            ) +
+            .replace("index.html", "post.html") +
         "?id=" +
         encodeURIComponent(postId);
 
-
     const shareData = {
-
-        title:
-            "Entre Nós ♡",
-
+        title: "Entre Nós ♡",
         text:
             "Olha essa história no Entre Nós.",
-
-        url:
-            url
+        url: url
     };
-
 
     try {
 
@@ -587,32 +457,29 @@ async function sharePost(postId) {
             return;
         }
 
-
-        await navigator.clipboard
-            .writeText(url);
-
-
-        showToast(
-            "Link copiado para a área de transferência",
-            "🔗"
+        await navigator.clipboard.writeText(
+            url
         );
 
+        showToast(
+            "Link copiado ♥",
+            "🔗"
+        );
 
     } catch (error) {
 
         if (
-            error.name ===
-            "AbortError"
+            error &&
+            error.name === "AbortError"
         ) {
             return;
         }
 
-
         try {
 
-            await navigator.clipboard
-                .writeText(url);
-
+            await navigator.clipboard.writeText(
+                url
+            );
 
             showToast(
                 "Link copiado ♥",
@@ -631,45 +498,38 @@ async function sharePost(postId) {
 
 
 /* =========================================================
-   MODAL DE OPÇÕES
+   MODAL
    ========================================================= */
-
-const modal =
-    document.getElementById(
-        "post-options-modal"
-    );
-
-
-const closeModalButton =
-    document.getElementById(
-        "close-post-modal"
-    );
-
 
 let selectedPostId = null;
 
 
+function getPostModal() {
+    return document.getElementById(
+        "post-options-modal"
+    );
+}
+
+
 function openPostModal(postId) {
+
+    const modal = getPostModal();
 
     if (!modal) {
         return;
     }
 
-
     selectedPostId =
         String(postId);
-
 
     modal.classList.add(
         "active"
     );
 
-
     modal.setAttribute(
         "aria-hidden",
         "false"
     );
-
 
     document.body.style.overflow =
         "hidden";
@@ -678,70 +538,26 @@ function openPostModal(postId) {
 
 function closePostModal() {
 
+    const modal = getPostModal();
+
     if (!modal) {
         return;
     }
 
-
     modal.classList.remove(
         "active"
     );
-
 
     modal.setAttribute(
         "aria-hidden",
         "true"
     );
 
-
     document.body.style.overflow =
         "";
 
-
-    selectedPostId =
-        null;
+    selectedPostId = null;
 }
-
-
-if (closeModalButton) {
-
-    closeModalButton.addEventListener(
-        "click",
-        closePostModal
-    );
-}
-
-
-if (modal) {
-
-    modal.addEventListener(
-        "click",
-        event => {
-
-            if (
-                event.target === modal
-            ) {
-                closePostModal();
-            }
-
-        }
-    );
-}
-
-
-document.addEventListener(
-    "keydown",
-    event => {
-
-        if (
-            event.key ===
-            "Escape"
-        ) {
-            closePostModal();
-        }
-
-    }
-);
 
 
 /* =========================================================
@@ -750,59 +566,44 @@ document.addEventListener(
 
 function hidePost(postId) {
 
-    postId =
-        String(postId);
+    postId = String(postId);
 
-
-    if (
-        !hiddenPosts.includes(
-            postId
-        )
-    ) {
+    if (!hiddenPosts.includes(postId)) {
 
         hiddenPosts.push(
             postId
         );
     }
 
-
     setStorage(
         STORAGE_KEYS.hiddenPosts,
         hiddenPosts
     );
-
 
     const card =
         document.querySelector(
             `.post-card[data-post-id="${postId}"]`
         );
 
-
     if (card) {
 
         card.style.transition =
-            "0.3s ease";
+            "all .3s ease";
 
-        card.style.opacity =
-            "0";
+        card.style.opacity = "0";
 
         card.style.transform =
             "translateY(-10px)";
 
-
         setTimeout(() => {
-
             card.remove();
-
         }, 300);
     }
-
 
     showToast(
         "Publicação ocultada",
         "♡"
     );
-
 
     closePostModal();
 }
@@ -819,7 +620,6 @@ function reportPost() {
         "⚠"
     );
 
-
     closePostModal();
 }
 
@@ -833,25 +633,20 @@ async function copyPostLink(postId) {
     const url =
         window.location.origin +
         window.location.pathname
-            .replace(
-                "index.html",
-                "post.html"
-            ) +
+            .replace("index.html", "post.html") +
         "?id=" +
         encodeURIComponent(postId);
 
-
     try {
 
-        await navigator.clipboard
-            .writeText(url);
-
+        await navigator.clipboard.writeText(
+            url
+        );
 
         showToast(
             "Link copiado ♥",
             "🔗"
         );
-
 
     } catch {
 
@@ -861,126 +656,100 @@ async function copyPostLink(postId) {
         );
     }
 
-
     closePostModal();
 }
 
 
 /* =========================================================
-   MENU DE OPÇÕES
+   MENUS DOS POSTS
    ========================================================= */
 
 function setupPostMenus() {
 
-    document
-        .querySelectorAll(
-            ".post-menu-button"
-        )
-        .forEach(button => {
+    document.querySelectorAll(
+        ".post-menu-button"
+    ).forEach(button => {
 
-            button.addEventListener(
-                "click",
-                event => {
+        button.addEventListener(
+            "click",
+            event => {
 
-                    event.preventDefault();
+                event.preventDefault();
+                event.stopPropagation();
 
-                    event.stopPropagation();
-
-
-                    const card =
-                        button.closest(
-                            ".post-card"
-                        );
-
-
-                    if (!card) {
-                        return;
-                    }
-
-
-                    openPostModal(
-                        card.dataset.postId
+                const card =
+                    button.closest(
+                        ".post-card"
                     );
 
+                if (!card) {
+                    return;
                 }
-            );
 
-        });
-
-
-    document
-        .querySelectorAll(
-            ".modal-option"
-        )
-        .forEach(option => {
-
-            option.addEventListener(
-                "click",
-                () => {
-
-                    if (!selectedPostId) {
-                        return;
-                    }
+                openPostModal(
+                    card.dataset.postId
+                );
+            }
+        );
+    });
 
 
-                    const text =
-                        option.textContent
-                            .toLowerCase();
+    document.querySelectorAll(
+        ".modal-option"
+    ).forEach(option => {
 
+        option.addEventListener(
+            "click",
+            () => {
 
-                    if (
-                        text.includes(
-                            "salvar"
-                        )
-                    ) {
-
-                        toggleSave(
-                            selectedPostId
-                        );
-
-                        closePostModal();
-
-
-                    } else if (
-                        text.includes(
-                            "copiar"
-                        )
-                    ) {
-
-                        copyPostLink(
-                            selectedPostId
-                        );
-
-
-                    } else if (
-                        text.includes(
-                            "ocultar"
-                        )
-                    ) {
-
-                        hidePost(
-                            selectedPostId
-                        );
-
-
-                    } else if (
-                        text.includes(
-                            "denunciar"
-                        )
-                    ) {
-
-                        reportPost();
-                    }
-
+                if (!selectedPostId) {
+                    return;
                 }
-            );
 
-        });
+                const text =
+                    option.textContent
+                        .toLowerCase();
+
+                if (
+                    text.includes("salvar")
+                ) {
+
+                    toggleSave(
+                        selectedPostId
+                    );
+
+                    closePostModal();
+
+                } else if (
+                    text.includes("copiar")
+                ) {
+
+                    copyPostLink(
+                        selectedPostId
+                    );
+
+                } else if (
+                    text.includes("ocultar")
+                ) {
+
+                    hidePost(
+                        selectedPostId
+                    );
+
+                } else if (
+                    text.includes("denunciar")
+                ) {
+
+                    reportPost();
+                }
+            }
+        );
+    });
 }
 
 
 /* =========================================================
-   FILTRO POR CATEGORIA
+   FILTROS DE CATEGORIA
    ========================================================= */
 
 function setupCategoryFilters() {
@@ -989,13 +758,6 @@ function setupCategoryFilters() {
         document.querySelectorAll(
             ".category-chip"
         );
-
-
-    const posts =
-        document.querySelectorAll(
-            ".post-card"
-        );
-
 
     chips.forEach(chip => {
 
@@ -1006,29 +768,27 @@ function setupCategoryFilters() {
                 const category =
                     chip.dataset.category;
 
-
                 chips.forEach(item => {
-
                     item.classList.remove(
                         "active"
                     );
-
                 });
-
 
                 chip.classList.add(
                     "active"
                 );
 
+                const posts =
+                    document.querySelectorAll(
+                        ".post-card"
+                    );
 
                 let visiblePosts = 0;
-
 
                 posts.forEach(post => {
 
                     const postCategory =
                         post.dataset.category;
-
 
                     if (
                         category === "Tudo" ||
@@ -1045,11 +805,19 @@ function setupCategoryFilters() {
                         post.style.display =
                             "none";
                     }
-
                 });
 
 
                 if (
+                    visiblePosts === 0
+                ) {
+
+                    showToast(
+                        "Ainda não há histórias nessa categoria",
+                        "♡"
+                    );
+
+                } else if (
                     category === "Tudo"
                 ) {
 
@@ -1065,21 +833,8 @@ function setupCategoryFilters() {
                         "♥"
                     );
                 }
-
-
-                if (
-                    visiblePosts === 0
-                ) {
-
-                    showToast(
-                        "Ainda não há histórias nessa categoria",
-                        "♡"
-                    );
-                }
-
             }
         );
-
     });
 }
 
@@ -1095,19 +850,16 @@ function setupFeedFilters() {
             ".filter-button"
         );
 
-
     const feed =
         document.querySelector(
             ".feed-section"
         );
 
-
     if (!feed) {
         return;
     }
 
-
-    const cards =
+    let cards =
         Array.from(
             feed.querySelectorAll(
                 ".post-card"
@@ -1122,18 +874,14 @@ function setupFeedFilters() {
             () => {
 
                 filters.forEach(item => {
-
                     item.classList.remove(
                         "active"
                     );
-
                 });
-
 
                 filter.classList.add(
                     "active"
                 );
-
 
                 const type =
                     filter.dataset.filter;
@@ -1155,7 +903,6 @@ function setupFeedFilters() {
                                     10
                                 );
 
-
                             const bCount =
                                 parseInt(
                                     b.querySelector(
@@ -1165,7 +912,6 @@ function setupFeedFilters() {
                                     10
                                 );
 
-
                             return (
                                 bCount -
                                 aCount
@@ -1173,7 +919,6 @@ function setupFeedFilters() {
                         }
                     );
 
-
                     cards.forEach(card => {
 
                         feed.insertBefore(
@@ -1182,44 +927,35 @@ function setupFeedFilters() {
                                 ".load-more"
                             )
                         );
-
                     });
-
 
                     showToast(
                         "Histórias mais apoiadas primeiro",
                         "♥"
                     );
 
-
                 } else {
 
                     cards.sort(
                         (a, b) => {
 
-                            const idA =
+                            const aId =
                                 parseInt(
                                     a.dataset.postId ||
                                     "0",
                                     10
                                 );
 
-
-                            const idB =
+                            const bId =
                                 parseInt(
                                     b.dataset.postId ||
                                     "0",
                                     10
                                 );
 
-
-                            return (
-                                idA -
-                                idB
-                            );
+                            return bId - aId;
                         }
                     );
-
 
                     cards.forEach(card => {
 
@@ -1229,19 +965,15 @@ function setupFeedFilters() {
                                 ".load-more"
                             )
                         );
-
                     });
-
 
                     showToast(
                         "Histórias mais recentes primeiro",
                         "♡"
                     );
                 }
-
             }
         );
-
     });
 }
 
@@ -1257,17 +989,14 @@ function setupSearch() {
             "search-form"
         );
 
-
     const input =
         document.getElementById(
             "search-input"
         );
 
-
     if (!form || !input) {
         return;
     }
-
 
     form.addEventListener(
         "submit",
@@ -1275,12 +1004,10 @@ function setupSearch() {
 
             event.preventDefault();
 
-
             const query =
                 input.value
                     .trim()
                     .toLowerCase();
-
 
             if (!query) {
 
@@ -1300,9 +1027,7 @@ function setupSearch() {
                     ".post-card"
                 );
 
-
             let found = 0;
-
 
             posts.forEach(post => {
 
@@ -1310,24 +1035,14 @@ function setupSearch() {
                     post.textContent
                         .toLowerCase();
 
-
                 if (
-                    content.includes(
-                        query
-                    )
+                    content.includes(query)
                 ) {
 
                     post.style.display =
                         "";
 
                     found++;
-
-
-                    post.scrollIntoView({
-                        behavior: "smooth",
-                        block: "center"
-                    });
-
 
                     post.animate(
                         [
@@ -1349,13 +1064,11 @@ function setupSearch() {
                         }
                     );
 
-
                 } else {
 
                     post.style.display =
                         "none";
                 }
-
             });
 
 
@@ -1366,6 +1079,19 @@ function setupSearch() {
                     "🔍"
                 );
 
+                const first =
+                    document.querySelector(
+                        '.post-card:not([style*="display: none"])'
+                    );
+
+                if (first) {
+
+                    first.scrollIntoView({
+                        behavior: "smooth",
+                        block: "center"
+                    });
+                }
+
             } else {
 
                 showToast(
@@ -1373,43 +1099,33 @@ function setupSearch() {
                     "♡"
                 );
             }
-
         }
     );
 }
 
 
 /* =========================================================
-   COMPARTILHAMENTO DOS POSTS
+   COMPARTILHAR
    ========================================================= */
 
 function setupShareButtons() {
 
-    document
-        .querySelectorAll(
-            ".share-button"
-        )
-        .forEach(button => {
+    document.querySelectorAll(
+        ".share-button"
+    ).forEach(button => {
 
-            button.addEventListener(
-                "click",
-                event => {
+        button.addEventListener(
+            "click",
+            event => {
 
-                    event.preventDefault();
+                event.preventDefault();
 
-
-                    const postId =
-                        button.dataset.postId;
-
-
-                    sharePost(
-                        postId
-                    );
-
-                }
-            );
-
-        });
+                sharePost(
+                    button.dataset.postId
+                );
+            }
+        );
+    });
 }
 
 
@@ -1419,33 +1135,23 @@ function setupShareButtons() {
 
 function setupSaveButtons() {
 
-    document
-        .querySelectorAll(
-            ".save-button"
-        )
-        .forEach(button => {
+    document.querySelectorAll(
+        ".save-button"
+    ).forEach(button => {
 
-            button.addEventListener(
-                "click",
-                event => {
+        button.addEventListener(
+            "click",
+            event => {
 
-                    event.preventDefault();
+                event.preventDefault();
+                event.stopPropagation();
 
-                    event.stopPropagation();
-
-
-                    const postId =
-                        button.dataset.postId;
-
-
-                    toggleSave(
-                        postId
-                    );
-
-                }
-            );
-
-        });
+                toggleSave(
+                    button.dataset.postId
+                );
+            }
+        );
+    });
 }
 
 
@@ -1455,93 +1161,58 @@ function setupSaveButtons() {
 
 function setupReactionButtons() {
 
-    document
-        .querySelectorAll(
-            ".reaction-button"
-        )
-        .forEach(button => {
+    document.querySelectorAll(
+        ".reaction-button"
+    ).forEach(button => {
 
-            button.addEventListener(
-                "click",
-                event => {
+        button.addEventListener(
+            "click",
+            event => {
 
-                    event.preventDefault();
+                event.preventDefault();
 
-
-                    toggleReaction(
-                        button
-                    );
-
-                }
-            );
-
-        });
+                toggleReaction(
+                    button
+                );
+            }
+        );
+    });
 }
 
 
 /* =========================================================
-   BOTÕES DE COMENTÁRIOS
+   COMENTÁRIOS
    ========================================================= */
 
 function setupCommentButtons() {
 
-    document
-        .querySelectorAll(
-            'a.post-action[href*="#comentarios"]'
-        )
-        .forEach(link => {
+    document.querySelectorAll(
+        ".comment-button"
+    ).forEach(button => {
 
-            link.addEventListener(
-                "click",
-                event => {
+        button.addEventListener(
+            "click",
+            event => {
 
-                    event.preventDefault();
+                event.preventDefault();
 
-
-                    link.animate(
-                        [
-                            {
-                                transform:
-                                    "scale(1)"
-                            },
-                            {
-                                transform:
-                                    "scale(.88)"
-                            },
-                            {
-                                transform:
-                                    "scale(1.08)"
-                            },
-                            {
-                                transform:
-                                    "scale(1)"
-                            }
-                        ],
-                        {
-                            duration: 300,
-                            easing:
-                                "cubic-bezier(.34,1.56,.64,1)"
-                        }
+                const card =
+                    button.closest(
+                        ".post-card"
                     );
 
-
-                    const href =
-                        link.getAttribute(
-                            "href"
-                        );
-
-
-                    setTimeout(() => {
-
-                        window.location.href =
-                            href;
-
-                    }, 220);
-
+                if (!card) {
+                    return;
                 }
-            );
 
-        });
+                const postId =
+                    card.dataset.postId;
+
+                window.location.href =
+                    `post.html?id=${encodeURIComponent(postId)}#comentarios`;
+            }
+        );
+    });
 }
 
 
@@ -1556,11 +1227,9 @@ function setupLoadMore() {
             "load-more-posts"
         );
 
-
     if (!button) {
         return;
     }
-
 
     button.addEventListener(
         "click",
@@ -1571,67 +1240,24 @@ function setupLoadMore() {
                 "♥"
             );
 
-
             button.animate(
                 [
                     {
-                        transform:
-                            "scale(1)"
+                        transform: "scale(1)"
                     },
                     {
-                        transform:
-                            "scale(.97)"
+                        transform: "scale(.97)"
                     },
                     {
-                        transform:
-                            "scale(1)"
+                        transform: "scale(1)"
                     }
                 ],
                 {
                     duration: 250
                 }
             );
-
         }
     );
-}
-
-
-/* =========================================================
-   LINKS DE CATEGORIA
-   ========================================================= */
-
-function setupCategoryLinks() {
-
-    document
-        .querySelectorAll(
-            ".sidebar-category, .sidebar-see-more"
-        )
-        .forEach(link => {
-
-            link.addEventListener(
-                "click",
-                () => {
-
-                    const href =
-                        link.getAttribute(
-                            "href"
-                        );
-
-
-                    if (
-                        href &&
-                        href.includes(
-                            "explorar.html"
-                        )
-                    ) {
-                        return;
-                    }
-
-                }
-            );
-
-        });
 }
 
 
@@ -1641,21 +1267,17 @@ function setupCategoryLinks() {
 
 function applyHiddenPosts() {
 
-    hiddenPosts.forEach(
-        postId => {
+    hiddenPosts.forEach(postId => {
 
-            const card =
-                document.querySelector(
-                    `.post-card[data-post-id="${postId}"]`
-                );
+        const card =
+            document.querySelector(
+                `.post-card[data-post-id="${postId}"]`
+            );
 
-
-            if (card) {
-                card.remove();
-            }
-
+        if (card) {
+            card.remove();
         }
-    );
+    });
 }
 
 
@@ -1667,74 +1289,61 @@ function restoreReactions() {
 
     initializeReactionCounts();
 
+    document.querySelectorAll(
+        ".reaction-button"
+    ).forEach(button => {
 
-    document
-        .querySelectorAll(
-            ".reaction-button"
-        )
-        .forEach(button => {
+        const card =
+            button.closest(
+                ".post-card"
+            );
 
-            const card =
-                button.closest(
-                    ".post-card"
+        if (!card) {
+            return;
+        }
+
+        const postId =
+            String(
+                card.dataset.postId
+            );
+
+        if (
+            reactions[postId]
+        ) {
+
+            button.classList.add(
+                "reacted"
+            );
+
+            const icon =
+                button.querySelector(
+                    "span:first-child"
                 );
 
+            const count =
+                button.querySelector(
+                    ".reaction-count"
+                );
 
-            if (!card) {
-                return;
+            if (icon) {
+                icon.textContent =
+                    "❤️";
             }
 
+            if (count) {
 
-            const postId =
-                String(
-                    card.dataset.postId
-                );
-
-
-            if (
-                reactions[postId]
-            ) {
-
-                button.classList.add(
-                    "reacted"
-                );
-
-
-                const icon =
-                    button.querySelector(
-                        "span:first-child"
+                const originalCount =
+                    parseInt(
+                        count.dataset.originalCount ||
+                        "0",
+                        10
                     );
 
-
-                const count =
-                    button.querySelector(
-                        ".reaction-count"
-                    );
-
-
-                if (icon) {
-                    icon.textContent =
-                        "❤️";
-                }
-
-
-                if (count) {
-
-                    const originalCount =
-                        parseInt(
-                            count.dataset.originalCount ||
-                            "0",
-                            10
-                        );
-
-
-                    count.textContent =
-                        originalCount + 1;
-                }
-
+                count.textContent =
+                    originalCount + 1;
             }
-
-        });
+        }
+    });
 }
 
 
@@ -1744,82 +1353,60 @@ function restoreReactions() {
 
 function setupPostLinks() {
 
-    document
-        .querySelectorAll(
-            ".post-content"
-        )
-        .forEach(link => {
+    document.querySelectorAll(
+        ".post-card"
+    ).forEach(card => {
 
-            link.addEventListener(
-                "click",
-                event => {
+        const postId =
+            card.dataset.postId;
 
-                    const href =
-                        link.getAttribute(
-                            "href"
-                        );
+        if (!postId) {
+            return;
+        }
 
+        card.querySelectorAll(
+            ".post-title, .post-avatar, .post-author"
+        ).forEach(link => {
 
-                    if (!href) {
-
-                        event.preventDefault();
-
-
-                        showToast(
-                            "Abrindo história...",
-                            "♡"
-                        );
-                    }
-
-                }
-            );
-
+            if (
+                link.tagName === "A"
+            ) {
+                link.href =
+                    `post.html?id=${encodeURIComponent(postId)}`;
+            }
         });
+    });
 }
 
 
 /* =========================================================
-   ANIMAÇÃO DOS CORAÇÕES
+   CORAÇÕES NO HOVER
    ========================================================= */
 
 function setupHeartHover() {
 
-    document
-        .querySelectorAll(
-            ".logo-heart, .heart-decoration, .cta-heart"
-        )
-        .forEach(element => {
+    document.querySelectorAll(
+        ".reaction-button, .save-button"
+    ).forEach(button => {
 
-            element.addEventListener(
-                "mouseenter",
-                () => {
+        button.addEventListener(
+            "mouseenter",
+            () => {
+                button.classList.add(
+                    "heart-hover"
+                );
+            }
+        );
 
-                    element.animate(
-                        [
-                            {
-                                transform:
-                                    "scale(1)"
-                            },
-                            {
-                                transform:
-                                    "scale(1.12)"
-                            },
-                            {
-                                transform:
-                                    "scale(1)"
-                            }
-                        ],
-                        {
-                            duration: 450,
-                            easing:
-                                "ease-out"
-                        }
-                    );
-
-                }
-            );
-
-        });
+        button.addEventListener(
+            "mouseleave",
+            () => {
+                button.classList.remove(
+                    "heart-hover"
+                );
+            }
+        );
+    });
 }
 
 
@@ -1827,36 +1414,38 @@ function setupHeartHover() {
    POSTS CRIADOS PELO USUÁRIO
    ========================================================= */
 
-function getUserPosts() {
+function escapeUserPostHTML(text) {
 
-    try {
-
-        return JSON.parse(
-            localStorage.getItem(
-                "entreNos_userPosts"
-            ) || "[]"
+    return String(text || "")
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
         );
-
-    } catch {
-
-        return [];
-    }
 }
 
 
-function escapeUserPostHTML(text) {
+function getUserPosts() {
 
-    const div =
-        document.createElement(
-            "div"
-        );
-
-
-    div.textContent =
-        text || "";
-
-
-    return div.innerHTML;
+    return getStorage(
+        STORAGE_KEYS.userPosts,
+        []
+    );
 }
 
 
@@ -1867,10 +1456,31 @@ function renderUserPosts() {
             ".feed-section"
         );
 
-
     if (!feed) {
         return;
     }
+
+    const userPosts =
+        getUserPosts();
+
+    if (!userPosts.length) {
+        return;
+    }
+
+
+    const existingIds =
+        new Set(
+            Array.from(
+                feed.querySelectorAll(
+                    ".post-card"
+                )
+            ).map(
+                card =>
+                    String(
+                        card.dataset.postId
+                    )
+            )
+        );
 
 
     const loadMore =
@@ -1879,102 +1489,85 @@ function renderUserPosts() {
         );
 
 
-    if (!loadMore) {
-        return;
-    }
-
-
-    const userPosts =
-        getUserPosts();
-
-
-    if (!userPosts.length) {
-        return;
-    }
-
-
     userPosts.forEach(post => {
 
-        /* Evita duplicação */
+        const id =
+            String(post.id);
 
-        if (
-            feed.querySelector(
-                `.post-card[data-post-id="${post.id}"]`
-            )
-        ) {
+        if (existingIds.has(id)) {
             return;
         }
 
 
-        /* Remove emoji da categoria
-           para o filtro */
-
-        const categoryText =
-            String(
-                post.categoria || ""
-            )
-            .replace(
-                /^[\p{Emoji_Presentation}\p{Extended_Pictographic}\s]+/u,
-                ""
-            )
-            .trim();
-
-
-        const article =
+        const card =
             document.createElement(
                 "article"
             );
 
-
-        article.className =
+        card.className =
             "post-card";
 
+        card.dataset.postId =
+            id;
 
-        article.dataset.category =
-            categoryText;
+        card.dataset.category =
+            post.categoria ||
+            "💭 Desabafo";
 
 
-        article.dataset.postId =
-            String(post.id);
+        const title =
+            escapeUserPostHTML(
+                post.titulo ||
+                "Sem título"
+            );
+
+        const text =
+            escapeUserPostHTML(
+                post.texto ||
+                ""
+            );
+
+        const category =
+            escapeUserPostHTML(
+                post.categoria ||
+                "💭 Desabafo"
+            );
+
+        const avatar =
+            escapeUserPostHTML(
+                post.avatar ||
+                "🌸"
+            );
+
+        const name =
+            escapeUserPostHTML(
+                post.nome ||
+                "Anônima"
+            );
 
 
-        article.innerHTML = `
+        card.innerHTML = `
 
             <div class="post-header">
 
                 <a
-                    href="perfil.html"
                     class="post-author"
+                    href="post.html?id=${encodeURIComponent(id)}"
                 >
 
-                    <span class="avatar avatar-flower">
-                        ${escapeUserPostHTML(
-                            post.avatar || "🌸"
-                        )}
+                    <span class="post-avatar">
+                        ${avatar}
                     </span>
 
-                    <span class="author-info">
-
-                        <strong>
-                            ${escapeUserPostHTML(
-                                post.nome || "Anônima"
-                            )}
-                        </strong>
-
-                        <small>
-                            ${escapeUserPostHTML(
-                                post.tempo || "agora"
-                            )}
-                        </small>
-
+                    <span>
+                        ${name}
                     </span>
 
                 </a>
 
-
                 <button
-                    type="button"
                     class="post-menu-button"
+                    type="button"
                     aria-label="Mais opções"
                 >
                     ⋯
@@ -1983,160 +1576,157 @@ function renderUserPosts() {
             </div>
 
 
-            <a
-                href="explorar.html?categoria=${encodeURIComponent(
-                    categoryText
-                )}"
-                class="post-category"
-            >
-                ${escapeUserPostHTML(
-                    post.categoria || "💭 Desabafo"
-                )}
-            </a>
+            <div class="post-category">
+                ${category}
+            </div>
 
 
             <a
-                href="post.html?id=${encodeURIComponent(
-                    post.id
-                )}"
-                class="post-content"
+                class="post-title"
+                href="post.html?id=${encodeURIComponent(id)}"
             >
-
-                <h3>
-                    ${escapeUserPostHTML(
-                        post.titulo || "Sem título"
-                    )}
-                </h3>
-
-                <p>
-                    ${escapeUserPostHTML(
-                        post.texto || ""
-                    )}
-                </p>
-
+                ${title}
             </a>
 
 
-            <div class="hashtags">
+            <p class="post-text">
+                ${text}
+            </p>
 
-                <a
-                    href="explorar.html?tag=entre-nos"
-                >
-                    #entreNós
-                </a>
 
-                ${
-                    post.askingAdvice
-                        ? `
-                            <a
-                                href="explorar.html?tag=conselho"
-                            >
-                                #conselho
-                            </a>
-                        `
-                        : ""
-                }
+            <div class="post-meta">
+                <span>
+                    ${post.tempo || "agora"}
+                </span>
 
+                <span>
+                    ${post.views || 0} visualizações
+                </span>
             </div>
 
 
             <div class="post-actions">
 
-                <div class="post-reactions">
-
-                    <button
-                        type="button"
-                        class="reaction-button"
-                        data-reaction="support"
-                        aria-label="Apoiar"
-                    >
-
-                        <span>♥</span>
-
-                        <span class="reaction-count">
-                            0
-                        </span>
-
-                    </button>
-
-
-                    <a
-                        href="post.html?id=${encodeURIComponent(
-                            post.id
-                        )}#comentarios"
-                        class="post-action"
-                    >
-
-                        <span>♡</span>
-
-                        <span>
-                            0
-                        </span>
-
-                    </a>
-
-
-                    <button
-                        type="button"
-                        class="post-action share-button"
-                        data-post-id="${escapeUserPostHTML(
-                            post.id
-                        )}"
-                    >
-
-                        <span>↗</span>
-
-                        <span>
-                            Compartilhar
-                        </span>
-
-                    </button>
-
-                </div>
+                <button
+                    class="reaction-button"
+                    type="button"
+                    data-post-id="${id}"
+                >
+                    <span>♥</span>
+                    <span class="reaction-count"
+                          data-original-count="0">
+                        0
+                    </span>
+                    <span>Apoiar</span>
+                </button>
 
 
                 <button
+                    class="comment-button"
                     type="button"
+                    data-post-id="${id}"
+                >
+                    💬
+                    <span>Comentar</span>
+                </button>
+
+
+                <button
+                    class="share-button"
+                    type="button"
+                    data-post-id="${id}"
+                >
+                    ↗
+                    <span>Compartilhar</span>
+                </button>
+
+
+                <button
                     class="save-button"
-                    data-post-id="${escapeUserPostHTML(
-                        post.id
-                    )}"
+                    type="button"
+                    data-post-id="${id}"
                     aria-label="Salvar publicação"
                 >
                     ♡
                 </button>
 
             </div>
-
         `;
 
 
-        /* Coloca no topo */
+        if (loadMore) {
 
-        feed.insertBefore(
-            article,
-            feed.firstElementChild
-        );
+            feed.insertBefore(
+                card,
+                loadMore
+            );
+
+        } else {
+
+            feed.appendChild(
+                card
+            );
+        }
 
     });
+}
 
 
-    /*
-       IMPORTANTE:
-       Não colocamos listeners aqui.
+/* =========================================================
+   MODAL
+   ========================================================= */
 
-       Os listeners são configurados
-       globalmente pelo initializeApp().
-       Isso evita que os botões sejam
-       ativados duas vezes.
-    */
+function setupModal() {
+
+    const modal =
+        document.getElementById(
+            "post-options-modal"
+        );
+
+    const closeButton =
+        document.getElementById(
+            "close-post-modal"
+        );
 
 
-    updateSaveButtons();
+    if (closeButton) {
 
-    initializeReactionCounts();
+        closeButton.addEventListener(
+            "click",
+            closePostModal
+        );
+    }
 
-    restoreReactions();
+
+    if (modal) {
+
+        modal.addEventListener(
+            "click",
+            event => {
+
+                if (
+                    event.target === modal
+                ) {
+
+                    closePostModal();
+                }
+            }
+        );
+    }
+
+
+    document.addEventListener(
+        "keydown",
+        event => {
+
+            if (
+                event.key === "Escape"
+            ) {
+
+                closePostModal();
+            }
+        }
+    );
 }
 
 
@@ -2146,64 +1736,37 @@ function renderUserPosts() {
 
 function initializeApp() {
 
-    /* Posts criados pelo usuário */
-
     renderUserPosts();
 
-
-    /* Posts ocultos */
-
     applyHiddenPosts();
-
-
-    /* Estados */
-
-    initializeReactionCounts();
 
     restoreReactions();
 
     updateSaveButtons();
 
-
-    /* Botões */
-
-    setupSaveButtons();
-
-    setupReactionButtons();
-
-    setupShareButtons();
-
-    setupCommentButtons();
-
     setupPostMenus();
-
-
-    /* Filtros */
 
     setupCategoryFilters();
 
     setupFeedFilters();
 
-
-    /* Pesquisa */
-
     setupSearch();
 
+    setupShareButtons();
 
-    /* Outros */
+    setupSaveButtons();
+
+    setupReactionButtons();
+
+    setupCommentButtons();
 
     setupLoadMore();
-
-    setupCategoryLinks();
 
     setupPostLinks();
 
     setupHeartHover();
 
-
-    console.log(
-        "Entre Nós ♡ carregado com sucesso!"
-    );
+    setupModal();
 }
 
 
