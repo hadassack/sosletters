@@ -1,1 +1,835 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Salvos — Entre Nós ♡</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        .saved-page {
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            padding-bottom: 80px;
+        }
+
+        .saved-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            margin-bottom: 24px;
+            color: #6e1424;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .saved-back:hover {
+            text-decoration: underline;
+        }
+
+        .saved-header {
+            margin-bottom: 30px;
+        }
+
+        .saved-header span {
+            display: block;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: #8f1d32;
+            margin-bottom: 8px;
+        }
+
+        .saved-header h1 {
+            margin: 0;
+            font-size: clamp(28px, 4vw, 40px);
+            color: #29171b;
+        }
+
+        .saved-header p {
+            margin: 8px 0 0;
+            color: #765c61;
+        }
+
+        .saved-count {
+            display: inline-flex;
+            margin-top: 16px;
+            padding: 8px 13px;
+            border-radius: 30px;
+            background: #f5e7e3;
+            color: #6e1424;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .saved-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .saved-card {
+            background: #fff;
+            border: 1px solid #eadfdd;
+            border-radius: 22px;
+            padding: 20px;
+            box-shadow: 0 5px 20px rgba(70, 20, 30, .04);
+            transition: .2s ease;
+        }
+
+        .saved-card:hover {
+            transform: translateY(-2px);
+            border-color: #d9b9bd;
+            box-shadow: 0 10px 28px rgba(70, 20, 30, .08);
+        }
+
+        .saved-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .saved-author {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+        }
+
+        .saved-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f5e7e3;
+            font-size: 22px;
+        }
+
+        .saved-author strong {
+            display: block;
+            color: #29171b;
+        }
+
+        .saved-author small {
+            color: #987f84;
+        }
+
+        .remove-save {
+            border: none;
+            background: transparent;
+            color: #8f1d32;
+            font-size: 22px;
+            cursor: pointer;
+            width: 38px;
+            height: 38px;
+            border-radius: 12px;
+            transition: .2s ease;
+        }
+
+        .remove-save:hover {
+            background: #f5e7e3;
+        }
+
+        .saved-category {
+            display: inline-block;
+            padding: 7px 11px;
+            border-radius: 12px;
+            background: #fff0ed;
+            color: #6e1424;
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .saved-content {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .saved-content h2 {
+            margin: 0 0 8px;
+            color: #29171b;
+            font-size: 20px;
+        }
+
+        .saved-content p {
+            margin: 0;
+            color: #765c61;
+            line-height: 1.6;
+        }
+
+        .saved-footer {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            margin-top: 17px;
+            padding-top: 15px;
+            border-top: 1px solid #f0e5e2;
+            color: #765c61;
+            font-size: 13px;
+        }
+
+        .empty-saved {
+            text-align: center;
+            padding: 75px 25px;
+            background: #fff;
+            border: 1px solid #eadfdd;
+            border-radius: 25px;
+        }
+
+        .empty-saved-heart {
+            font-size: 58px;
+            color: #8f1d32;
+            margin-bottom: 14px;
+        }
+
+        .empty-saved h2 {
+            margin: 0 0 8px;
+            color: #29171b;
+        }
+
+        .empty-saved p {
+            margin: 0 auto 22px;
+            max-width: 430px;
+            line-height: 1.6;
+            color: #765c61;
+        }
+
+        .empty-saved a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 18px;
+            background: #6e1424;
+            color: white;
+            border-radius: 14px;
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        .empty-saved a:hover {
+            background: #8f1d32;
+        }
+
+        .mobile-navigation {
+            z-index: 100;
+        }
+
+        @media (max-width: 700px) {
+
+            .saved-card {
+                padding: 16px;
+            }
+
+            .saved-content h2 {
+                font-size: 18px;
+            }
+
+            .saved-footer {
+                gap: 12px;
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="background-decoration" aria-hidden="true">
+        <span>♡</span>
+        <span>♡</span>
+        <span>♥</span>
+        <span>♡</span>
+    </div>
+
+
+    <!-- HEADER -->
+
+    <header class="site-header">
+
+        <div class="header-inner">
+
+            <a href="index.html" class="logo">
+                <span class="logo-heart">♥</span>
+                <span class="logo-text">Entre Nós</span>
+            </a>
+
+            <form class="search-bar" onsubmit="return false;">
+
+                <span class="search-icon">🔍</span>
+
+                <input
+                    type="search"
+                    placeholder="O que você está procurando?"
+                >
+
+                <span class="search-heart">♡</span>
+
+            </form>
+
+            <div class="header-actions">
+
+                <a
+                    href="notificacoes.html"
+                    class="header-action"
+                    aria-label="Notificações"
+                >
+                    <span>♡</span>
+                    <span class="notification-dot"></span>
+                </a>
+
+                <a
+                    href="mensagens.html"
+                    class="header-action"
+                    aria-label="Mensagens"
+                >
+                    <span>✉</span>
+                </a>
+
+                <a
+                    href="perfil.html"
+                    class="header-profile"
+                    aria-label="Meu perfil"
+                >
+                    <span class="mini-avatar">🌷</span>
+                </a>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <!-- LAYOUT -->
+
+    <div class="app-layout">
+
+
+        <!-- SIDEBAR -->
+
+        <aside class="sidebar">
+
+            <div class="sidebar-inner">
+
+                <nav class="main-navigation">
+
+                    <a href="index.html" class="nav-item">
+                        <span class="nav-icon">⌂</span>
+                        <span class="nav-text">Início</span>
+                    </a>
+
+                    <a href="explorar.html" class="nav-item">
+                        <span class="nav-icon">⌕</span>
+                        <span class="nav-text">Explorar</span>
+                    </a>
+
+                    <a href="criar.html" class="nav-item nav-create">
+                        <span class="nav-icon">＋</span>
+                        <span class="nav-text">Criar publicação</span>
+                    </a>
+
+                    <a href="salvos.html" class="nav-item active">
+                        <span class="nav-icon">♡</span>
+                        <span class="nav-text">Salvos</span>
+                    </a>
+
+                    <a href="notificacoes.html" class="nav-item">
+                        <span class="nav-icon">♧</span>
+                        <span class="nav-text">Notificações</span>
+                    </a>
+
+                    <a href="mensagens.html" class="nav-item">
+                        <span class="nav-icon">✉</span>
+                        <span class="nav-text">Mensagens</span>
+                    </a>
+
+                    <a href="perfil.html" class="nav-item">
+                        <span class="nav-icon">◯</span>
+                        <span class="nav-text">Meu perfil</span>
+                    </a>
+
+                </nav>
+
+
+                <div class="sidebar-divider"></div>
+
+
+                <div class="sidebar-section">
+
+                    <h3 class="sidebar-title">
+                        Categorias
+                    </h3>
+
+                    <a
+                        href="explorar.html?categoria=Paixão"
+                        class="sidebar-category"
+                    >
+                        💕 Paixão
+                    </a>
+
+                    <a
+                        href="explorar.html?categoria=Ele gosta de mim?"
+                        class="sidebar-category"
+                    >
+                        🤷 Ele gosta de mim?
+                    </a>
+
+                    <a
+                        href="explorar.html?categoria=Término"
+                        class="sidebar-category"
+                    >
+                        💔 Término
+                    </a>
+
+                    <a
+                        href="explorar.html?categoria=Preciso de conselho"
+                        class="sidebar-category"
+                    >
+                        🫂 Conselho
+                    </a>
+
+                    <a
+                        href="explorar.html?categoria=Primeiro amor"
+                        class="sidebar-category"
+                    >
+                        🌷 Primeiro amor
+                    </a>
+
+                    <a
+                        href="explorar.html"
+                        class="sidebar-see-more"
+                    >
+                        Ver todas →
+                    </a>
+
+                </div>
+
+
+                <div class="sidebar-divider"></div>
+
+
+                <nav class="secondary-navigation">
+
+                    <a href="configuracoes.html" class="nav-item">
+                        <span class="nav-icon">⚙</span>
+                        <span class="nav-text">Configurações</span>
+                    </a>
+
+                    <a href="ajuda.html" class="nav-item">
+                        <span class="nav-icon">?</span>
+                        <span class="nav-text">Ajuda</span>
+                    </a>
+
+                </nav>
+
+
+                <div class="sidebar-quote">
+
+                    <span class="quote-heart">♥</span>
+
+                    <p>
+                        Você não precisa entender
+                        tudo sozinha.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </aside>
+
+
+        <!-- CONTEÚDO -->
+
+        <main class="main-content">
+
+            <div class="saved-page">
+
+                <a
+                    href="index.html"
+                    class="saved-back"
+                >
+                    ← Voltar para o início
+                </a>
+
+
+                <header class="saved-header">
+
+                    <span>
+                        SEU CANTINHO ♡
+                    </span>
+
+                    <h1>
+                        Publicações salvas
+                    </h1>
+
+                    <p>
+                        Histórias que você guardou para ler novamente.
+                    </p>
+
+                    <div
+                        class="saved-count"
+                        id="savedCount"
+                    >
+                        0 publicações
+                    </div>
+
+                </header>
+
+
+                <div
+                    class="saved-list"
+                    id="savedList"
+                ></div>
+
+
+                <div
+                    class="empty-saved"
+                    id="emptySaved"
+                    style="display:none;"
+                >
+
+                    <div class="empty-saved-heart">
+                        ♡
+                    </div>
+
+                    <h2>
+                        Nada salvo por enquanto
+                    </h2>
+
+                    <p>
+                        Quando alguma história tocar seu coração,
+                        salve para encontrar aqui depois.
+                    </p>
+
+                    <a href="index.html">
+                        Explorar histórias →
+                    </a>
+
+                </div>
+
+            </div>
+
+        </main>
+
+    </div>
+
+
+    <!-- MOBILE -->
+
+    <nav
+        class="mobile-navigation"
+        aria-label="Navegação mobile"
+    >
+
+        <a
+            href="index.html"
+            class="mobile-nav-item"
+        >
+            <span>⌂</span>
+            <small>Início</small>
+        </a>
+
+        <a
+            href="explorar.html"
+            class="mobile-nav-item"
+        >
+            <span>⌕</span>
+            <small>Explorar</small>
+        </a>
+
+        <a
+            href="criar.html"
+            class="mobile-nav-create"
+            aria-label="Criar publicação"
+        >
+            ＋
+        </a>
+
+        <a
+            href="salvos.html"
+            class="mobile-nav-item active"
+        >
+            <span>♡</span>
+            <small>Salvos</small>
+        </a>
+
+        <a
+            href="perfil.html"
+            class="mobile-nav-item"
+        >
+            <span>◯</span>
+            <small>Perfil</small>
+        </a>
+
+    </nav>
+
+
+    <script>
+
+        const savedKey = "entreNos_savedPosts";
+
+        const savedList =
+            document.getElementById("savedList");
+
+        const emptySaved =
+            document.getElementById("emptySaved");
+
+        const savedCount =
+            document.getElementById("savedCount");
+
+
+        const posts = {
+
+            1: {
+                author: "Anônima",
+                avatar: "🌸",
+                time: "há 2 horas",
+                category: "🤷 Ele gosta de mim?",
+                title: "Eu não consigo entender os sinais dele...",
+                text: "A gente conversa praticamente todos os dias, ele sempre procura assunto e parece ficar diferente quando estamos perto dos nossos amigos. Mas quando tento entender se existe alguma coisa a mais, ele simplesmente muda de assunto...",
+                reactions: 124,
+                comments: 32
+            },
+
+            2: {
+                author: "Bia",
+                avatar: "🌹",
+                time: "há 4 horas",
+                category: "🫂 Preciso de conselho",
+                title: "Vocês voltariam depois de uma mentira?",
+                text: "Eu descobri uma coisa que ele escondeu de mim durante algumas semanas. Ele pediu desculpas e disse que estava com medo da minha reação. Eu ainda gosto muito dele, mas não sei se consigo confiar novamente.",
+                reactions: 89,
+                comments: 47
+            },
+
+            3: {
+                author: "Lua",
+                avatar: "🌷",
+                time: "ontem",
+                category: "💔 Término",
+                title: "Acho que estou finalmente conseguindo seguir em frente.",
+                text: "Durante meses achei que nunca conseguiria ficar bem depois do término. Hoje percebi que passei uma tarde inteira sem pensar nele. Parece pequeno, mas para mim foi enorme.",
+                reactions: 215,
+                comments: 61
+            }
+
+        };
+
+
+        function getSavedPosts() {
+
+            try {
+
+                const data =
+                    localStorage.getItem(savedKey);
+
+                if (!data) {
+                    return [];
+                }
+
+                const parsed =
+                    JSON.parse(data);
+
+                if (!Array.isArray(parsed)) {
+                    return [];
+                }
+
+                return parsed;
+
+            } catch (error) {
+
+                return [];
+
+            }
+
+        }
+
+
+        function saveSavedPosts(posts) {
+
+            localStorage.setItem(
+                savedKey,
+                JSON.stringify(posts)
+            );
+
+        }
+
+
+        function getPost(id) {
+
+            return posts[String(id)];
+
+        }
+
+
+        function renderSaved() {
+
+            const saved =
+                getSavedPosts();
+
+            savedList.innerHTML = "";
+
+            savedCount.textContent =
+                saved.length === 1
+                    ? "1 publicação"
+                    : `${saved.length} publicações`;
+
+
+            if (saved.length === 0) {
+
+                emptySaved.style.display = "block";
+
+                return;
+
+            }
+
+
+            emptySaved.style.display = "none";
+
+
+            saved.forEach(id => {
+
+                const post =
+                    getPost(id);
+
+
+                if (!post) {
+                    return;
+                }
+
+
+                const card =
+                    document.createElement("article");
+
+                card.className = "saved-card";
+
+                card.innerHTML = `
+
+                    <div class="saved-card-header">
+
+                        <div class="saved-author">
+
+                            <div class="saved-avatar">
+                                ${post.avatar}
+                            </div>
+
+                            <div>
+                                <strong>
+                                    ${post.author}
+                                </strong>
+
+                                <small>
+                                    ${post.time}
+                                </small>
+                            </div>
+
+                        </div>
+
+                        <button
+                            type="button"
+                            class="remove-save"
+                            data-remove="${id}"
+                            aria-label="Remover dos salvos"
+                            title="Remover dos salvos"
+                        >
+                            ♡
+                        </button>
+
+                    </div>
+
+
+                    <span class="saved-category">
+                        ${post.category}
+                    </span>
+
+
+                    <a
+                        href="post.html?id=${id}"
+                        class="saved-content"
+                    >
+
+                        <h2>
+                            ${post.title}
+                        </h2>
+
+                        <p>
+                            ${post.text}
+                        </p>
+
+                    </a>
+
+
+                    <div class="saved-footer">
+
+                        <span>
+                            ♥ ${post.reactions}
+                        </span>
+
+                        <span>
+                            ♡ ${post.comments}
+                        </span>
+
+                        <span>
+                            Publicação salva
+                        </span>
+
+                    </div>
+
+                `;
+
+
+                savedList.appendChild(card);
+
+            });
+
+
+            document
+                .querySelectorAll("[data-remove]")
+                .forEach(button => {
+
+                    button.addEventListener(
+                        "click",
+                        function () {
+
+                            const id =
+                                this.dataset.remove;
+
+                            const current =
+                                getSavedPosts();
+
+                            const updated =
+                                current.filter(
+                                    savedId =>
+                                        String(savedId) !== String(id)
+                                );
+
+                            saveSavedPosts(updated);
+
+                            renderSaved();
+
+                        }
+                    );
+
+                });
+
+        }
+
+
+        renderSaved();
+
+    </script>
+
+</body>
+
+</html>
