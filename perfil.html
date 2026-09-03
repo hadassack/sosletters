@@ -14,160 +14,242 @@
 
     <!-- CABEÇALHO -->
     <header>
-
         <div class="header-container">
 
-            <!-- LOGO -->
             <a href="index.html" class="logo">
                 Entre Nós ♡
             </a>
 
-
-            <!-- MENU -->
             <nav>
-
-                <a href="index.html">
-                    Início
-                </a>
-
-                <a href="index.html#explorar">
-                    Explorar
-                </a>
-
-                <a href="index.html#categorias">
-                    Categorias
-                </a>
-
-                <a href="index.html#posts">
-                    Posts
-                </a>
-
+                <a href="index.html">Início</a>
+                <a href="index.html#explorar">Explorar</a>
+                <a href="index.html#categorias">Categorias</a>
+                <a href="index.html#posts">Posts</a>
             </nav>
 
-
-            <!-- MEU PERFIL -->
             <a href="perfil.html" class="btn btn-principal">
                 Meu perfil
             </a>
 
         </div>
-
     </header>
 
 
-    <main>
+    <main class="pagina-perfil">
 
-        <!-- PERFIL -->
-        <section class="perfil-card">
+        <!-- CABEÇALHO DO PERFIL -->
+        <section class="perfil-header">
 
-            <!-- AVATAR -->
-            <div
-                class="perfil-avatar"
-                id="avatar-perfil"
-            >
-                🩷
+            <!-- CAPA -->
+            <div class="perfil-capa">
+
+                <div class="decoracao decoracao-1">♡</div>
+                <div class="decoracao decoracao-2">✦</div>
+                <div class="decoracao decoracao-3">♡</div>
+
             </div>
 
 
-            <!-- NOME -->
-            <h1 id="nome-perfil">
-                Meu Perfil
-            </h1>
+            <!-- INFORMAÇÕES -->
+            <div class="perfil-conteudo">
+
+                <div
+                    class="perfil-avatar"
+                    id="avatar-perfil"
+                >
+                    🩷
+                </div>
 
 
-            <!-- BIO -->
-            <p id="bio-perfil">
+                <div class="perfil-info">
 
-                Conte um pouquinho sobre você ♡
+                    <div class="perfil-nome-linha">
 
-            </p>
+                        <div>
+                            <h1 id="nome-perfil">
+                                Meu Perfil
+                            </h1>
+
+                            <p class="usuario-handle">
+                                @minha-conta
+                            </p>
+                        </div>
 
 
-            <!-- EDITAR -->
-            <button
-                class="btn btn-secundario"
-                id="editar-perfil"
-            >
-                Editar perfil
-            </button>
+                        <button
+                            class="btn btn-secundario"
+                            id="editar-perfil"
+                        >
+                            ✏️ Editar perfil
+                        </button>
+
+                    </div>
+
+
+                    <p
+                        class="bio-perfil"
+                        id="bio-perfil"
+                    >
+                        Conte um pouquinho sobre você ♡
+                    </p>
+
+
+                    <p class="membro-desde">
+                        ✦ Membro da comunidade
+                    </p>
+
+                </div>
+
+            </div>
 
         </section>
 
 
+        <!-- ESTATÍSTICAS -->
+        <section class="estatisticas">
 
-        <!-- EDITAR PERFIL -->
+            <div class="estatistica-card">
+
+                <span
+                    class="numero-estatistica"
+                    id="numero-meus-posts"
+                >
+                    0
+                </span>
+
+                <span class="label-estatistica">
+                    Posts
+                </span>
+
+            </div>
+
+
+            <div class="estatistica-card">
+
+                <span
+                    class="numero-estatistica"
+                    id="numero-salvos"
+                >
+                    0
+                </span>
+
+                <span class="label-estatistica">
+                    Salvos
+                </span>
+
+            </div>
+
+
+            <div class="estatistica-card">
+
+                <span
+                    class="numero-estatistica"
+                    id="numero-curtidas"
+                >
+                    0
+                </span>
+
+                <span class="label-estatistica">
+                    Curtidas
+                </span>
+
+            </div>
+
+        </section>
+
+
+        <!-- ÁREA DE EDIÇÃO -->
         <section
-            class="criar-post"
+            class="editar-perfil-area"
             id="area-editar-perfil"
-            style="display: none;"
         >
 
-            <h2>
-                Editar perfil ♡
-            </h2>
+            <div class="editar-perfil-box">
+
+                <div class="editar-topo">
+
+                    <div>
+
+                        <h2>
+                            Editar perfil ♡
+                        </h2>
+
+                        <p>
+                            Deixe seu cantinho com a sua cara.
+                        </p>
+
+                    </div>
 
 
-            <!-- NOME -->
+                    <button
+                        class="fechar-edicao"
+                        id="cancelar-edicao"
+                    >
+                        ✕
+                    </button>
 
-            <input
-                type="text"
-                id="input-nome"
-                placeholder="Seu nome ou apelido"
-            >
-
-
-            <br><br>
+                </div>
 
 
-            <!-- BIO -->
+                <label>
+                    Nome
+                </label>
 
-            <textarea
-                id="input-bio"
-                placeholder="Escreva uma pequena bio..."
-            ></textarea>
+                <input
+                    type="text"
+                    id="input-nome"
+                    placeholder="Seu nome ou apelido"
+                >
 
 
-            <br><br>
+                <label>
+                    Bio
+                </label>
+
+                <textarea
+                    id="input-bio"
+                    placeholder="Conte um pouquinho sobre você..."
+                ></textarea>
 
 
-            <!-- AVATAR E SALVAR -->
+                <label>
+                    Escolha seu símbolo
+                </label>
 
-            <div class="post-opcoes">
+                <div class="avatares-opcoes">
 
-                <select id="input-avatar">
+                    <button class="avatar-opcao" data-avatar="🩷">
+                        🩷
+                    </button>
 
-                    <option value="🩷">
-                        🩷 Coração
-                    </option>
+                    <button class="avatar-opcao" data-avatar="🌸">
+                        🌸
+                    </button>
 
-                    <option value="🌸">
-                        🌸 Flor
-                    </option>
+                    <button class="avatar-opcao" data-avatar="🌙">
+                        🌙
+                    </button>
 
-                    <option value="🌙">
-                        🌙 Lua
-                    </option>
+                    <button class="avatar-opcao" data-avatar="💌">
+                        💌
+                    </button>
 
-                    <option value="💌">
-                        💌 Carta
-                    </option>
+                    <button class="avatar-opcao" data-avatar="🦋">
+                        🦋
+                    </button>
 
-                    <option value="🦋">
-                        🦋 Borboleta
-                    </option>
+                    <button class="avatar-opcao" data-avatar="✨">
+                        ✨
+                    </button>
 
-                    <option value="✨">
-                        ✨ Estrela
-                    </option>
-
-                </select>
+                </div>
 
 
                 <button
                     class="btn btn-principal"
                     id="salvar-perfil"
                 >
-                    Salvar ♡
+                    Salvar alterações ♡
                 </button>
 
             </div>
@@ -175,37 +257,65 @@
         </section>
 
 
+        <!-- ABAS -->
+        <section class="perfil-conteudo-posts">
 
-        <!-- MEUS POSTS -->
+            <div class="perfil-abas">
 
-        <section
-            class="posts"
-            id="meus-posts"
-        >
-
-            <h2 class="titulo-secao">
-                Meus posts ♡
-            </h2>
+                <button
+                    class="perfil-aba ativa"
+                    data-aba="meus"
+                >
+                    📝 Meus posts
+                </button>
 
 
-            <!--
-                Os posts criados pela usuária
-                aparecerão aqui futuramente
-                pelo JavaScript.
-            -->
+                <button
+                    class="perfil-aba"
+                    data-aba="salvos"
+                >
+                    🔖 Salvos
+                </button>
 
-            <div id="lista-meus-posts">
+
+                <button
+                    class="perfil-aba"
+                    data-aba="curtidos"
+                >
+                    ♥ Curtidos
+                </button>
+
+            </div>
+
+
+            <!-- CONTEÚDO DAS ABAS -->
+            <div
+                id="conteudo-perfil"
+                class="conteudo-perfil"
+            >
+
+                <!-- JavaScript coloca os posts aqui -->
 
             </div>
 
         </section>
 
 
+        <!-- PEQUENO AVISO -->
+        <section class="perfil-dica">
+
+            <span>♡</span>
+
+            <p>
+                Seu perfil é o seu cantinho dentro da comunidade.
+                Aqui você encontra suas histórias, posts favoritos
+                e tudo que marcou você.
+            </p>
+
+        </section>
+
     </main>
 
-
-
-    <!-- RODAPÉ -->
 
     <footer>
 
@@ -218,9 +328,6 @@
 
     </footer>
 
-
-
-    <!-- JAVASCRIPT -->
 
     <script src="script.js"></script>
 
