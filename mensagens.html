@@ -1,1 +1,986 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Mensagens — Entre Nós ♡</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        .messages-page {
+            width: 100%;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding-bottom: 70px;
+        }
+
+        .messages-title {
+            margin-bottom: 24px;
+        }
+
+        .messages-title span {
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: #8f1d32;
+        }
+
+        .messages-title h1 {
+            margin: 7px 0 5px;
+            color: #29171b;
+            font-size: 36px;
+        }
+
+        .messages-title p {
+            margin: 0;
+            color: #765c61;
+        }
+
+        .messages-box {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            min-height: 620px;
+            background: #fff;
+            border: 1px solid #eadfdd;
+            border-radius: 25px;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(70, 20, 30, .06);
+        }
+
+        /* CONVERSAS */
+
+        .conversation-list {
+            border-right: 1px solid #eadfdd;
+            background: #fffaf8;
+        }
+
+        .conversation-search {
+            padding: 18px;
+            border-bottom: 1px solid #eadfdd;
+        }
+
+        .conversation-search-box {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 11px 13px;
+            background: #fff;
+            border: 1px solid #eadfdd;
+            border-radius: 14px;
+        }
+
+        .conversation-search-box input {
+            border: none;
+            outline: none;
+            width: 100%;
+            background: transparent;
+        }
+
+        .conversation {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-bottom: 1px solid #f1e7e4;
+            background: transparent;
+            text-align: left;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .conversation:hover {
+            background: #fff1ee;
+        }
+
+        .conversation.active {
+            background: #f8e8e5;
+        }
+
+        .conversation-avatar {
+            width: 47px;
+            height: 47px;
+            min-width: 47px;
+            border-radius: 50%;
+            background: #f5e7e3;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+
+        .conversation-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .conversation-name {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .conversation-name strong {
+            color: #29171b;
+        }
+
+        .conversation-time {
+            color: #987f84;
+            font-size: 11px;
+        }
+
+        .conversation-preview {
+            margin-top: 4px;
+            color: #765c61;
+            font-size: 13px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .unread-dot {
+            width: 9px;
+            height: 9px;
+            min-width: 9px;
+            background: #8f1d32;
+            border-radius: 50%;
+        }
+
+        /* CHAT */
+
+        .chat {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+
+        .chat-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 18px 22px;
+            border-bottom: 1px solid #eadfdd;
+        }
+
+        .chat-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: #f5e7e3;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+
+        .chat-user strong {
+            display: block;
+            color: #29171b;
+        }
+
+        .chat-user small {
+            color: #987f84;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 25px;
+            overflow-y: auto;
+            background:
+                radial-gradient(circle at 10% 10%, rgba(143, 29, 50, .035), transparent 25%),
+                #fffdfc;
+        }
+
+        .date-divider {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .date-divider span {
+            display: inline-block;
+            padding: 6px 12px;
+            background: #f5e7e3;
+            color: #765c61;
+            border-radius: 20px;
+            font-size: 11px;
+        }
+
+        .message-row {
+            display: flex;
+            margin-bottom: 13px;
+        }
+
+        .message-row.mine {
+            justify-content: flex-end;
+        }
+
+        .message {
+            max-width: 70%;
+            padding: 12px 15px;
+            border-radius: 18px;
+            background: #f5e7e3;
+            color: #29171b;
+            line-height: 1.45;
+            font-size: 14px;
+        }
+
+        .message-row.mine .message {
+            background: #6e1424;
+            color: white;
+            border-bottom-right-radius: 5px;
+        }
+
+        .message-row:not(.mine) .message {
+            border-bottom-left-radius: 5px;
+        }
+
+        .message-time {
+            display: block;
+            margin-top: 5px;
+            font-size: 10px;
+            opacity: .65;
+            text-align: right;
+        }
+
+        .chat-input-area {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px 18px;
+            border-top: 1px solid #eadfdd;
+            background: white;
+        }
+
+        .chat-input {
+            flex: 1;
+            border: 1px solid #eadfdd;
+            border-radius: 16px;
+            padding: 13px 15px;
+            outline: none;
+            font-size: 14px;
+        }
+
+        .chat-input:focus {
+            border-color: #b43a4b;
+        }
+
+        .send-button {
+            width: 45px;
+            height: 45px;
+            border: none;
+            border-radius: 14px;
+            background: #6e1424;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .send-button:hover {
+            background: #8f1d32;
+            transform: translateY(-1px);
+        }
+
+        .empty-chat {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 30px;
+            color: #765c61;
+        }
+
+        .empty-chat-heart {
+            font-size: 55px;
+            color: #8f1d32;
+            margin-bottom: 12px;
+        }
+
+        .empty-chat h2 {
+            margin: 0 0 7px;
+            color: #29171b;
+        }
+
+        @media (max-width: 800px) {
+
+            .messages-box {
+                grid-template-columns: 1fr;
+                min-height: auto;
+            }
+
+            .conversation-list {
+                border-right: none;
+                border-bottom: 1px solid #eadfdd;
+            }
+
+            .conversation:nth-of-type(n+4) {
+                display: none;
+            }
+
+            .chat {
+                min-height: 520px;
+            }
+
+            .message {
+                max-width: 82%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="site-header">
+
+    <div class="header-inner">
+
+        <a href="index.html" class="logo">
+            <span class="logo-heart">♥</span>
+            <span class="logo-text">Entre Nós</span>
+        </a>
+
+        <form class="search-bar" onsubmit="return false;">
+
+            <span class="search-icon">🔍</span>
+
+            <input
+                type="search"
+                placeholder="O que você está procurando?"
+            >
+
+            <span class="search-heart">♡</span>
+
+        </form>
+
+        <div class="header-actions">
+
+            <a
+                href="notificacoes.html"
+                class="header-action"
+                aria-label="Notificações"
+            >
+                ♡
+            </a>
+
+            <a
+                href="mensagens.html"
+                class="header-action"
+                aria-label="Mensagens"
+            >
+                ✉
+            </a>
+
+            <a
+                href="perfil.html"
+                class="header-profile"
+                aria-label="Meu perfil"
+            >
+                🌷
+            </a>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+<div class="app-layout">
+
+    <aside class="sidebar">
+
+        <div class="sidebar-inner">
+
+            <nav class="main-navigation">
+
+                <a href="index.html" class="nav-item">
+                    ⌂
+                    <span>Início</span>
+                </a>
+
+                <a href="explorar.html" class="nav-item">
+                    ⌕
+                    <span>Explorar</span>
+                </a>
+
+                <a href="criar.html" class="nav-item nav-create">
+                    ＋
+                    <span>Criar publicação</span>
+                </a>
+
+                <a href="salvos.html" class="nav-item">
+                    ♡
+                    <span>Salvos</span>
+                </a>
+
+                <a href="notificacoes.html" class="nav-item">
+                    ♧
+                    <span>Notificações</span>
+                </a>
+
+                <a href="mensagens.html" class="nav-item active">
+                    ✉
+                    <span>Mensagens</span>
+                </a>
+
+                <a href="perfil.html" class="nav-item">
+                    ◯
+                    <span>Meu perfil</span>
+                </a>
+
+            </nav>
+
+            <div class="sidebar-divider"></div>
+
+            <nav class="secondary-navigation">
+
+                <a href="configuracoes.html" class="nav-item">
+                    ⚙
+                    <span>Configurações</span>
+                </a>
+
+                <a href="ajuda.html" class="nav-item">
+                    ?
+                    <span>Ajuda</span>
+                </a>
+
+            </nav>
+
+        </div>
+
+    </aside>
+
+
+    <main class="main-content">
+
+        <div class="messages-page">
+
+            <div class="messages-title">
+
+                <span>
+                    UM CANTINHO SÓ SEU ♡
+                </span>
+
+                <h1>Mensagens</h1>
+
+                <p>
+                    Converse com pessoas da comunidade.
+                </p>
+
+            </div>
+
+
+            <div class="messages-box">
+
+                <!-- CONVERSAS -->
+
+                <aside class="conversation-list">
+
+                    <div class="conversation-search">
+
+                        <div class="conversation-search-box">
+
+                            🔍
+
+                            <input
+                                type="text"
+                                id="conversationSearch"
+                                placeholder="Pesquisar conversa..."
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <button
+                        class="conversation active"
+                        data-name="Bia"
+                        data-avatar="🌹"
+                    >
+
+                        <div class="conversation-avatar">
+                            🌹
+                        </div>
+
+                        <div class="conversation-info">
+
+                            <div class="conversation-name">
+
+                                <strong>Bia</strong>
+
+                                <span class="conversation-time">
+                                    agora
+                                </span>
+
+                            </div>
+
+                            <div class="conversation-preview">
+                                Você viu o que aconteceu?
+                            </div>
+
+                        </div>
+
+                        <span class="unread-dot"></span>
+
+                    </button>
+
+
+                    <button
+                        class="conversation"
+                        data-name="Lua"
+                        data-avatar="🌷"
+                    >
+
+                        <div class="conversation-avatar">
+                            🌷
+                        </div>
+
+                        <div class="conversation-info">
+
+                            <div class="conversation-name">
+
+                                <strong>Lua</strong>
+
+                                <span class="conversation-time">
+                                    1h
+                                </span>
+
+                            </div>
+
+                            <div class="conversation-preview">
+                                Obrigada pelo conselho ❤️
+                            </div>
+
+                        </div>
+
+                    </button>
+
+
+                    <button
+                        class="conversation"
+                        data-name="Anônima"
+                        data-avatar="🌸"
+                    >
+
+                        <div class="conversation-avatar">
+                            🌸
+                        </div>
+
+                        <div class="conversation-info">
+
+                            <div class="conversation-name">
+
+                                <strong>Anônima</strong>
+
+                                <span class="conversation-time">
+                                    ontem
+                                </span>
+
+                            </div>
+
+                            <div class="conversation-preview">
+                                Acho que você tem razão...
+                            </div>
+
+                        </div>
+
+                    </button>
+
+
+                    <button
+                        class="conversation"
+                        data-name="Clara"
+                        data-avatar="🌺"
+                    >
+
+                        <div class="conversation-avatar">
+                            🌺
+                        </div>
+
+                        <div class="conversation-info">
+
+                            <div class="conversation-name">
+
+                                <strong>Clara</strong>
+
+                                <span class="conversation-time">
+                                    seg.
+                                </span>
+
+                            </div>
+
+                            <div class="conversation-preview">
+                                KKKKKKK eu também pensei isso
+                            </div>
+
+                        </div>
+
+                    </button>
+
+                </aside>
+
+
+                <!-- CHAT -->
+
+                <section class="chat">
+
+                    <header class="chat-header">
+
+                        <div
+                            class="chat-avatar"
+                            id="chatAvatar"
+                        >
+                            🌹
+                        </div>
+
+                        <div class="chat-user">
+
+                            <strong id="chatName">
+                                Bia
+                            </strong>
+
+                            <small>
+                                Online agora
+                            </small>
+
+                        </div>
+
+                    </header>
+
+
+                    <div
+                        class="chat-messages"
+                        id="chatMessages"
+                    >
+
+                        <div class="date-divider">
+                            <span>Hoje</span>
+                        </div>
+
+
+                        <div class="message-row">
+
+                            <div class="message">
+
+                                Oii! Você viu o que aconteceu
+                                naquele post?
+
+                                <span class="message-time">
+                                    18:21
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="message-row mine">
+
+                            <div class="message">
+
+                                Vi sim KKKKKK.
+                                Eu não sabia nem o que responder.
+
+                                <span class="message-time">
+                                    18:23
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="message-row">
+
+                            <div class="message">
+
+                                Eu também 😭
+                                Mas acho que ela precisava ouvir
+                                aquilo.
+
+                                <span class="message-time">
+                                    18:25
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="message-row mine">
+
+                            <div class="message">
+
+                                Concordo. ❤️
+
+                                <span class="message-time">
+                                    18:26
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <form
+                        class="chat-input-area"
+                        id="messageForm"
+                    >
+
+                        <input
+                            type="text"
+                            class="chat-input"
+                            id="messageInput"
+                            placeholder="Escreva uma mensagem..."
+                            maxlength="500"
+                            autocomplete="off"
+                        >
+
+                        <button
+                            type="submit"
+                            class="send-button"
+                            aria-label="Enviar mensagem"
+                        >
+                            ➤
+                        </button>
+
+                    </form>
+
+                </section>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<nav
+    class="mobile-navigation"
+    aria-label="Navegação mobile"
+>
+
+    <a
+        href="index.html"
+        class="mobile-nav-item"
+    >
+        <span>⌂</span>
+        <small>Início</small>
+    </a>
+
+    <a
+        href="explorar.html"
+        class="mobile-nav-item"
+    >
+        <span>⌕</span>
+        <small>Explorar</small>
+    </a>
+
+    <a
+        href="criar.html"
+        class="mobile-nav-create"
+        aria-label="Criar publicação"
+    >
+        ＋
+    </a>
+
+    <a
+        href="notificacoes.html"
+        class="mobile-nav-item"
+    >
+        <span>♡</span>
+        <small>Avisos</small>
+    </a>
+
+    <a
+        href="perfil.html"
+        class="mobile-nav-item"
+    >
+        <span>◯</span>
+        <small>Perfil</small>
+    </a>
+
+</nav>
+
+
+<script>
+
+    const conversations =
+        document.querySelectorAll(".conversation");
+
+    const chatName =
+        document.getElementById("chatName");
+
+    const chatAvatar =
+        document.getElementById("chatAvatar");
+
+    const chatMessages =
+        document.getElementById("chatMessages");
+
+    const messageForm =
+        document.getElementById("messageForm");
+
+    const messageInput =
+        document.getElementById("messageInput");
+
+    const conversationSearch =
+        document.getElementById("conversationSearch");
+
+
+    /* TROCAR CONVERSA */
+
+    conversations.forEach(conversation => {
+
+        conversation.addEventListener("click", () => {
+
+            conversations.forEach(item => {
+                item.classList.remove("active");
+            });
+
+            conversation.classList.add("active");
+
+            conversation
+                .querySelector(".unread-dot")
+                ?.remove();
+
+            const name =
+                conversation.dataset.name;
+
+            const avatar =
+                conversation.dataset.avatar;
+
+            chatName.textContent = name;
+            chatAvatar.textContent = avatar;
+
+
+            chatMessages.innerHTML = `
+
+                <div class="date-divider">
+                    <span>Hoje</span>
+                </div>
+
+                <div class="message-row">
+
+                    <div class="message">
+
+                        Oii! Que bom falar com você ❤️
+
+                        <span class="message-time">
+                            18:20
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <div class="message-row mine">
+
+                    <div class="message">
+
+                        Oii! Também estava querendo
+                        conversar com você.
+
+                        <span class="message-time">
+                            18:22
+                        </span>
+
+                    </div>
+
+                </div>
+
+            `;
+
+        });
+
+    });
+
+
+    /* ENVIAR */
+
+    messageForm.addEventListener("submit", event => {
+
+        event.preventDefault();
+
+        const text =
+            messageInput.value.trim();
+
+        if (!text) {
+            return;
+        }
+
+
+        const row =
+            document.createElement("div");
+
+        row.className =
+            "message-row mine";
+
+
+        row.innerHTML = `
+
+            <div class="message">
+
+                ${text.replace(/</g, "&lt;").replace(/>/g, "&gt;")}
+
+                <span class="message-time">
+                    agora
+                </span>
+
+            </div>
+
+        `;
+
+
+        chatMessages.appendChild(row);
+
+        messageInput.value = "";
+
+        chatMessages.scrollTop =
+            chatMessages.scrollHeight;
+
+    });
+
+
+    /* PESQUISAR CONVERSAS */
+
+    conversationSearch.addEventListener(
+        "input",
+        () => {
+
+            const search =
+                conversationSearch.value
+                    .toLowerCase()
+                    .trim();
+
+
+            conversations.forEach(conversation => {
+
+                const name =
+                    conversation.dataset.name
+                        .toLowerCase();
+
+                conversation.style.display =
+                    name.includes(search)
+                        ? "flex"
+                        : "none";
+
+            });
+
+        }
+    );
+
+</script>
+
+</body>
+</html>
