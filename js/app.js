@@ -136,39 +136,7 @@ function toggleSave(postId) {
         });
 
         showToast("Removido dos salvos", "♡");
-
-    } else {
-        savedPosts.push(postId);
-
-        buttons.forEach(button => {
-            button.classList.add("saved", "save-pop");
-
-            button.textContent = "♥";
-
-            button.animate(
-                [
-                    { transform: "scale(1)" },
-                    { transform: "scale(1.35)" },
-                    { transform: "scale(.92)" },
-                    { transform: "scale(1.08)" },
-                    { transform: "scale(1)" }
-                ],
-                {
-                    duration: 500,
-                    easing: "cubic-bezier(.34,1.56,.64,1)"
-                }
-            );
-
-            setTimeout(() => {
-                button.classList.remove("save-pop");
-            }, 550);
-        });
-
-        showToast("Publicação salva ♥", "♥");
-    }
-
-    setStorage(STORAGE_KEYS.savedPosts, savedPosts);
-    updateSaveButtons();
+       
 } else {
         savedPosts.push(postId);
 
