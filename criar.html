@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Criar publicação ♡ Entre Nós</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        .create-page {
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 35px 20px 90px;
+        }
+
+        .create-header {
+            margin-bottom: 25px;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #6E1424;
+            text-decoration: none;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        .create-header h1 {
+            margin: 0 0 8px;
+            color: #29171B;
+            font-size: 34px;
+        }
+
+        .create-header p {
+            margin: 0;
+            color: #765C61;
+            line-height: 1.6;
+        }
+
+        .create-card {
+            background: #FFF8F5;
+            border-radius: 28px;
+            padding: 30px;
+            box-shadow: 0 12px 35px rgba(110, 20, 36, .10);
+            border: 1px solid rgba(110, 20, 36, .08);
+        }
+
+        .form-group {
+            margin-bottom: 22px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #29171B;
+            font-weight: 800;
+        }
+
+        .form-help {
+            display: block;
+            margin-top: 6px;
+            color: #765C61;
+            font-size: 13px;
+        }
+
+        .create-input,
+        .create-select,
+        .create-textarea {
+            width: 100%;
+            box-sizing: border-box;
+            border: 1px solid #DFC8C4;
+            background: white;
+            color: #29171B;
+            border-radius: 16px;
+            padding: 14px 16px;
+            font: inherit;
+            outline: none;
+            transition: .2s;
+        }
+
+        .create-input:focus,
+        .create-select:focus,
+        .create-textarea:focus {
+            border-color: #8F1D32;
+            box-shadow: 0 0 0 3px rgba(143, 29, 50, .10);
+        }
+
+        .create-textarea {
+            min-height: 220px;
+            resize: vertical;
+            line-height: 1.6;
+        }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .category-option {
+            position: relative;
+        }
+
+        .category-option input {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .category-option label {
+            display: block;
+            margin: 0;
+            padding: 13px;
+            border: 1px solid #DFC8C4;
+            background: white;
+            border-radius: 15px;
+            color: #4E393D;
+            cursor: pointer;
+            font-size: 14px;
+            transition: .2s;
+        }
+
+        .category-option label:hover {
+            border-color: #8F1D32;
+            transform: translateY(-1px);
+        }
+
+        .category-option input:checked + label {
+            background: #6E1424;
+            border-color: #6E1424;
+            color: white;
+        }
+
+        .visibility-box {
+            background: #F5E7E3;
+            border-radius: 18px;
+            padding: 18px;
+        }
+
+        .visibility-option {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin: 10px 0;
+        }
+
+        .visibility-option:first-child {
+            margin-top: 0;
+        }
+
+        .visibility-option:last-child {
+            margin-bottom: 0;
+        }
+
+        .visibility-option input {
+            margin-top: 4px;
+            accent-color: #6E1424;
+        }
+
+        .visibility-option label {
+            margin: 0;
+            cursor: pointer;
+        }
+
+        .visibility-title {
+            display: block;
+            color: #29171B;
+            font-weight: 700;
+        }
+
+        .visibility-description {
+            display: block;
+            color: #765C61;
+            font-size: 13px;
+            margin-top: 3px;
+        }
+
+        .extra-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .extra-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px;
+            background: white;
+            border: 1px solid #DFC8C4;
+            border-radius: 15px;
+        }
+
+        .extra-option input {
+            accent-color: #6E1424;
+        }
+
+        .extra-option label {
+            margin: 0;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .character-counter {
+            text-align: right;
+            color: #765C61;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .create-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #EAD9D5;
+        }
+
+        .btn-cancel,
+        .btn-publish {
+            border: 0;
+            border-radius: 14px;
+            padding: 13px 22px;
+            font: inherit;
+            font-weight: 800;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .btn-cancel {
+            background: #F5E7E3;
+            color: #6E1424;
+        }
+
+        .btn-publish {
+            background: #6E1424;
+            color: white;
+        }
+
+        .btn-cancel:hover,
+        .btn-publish:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-publish:hover {
+            background: #8F1D32;
+        }
+
+        .success-message {
+            display: none;
+            background: #F5E7E3;
+            color: #6E1424;
+            padding: 15px 18px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        @media (max-width: 650px) {
+
+            .create-page {
+                padding: 22px 13px 80px;
+            }
+
+            .create-card {
+                padding: 20px;
+                border-radius: 22px;
+            }
+
+            .create-header h1 {
+                font-size: 28px;
+            }
+
+            .category-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .extra-options {
+                grid-template-columns: 1fr;
+            }
+
+            .create-actions {
+                flex-direction: column-reverse;
+            }
+
+            .btn-cancel,
+            .btn-publish {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<main class="create-page">
+
+    <div class="create-header">
+
+        <a href="index.html" class="back-link">
+            ← Voltar para o início
+        </a>
+
+        <h1>Crie sua publicação ♡</h1>
+
+        <p>
+            Conte sua história, peça uma opinião ou simplesmente coloque
+            para fora o que está sentindo.
+        </p>
+
+    </div>
+
+
+    <div id="successMessage" class="success-message">
+        Publicação criada com sucesso! ♡
+    </div>
+
+
+    <section class="create-card">
+
+        <form id="createPostForm">
+
+            <!-- TÍTULO -->
+
+            <div class="form-group">
+
+                <label for="postTitle">
+                    Título da publicação
+                </label>
+
+                <input
+                    type="text"
+                    id="postTitle"
+                    class="create-input"
+                    maxlength="120"
+                    placeholder="Ex.: Será que ele gosta de mim?"
+                    required
+                >
+
+            </div>
+
+
+            <!-- CATEGORIA -->
+
+            <div class="form-group">
+
+                <label>
+                    Categoria
+                </label>
+
+                <div class="category-grid">
+
+                    <div class="category-option">
+                        <input
+                            type="radio"
+                            name="category"
+                            id="cat1"
+                            value="🤷 Ele gosta de mim?"
+                            required
+                        >
+                        <label for="cat1">
+                            🤷 Ele gosta de mim?
+                        </label>
+                    </div>
+
+                    <div class="category-option">
+                        <input
+                            type="radio"
+                            name="category"
+                            id="cat2"
+                            value="💕 Paixão"
+                        >
+                        <label for="cat2">
+                            💕 Paixão
+                        </label>
+                    </div>
+
+                    <div class="category-option">
+                        <input
+                            type="radio"
+                            name="category"
+                            id="cat3"
+                            value="💔 Término"
+                        >
+                        <label for="cat3">
+                            💔 Término
+                        </label>
+                    </div>
+
+                    <div class="category-option">
+                        <input
+                            type="radio"
+                            name="category"
+                            id="cat4"
+                            value="🥀 Relacionamento complicado"
+                        >
+                        <label for="cat4">
+                            🥀 Relacionamento complicado
+                        </label>
+                    </div>
+
+                    <div class="category-option">
+                        <input
+                            type="radio"
+                            name="category"
+                            id="cat5"
+                            value="🆘 Preciso de conselho"
+                        >
+                        <label for="cat5">
+                            🆘 Preciso de conselho
+                        </label>
+                    </div>
+
+                    <div class="category-option">
+                        <input
+                            type="radio"
+                            name="category"
+                            id="cat6"
+                            value="💗 Primeiro amor"
+                        >
+                        <label for="cat6">
+                            💗 Primeiro amor
+                        </label>
+                    </div>
+
+                    <div class="category-option">
+                        <input
+                            type="radio"
+                            name="category"
+                            id="cat7"
+                            value="💭 Desabafo"
+                        >
+                        <label for="cat7">
+                            💭 Desabafo
+                        </label>
+                    </div>
+
+                    <div class="category-option">
+                        <input
+                            type="radio"
+                            name="category"
+                            id="cat8"
+                            value="👀 Crush"
+                        >
+                        <label for="cat8">
+                            👀 Crush
+                        </label>
+                    </div>
+
+                    <div class="category-option">
+                        <input
+                            type="radio"
+                            name="category"
+                            id="cat9"
+                            value="💌 Ficante"
+                        >
+                        <label for="cat9">
+                            💌 Ficante
+                        </label>
+                    </div>
+
+                    <div class="category-option">
+                        <input
+                            type="radio"
+                            name="category"
+                            id="cat10"
+                            value="💍 Relacionamento"
+                        >
+                        <label for="cat10">
+                            💍 Relacionamento
+                        </label>
+                    </div>
+
+                    <div class="category-option">
+                        <input
+                            type="radio"
+                            name="category"
+                            id="cat11"
+                            value="🤦 Deu ruim"
+                        >
+                        <label for="cat11">
+                            🤦 Deu ruim
+                        </label>
+                    </div>
+
+                    <div class="category-option">
+                        <input
+                            type="radio"
+                            name="category"
+                            id="cat12"
+                            value="🌷 Superação"
+                        >
+                        <label for="cat12">
+                            🌷 Superação
+                        </label>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- TEXTO -->
+
+            <div class="form-group">
+
+                <label for="postText">
+                    Sua história
+                </label>
+
+                <textarea
+                    id="postText"
+                    class="create-textarea"
+                    maxlength="3000"
+                    placeholder="Conta pra gente o que aconteceu... Você pode escrever do seu jeito. ♡"
+                    required
+                ></textarea>
+
+                <div class="character-counter">
+                    <span id="charCount">0</span>/3000
+                </div>
+
+            </div>
+
+
+            <!-- IDENTIDADE -->
+
+            <div class="form-group">
+
+                <label>
+                    Como você quer aparecer?
+                </label>
+
+                <div class="visibility-box">
+
+                    <div class="visibility-option">
+
+                        <input
+                            type="radio"
+                            name="identity"
+                            id="anonymous"
+                            value="anonymous"
+                            checked
+                        >
+
+                        <label for="anonymous">
+
+                            <span class="visibility-title">
+                                🌸 Anônima
+                            </span>
+
+                            <span class="visibility-description">
+                                Seu nome não aparecerá na publicação.
+                            </span>
+
+                        </label>
+
+                    </div>
+
+
+                    <div class="visibility-option">
+
+                        <input
+                            type="radio"
+                            name="identity"
+                            id="identified"
+                            value="identified"
+                        >
+
+                        <label for="identified">
+
+                            <span class="visibility-title">
+                                💗 Meu perfil
+                            </span>
+
+                            <span class="visibility-description">
+                                Sua publicação ficará ligada ao seu perfil.
+                            </span>
+
+                        </label>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- OPÇÕES -->
+
+            <div class="form-group">
+
+                <label>
+                    Opções
+                </label>
+
+                <div class="extra-options">
+
+                    <div class="extra-option">
+
+                        <input
+                            type="checkbox"
+                            id="allowComments"
+                            checked
+                        >
+
+                        <label for="allowComments">
+                            💬 Permitir comentários
+                        </label>
+
+                    </div>
+
+
+                    <div class="extra-option">
+
+                        <input
+                            type="checkbox"
+                            id="askAdvice"
+                        >
+
+                        <label for="askAdvice">
+                            🆘 Pedir conselhos
+                        </label>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- BOTÕES -->
+
+            <div class="create-actions">
+
+                <button
+                    type="button"
+                    class="btn-cancel"
+                    onclick="window.location.href='index.html'"
+                >
+                    Cancelar
+                </button>
+
+                <button
+                    type="submit"
+                    class="btn-publish"
+                >
+                    Publicar ♡
+                </button>
+
+            </div>
+
+        </form>
+
+    </section>
+
+</main>
+
+
+<div id="toast" class="toast"></div>
+
+
+<script>
+
+    const form = document.getElementById("createPostForm");
+
+    const postText = document.getElementById("postText");
+
+    const charCount = document.getElementById("charCount");
+
+    const successMessage =
+        document.getElementById("successMessage");
+
+
+    /* CONTADOR */
+
+    postText.addEventListener("input", () => {
+
+        charCount.textContent = postText.value.length;
+
+    });
+
+
+    /* TOAST */
+
+    function showToast(message) {
+
+        const toast = document.getElementById("toast");
+
+        if (!toast) return;
+
+        toast.textContent = message;
+
+        toast.classList.add("show");
+
+        setTimeout(() => {
+
+            toast.classList.remove("show");
+
+        }, 2500);
+
+    }
+
+
+    /* CRIAR PUBLICAÇÃO */
+
+    form.addEventListener("submit", (event) => {
+
+        event.preventDefault();
+
+
+        const title =
+            document.getElementById("postTitle").value.trim();
+
+        const text =
+            document.getElementById("postText").value.trim();
+
+        const category =
+            document.querySelector(
+                'input[name="category"]:checked'
+            )?.value;
+
+        const identity =
+            document.querySelector(
+                'input[name="identity"]:checked'
+            )?.value;
+
+
+        if (!title || !text || !category) {
+
+            showToast("Preencha os campos obrigatórios ♡");
+
+            return;
+
+        }
+
+
+        let userPosts = [];
+
+        try {
+
+            userPosts = JSON.parse(
+                localStorage.getItem("entreNos_userPosts") || "[]"
+            );
+
+        } catch {
+
+            userPosts = [];
+
+        }
+
+
+        const newPost = {
+
+            id: Date.now(),
+
+            categoria: category,
+
+            avatar: identity === "anonymous"
+                ? "🌸"
+                : "💗",
+
+            nome: identity === "anonymous"
+                ? "Anônima"
+                : "Você",
+
+            tempo: "agora",
+
+            titulo: title,
+
+            texto: text,
+
+            views: 0,
+
+            commentsEnabled:
+                document.getElementById("allowComments").checked,
+
+            askingAdvice:
+                document.getElementById("askAdvice").checked
+
+        };
+
+
+        userPosts.unshift(newPost);
+
+
+        localStorage.setItem(
+            "entreNos_userPosts",
+            JSON.stringify(userPosts)
+        );
+
+
+        successMessage.classList.add("show");
+
+        showToast("Publicação criada! ❤️");
+
+
+        form.reset();
+
+        charCount.textContent = "0";
+
+
+        setTimeout(() => {
+
+            window.location.href =
+                "post.html?id=" + newPost.id;
+
+        }, 900);
+
+    });
+
+</script>
+
+</body>
+</html>
