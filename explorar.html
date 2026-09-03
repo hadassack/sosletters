@@ -1,1 +1,696 @@
+<!DOCTYPE html>
 
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+```
+<title>Explorar — Entre Nós ♡</title>
+
+<link rel="stylesheet" href="css/style.css">
+
+<style>
+
+    .explore-page {
+        width: 100%;
+        max-width: 900px;
+        margin: 0 auto;
+        padding-bottom: 80px;
+    }
+
+    .explore-header {
+        margin-bottom: 28px;
+    }
+
+    .explore-label {
+        display: block;
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 2px;
+        color: #8f1d32;
+        margin-bottom: 8px;
+    }
+
+    .explore-header h1 {
+        margin: 0;
+        color: #29171b;
+        font-size: clamp(30px, 5vw, 42px);
+    }
+
+    .explore-header p {
+        color: #765c61;
+        line-height: 1.6;
+    }
+
+    .explore-search {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: white;
+        border: 1px solid #eadfdd;
+        border-radius: 18px;
+        padding: 14px 17px;
+        margin-bottom: 25px;
+    }
+
+    .explore-search input {
+        border: none;
+        outline: none;
+        width: 100%;
+        font-size: 15px;
+        background: transparent;
+    }
+
+    .category-filters {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-bottom: 30px;
+    }
+
+    .category-filter {
+        border: 1px solid #ead8d4;
+        background: #fff8f5;
+        color: #6e1424;
+        padding: 10px 15px;
+        border-radius: 14px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: .2s;
+    }
+
+    .category-filter:hover,
+    .category-filter.active {
+        background: #6e1424;
+        color: white;
+        border-color: #6e1424;
+    }
+
+    .explore-results {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .explore-card {
+        display: block;
+        text-decoration: none;
+        color: inherit;
+        background: white;
+        border: 1px solid #eadfdd;
+        border-radius: 22px;
+        padding: 20px;
+        transition: .2s;
+    }
+
+    .explore-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 28px rgba(70, 20, 30, .08);
+        border-color: #d9b9bd;
+    }
+
+    .explore-author {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 14px;
+    }
+
+    .explore-avatar {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        background: #f5e7e3;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 21px;
+    }
+
+    .explore-author strong {
+        display: block;
+        color: #29171b;
+    }
+
+    .explore-author small {
+        color: #987f84;
+    }
+
+    .explore-category {
+        display: inline-block;
+        padding: 6px 11px;
+        background: #fff0ed;
+        color: #8f1d32;
+        border-radius: 10px;
+        font-size: 12px;
+        font-weight: 700;
+        margin-bottom: 12px;
+    }
+
+    .explore-card h2 {
+        margin: 0 0 8px;
+        font-size: 20px;
+        color: #29171b;
+    }
+
+    .explore-card p {
+        margin: 0;
+        color: #765c61;
+        line-height: 1.6;
+    }
+
+    .explore-meta {
+        display: flex;
+        gap: 16px;
+        margin-top: 16px;
+        color: #987f84;
+        font-size: 13px;
+    }
+
+    .no-results {
+        display: none;
+        text-align: center;
+        padding: 50px 20px;
+        background: white;
+        border: 1px solid #eadfdd;
+        border-radius: 22px;
+        color: #765c61;
+    }
+
+    @media (max-width: 700px) {
+
+        .explore-card {
+            padding: 16px;
+        }
+
+        .category-filters {
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            padding-bottom: 5px;
+        }
+
+        .category-filter {
+            white-space: nowrap;
+        }
+
+    }
+
+</style>
+```
+
+</head>
+
+<body>
+
+```
+<header class="site-header">
+
+    <div class="header-inner">
+
+        <a href="index.html" class="logo">
+            <span class="logo-heart">♥</span>
+            <span class="logo-text">Entre Nós</span>
+        </a>
+
+        <form class="search-bar" onsubmit="return false;">
+            <span class="search-icon">🔍</span>
+
+            <input
+                type="search"
+                placeholder="O que você está procurando?"
+            >
+
+            <span class="search-heart">♡</span>
+        </form>
+
+        <div class="header-actions">
+
+            <a href="notificacoes.html"
+               class="header-action"
+               aria-label="Notificações">
+                ♡
+            </a>
+
+            <a href="mensagens.html"
+               class="header-action"
+               aria-label="Mensagens">
+                ✉
+            </a>
+
+            <a href="perfil.html"
+               class="header-profile"
+               aria-label="Meu perfil">
+                🌷
+            </a>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+<div class="app-layout">
+
+    <aside class="sidebar">
+
+        <div class="sidebar-inner">
+
+            <nav class="main-navigation">
+
+                <a href="index.html" class="nav-item">
+                    ⌂
+                    <span>Início</span>
+                </a>
+
+                <a href="explorar.html" class="nav-item active">
+                    ⌕
+                    <span>Explorar</span>
+                </a>
+
+                <a href="criar.html" class="nav-item nav-create">
+                    ＋
+                    <span>Criar publicação</span>
+                </a>
+
+                <a href="salvos.html" class="nav-item">
+                    ♡
+                    <span>Salvos</span>
+                </a>
+
+                <a href="notificacoes.html" class="nav-item">
+                    ♧
+                    <span>Notificações</span>
+                </a>
+
+                <a href="mensagens.html" class="nav-item">
+                    ✉
+                    <span>Mensagens</span>
+                </a>
+
+                <a href="perfil.html" class="nav-item">
+                    ◯
+                    <span>Meu perfil</span>
+                </a>
+
+            </nav>
+
+            <div class="sidebar-divider"></div>
+
+            <nav class="secondary-navigation">
+
+                <a href="configuracoes.html" class="nav-item">
+                    ⚙
+                    <span>Configurações</span>
+                </a>
+
+                <a href="ajuda.html" class="nav-item">
+                    ?
+                    <span>Ajuda</span>
+                </a>
+
+            </nav>
+
+        </div>
+
+    </aside>
+
+
+    <main class="main-content">
+
+        <div class="explore-page">
+
+            <header class="explore-header">
+
+                <span class="explore-label">
+                    ENCONTRE HISTÓRIAS ♡
+                </span>
+
+                <h1>Explorar</h1>
+
+                <p>
+                    Encontre histórias, desabafos e pessoas
+                    que talvez estejam sentindo algo parecido com você.
+                </p>
+
+            </header>
+
+
+            <div class="explore-search">
+
+                🔍
+
+                <input
+                    type="text"
+                    id="exploreSearch"
+                    placeholder="Pesquisar histórias..."
+                >
+
+                ♡
+
+            </div>
+
+
+            <div class="category-filters">
+
+                <button class="category-filter active"
+                    data-category="Todos">
+                    ♡ Tudo
+                </button>
+
+                <button class="category-filter"
+                    data-category="Paixão">
+                    💕 Paixão
+                </button>
+
+                <button class="category-filter"
+                    data-category="Ele gosta de mim?">
+                    🤷 Ele gosta de mim?
+                </button>
+
+                <button class="category-filter"
+                    data-category="Término">
+                    💔 Término
+                </button>
+
+                <button class="category-filter"
+                    data-category="Conselho">
+                    🫂 Conselho
+                </button>
+
+                <button class="category-filter"
+                    data-category="Primeiro amor">
+                    🌷 Primeiro amor
+                </button>
+
+            </div>
+
+
+            <section
+                class="explore-results"
+                id="exploreResults"
+            >
+
+                <a href="post.html?id=1"
+                   class="explore-card"
+                   data-category="Ele gosta de mim?">
+
+                    <div class="explore-author">
+
+                        <div class="explore-avatar">🌸</div>
+
+                        <div>
+                            <strong>Anônima</strong>
+                            <small>há 2 horas</small>
+                        </div>
+
+                    </div>
+
+                    <span class="explore-category">
+                        🤷 Ele gosta de mim?
+                    </span>
+
+                    <h2>
+                        Eu não consigo entender os sinais dele...
+                    </h2>
+
+                    <p>
+                        Às vezes parece que ele gosta de mim,
+                        mas em outros momentos fica completamente
+                        distante. Estou criando expectativas?
+                    </p>
+
+                    <div class="explore-meta">
+                        <span>♥ 124</span>
+                        <span>💬 32</span>
+                    </div>
+
+                </a>
+
+
+                <a href="post.html?id=2"
+                   class="explore-card"
+                   data-category="Conselho">
+
+                    <div class="explore-author">
+
+                        <div class="explore-avatar">🌹</div>
+
+                        <div>
+                            <strong>Bia</strong>
+                            <small>há 4 horas</small>
+                        </div>
+
+                    </div>
+
+                    <span class="explore-category">
+                        🫂 Preciso de conselho
+                    </span>
+
+                    <h2>
+                        Vocês voltariam depois de uma mentira?
+                    </h2>
+
+                    <p>
+                        Ele escondeu uma coisa de mim e agora
+                        não sei se consigo confiar novamente.
+                    </p>
+
+                    <div class="explore-meta">
+                        <span>♥ 89</span>
+                        <span>💬 47</span>
+                    </div>
+
+                </a>
+
+
+                <a href="post.html?id=3"
+                   class="explore-card"
+                   data-category="Término">
+
+                    <div class="explore-author">
+
+                        <div class="explore-avatar">🌷</div>
+
+                        <div>
+                            <strong>Lua</strong>
+                            <small>ontem</small>
+                        </div>
+
+                    </div>
+
+                    <span class="explore-category">
+                        💔 Término
+                    </span>
+
+                    <h2>
+                        Acho que estou conseguindo seguir em frente.
+                    </h2>
+
+                    <p>
+                        Hoje percebi que passei uma tarde inteira
+                        sem pensar nele. Parece pequeno, mas para
+                        mim foi enorme.
+                    </p>
+
+                    <div class="explore-meta">
+                        <span>♥ 215</span>
+                        <span>💬 61</span>
+                    </div>
+
+                </a>
+
+
+                <a href="post.html?id=1"
+                   class="explore-card"
+                   data-category="Paixão">
+
+                    <div class="explore-author">
+
+                        <div class="explore-avatar">💗</div>
+
+                        <div>
+                            <strong>Uma garota apaixonada</strong>
+                            <small>ontem</small>
+                        </div>
+
+                    </div>
+
+                    <span class="explore-category">
+                        💕 Paixão
+                    </span>
+
+                    <h2>
+                        É possível gostar de alguém e ter medo?
+                    </h2>
+
+                    <p>
+                        Eu gosto muito dele, mas toda vez que penso
+                        em contar, sinto que posso estragar tudo.
+                    </p>
+
+                    <div class="explore-meta">
+                        <span>♥ 97</span>
+                        <span>💬 28</span>
+                    </div>
+
+                </a>
+
+            </section>
+
+
+            <div
+                class="no-results"
+                id="noResults"
+            >
+
+                <h2>♡ Nenhuma história encontrada</h2>
+
+                <p>
+                    Tente pesquisar outra palavra ou categoria.
+                </p>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<script>
+
+    const searchInput =
+        document.getElementById("exploreSearch");
+
+    const cards =
+        document.querySelectorAll(".explore-card");
+
+    const filters =
+        document.querySelectorAll(".category-filter");
+
+    const noResults =
+        document.getElementById("noResults");
+
+    let selectedCategory = "Todos";
+
+
+    function filterPosts() {
+
+        const search =
+            searchInput.value.toLowerCase();
+
+        let visibleCount = 0;
+
+
+        cards.forEach(card => {
+
+            const category =
+                card.dataset.category;
+
+            const text =
+                card.innerText.toLowerCase();
+
+
+            const matchesSearch =
+                text.includes(search);
+
+
+            const matchesCategory =
+                selectedCategory === "Todos" ||
+                category === selectedCategory;
+
+
+            if (
+                matchesSearch &&
+                matchesCategory
+            ) {
+
+                card.style.display = "block";
+                visibleCount++;
+
+            } else {
+
+                card.style.display = "none";
+
+            }
+
+        });
+
+
+        if (visibleCount === 0) {
+
+            noResults.style.display = "block";
+
+        } else {
+
+            noResults.style.display = "none";
+
+        }
+
+    }
+
+
+    searchInput.addEventListener(
+        "input",
+        filterPosts
+    );
+
+
+    filters.forEach(button => {
+
+        button.addEventListener(
+            "click",
+            function () {
+
+                filters.forEach(filter =>
+                    filter.classList.remove("active")
+                );
+
+                this.classList.add("active");
+
+                selectedCategory =
+                    this.dataset.category;
+
+                filterPosts();
+
+            }
+        );
+
+    });
+
+
+    /* IDENTIFICA CATEGORIA VINDO DE OUTRA PÁGINA */
+
+    const params =
+        new URLSearchParams(
+            window.location.search
+        );
+
+    const categoryParam =
+        params.get("categoria");
+
+
+    if (categoryParam) {
+
+        filters.forEach(button => {
+
+            if (
+                button.dataset.category === categoryParam
+            ) {
+
+                button.click();
+
+            }
+
+        });
+
+    }
+
+</script>
+```
+
+</body>
+</html>
