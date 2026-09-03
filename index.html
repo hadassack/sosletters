@@ -7,257 +7,1271 @@
 
     <title>Entre Nós ♡</title>
 
-    <link rel="stylesheet" href="style.css">
+    <meta
+        name="description"
+        content="Entre Nós — um espaço para compartilhar histórias, sentimentos e conselhos."
+    >
+
+    <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
 
-    <!-- CABEÇALHO -->
-    <header>
-        <div class="header-container">
+    <!-- =====================================================
+         FUNDO DECORATIVO
+    ====================================================== -->
 
-            <a href="index.html" class="logo">
-                Entre Nós ♡
+    <div class="background-decoration" aria-hidden="true">
+        <span>♡</span>
+        <span>♡</span>
+        <span>♥</span>
+        <span>♡</span>
+    </div>
+
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <header class="site-header">
+
+        <div class="header-inner">
+
+            <!-- LOGO -->
+
+            <a href="index.html" class="logo" aria-label="Entre Nós - Início">
+
+                <span class="logo-heart">♥</span>
+
+                <span class="logo-text">
+                    Entre Nós
+                </span>
+
             </a>
 
-            <nav>
-                <a href="index.html">Início</a>
-                <a href="#explorar">Explorar</a>
-                <a href="#categorias">Categorias</a>
-                <a href="#posts">Posts</a>
-            </nav>
 
-            <!-- BOTÃO PERFIL -->
-            <a href="perfil.html" class="btn btn-principal">
-                Meu perfil
-            </a>
+            <!-- PESQUISA -->
+
+            <form class="search-bar" id="search-form">
+
+                <span class="search-icon" aria-hidden="true">
+                    🔍
+                </span>
+
+                <input
+                    type="search"
+                    id="search-input"
+                    placeholder="O que você está procurando?"
+                    autocomplete="off"
+                >
+
+                <span class="search-heart" aria-hidden="true">
+                    ♡
+                </span>
+
+            </form>
+
+
+            <!-- AÇÕES DO HEADER -->
+
+            <div class="header-actions">
+
+                <a
+                    href="notificacoes.html"
+                    class="header-action"
+                    aria-label="Notificações"
+                    title="Notificações"
+                >
+                    <span>♡</span>
+                    <span class="notification-dot"></span>
+                </a>
+
+                <a
+                    href="mensagens.html"
+                    class="header-action"
+                    aria-label="Mensagens"
+                    title="Mensagens"
+                >
+                    <span>✉</span>
+                </a>
+
+                <a
+                    href="perfil.html"
+                    class="header-profile"
+                    aria-label="Meu perfil"
+                >
+
+                    <span class="mini-avatar">
+                        🌷
+                    </span>
+
+                </a>
+
+            </div>
 
         </div>
+
     </header>
 
 
-    <main>
 
-        <!-- BOAS-VINDAS -->
-        <section class="hero">
+    <!-- =====================================================
+         LAYOUT PRINCIPAL
+    ====================================================== -->
 
-            <h1>
-                Um cantinho para tudo aquilo
-                que fica preso no coração.
-            </h1>
-
-            <p>
-                Compartilhe suas histórias, peça conselhos,
-                desabafe e encontre pessoas que talvez estejam
-                sentindo exatamente a mesma coisa que você.
-            </p>
-
-            <div class="frase">
-                ♡ Você não precisa entender tudo sozinha.
-            </div>
-
-        </section>
+    <div class="app-layout">
 
 
-        <!-- CATEGORIAS -->
-        <section id="categorias">
+        <!-- =================================================
+             SIDEBAR
+        ================================================== -->
 
-            <div class="categorias">
+        <aside class="sidebar">
 
-                <button class="categoria ativa" data-categoria="Tudo">
-                    💌 Tudo
-                </button>
-
-                <button class="categoria" data-categoria="Término">
-                    💔 Término
-                </button>
-
-                <button class="categoria" data-categoria="Paixão">
-                    🩷 Paixão
-                </button>
-
-                <button
-                    class="categoria"
-                    data-categoria="Ele gosta de mim?"
-                >
-                    🤷 Ele gosta de mim?
-                </button>
-
-                <button
-                    class="categoria"
-                    data-categoria="Preciso de conselho"
-                >
-                    🫂 Preciso de conselho
-                </button>
-
-                <button
-                    class="categoria"
-                    data-categoria="Primeiro amor"
-                >
-                    🌷 Primeiro amor
-                </button>
-
-                <button
-                    class="categoria"
-                    data-categoria="Relacionamento complicado"
-                >
-                    🕸️ Relacionamento complicado
-                </button>
-
-            </div>
-
-        </section>
+            <div class="sidebar-inner">
 
 
-        <!-- CRIAR POST -->
-        <section class="criar-post">
+                <!-- NAVEGAÇÃO -->
 
-            <h2>
-                O que está acontecendo no seu coração? ♡
-            </h2>
+                <nav class="main-navigation" aria-label="Navegação principal">
 
-            <input
-                type="text"
-                id="titulo"
-                placeholder="Dê um título para o seu post..."
-            >
+                    <a href="index.html" class="nav-item active">
 
-            <br><br>
+                        <span class="nav-icon">⌂</span>
 
-            <textarea
-                id="texto"
-                placeholder="Compartilhe algo que está sentindo..."
-            ></textarea>
+                        <span class="nav-text">
+                            Início
+                        </span>
+
+                    </a>
 
 
-            <div class="post-opcoes">
+                    <a href="explorar.html" class="nav-item">
 
-                <select id="categoria-post">
+                        <span class="nav-icon">⌕</span>
 
-                    <option value="">
-                        🏷️ Escolher categoria
-                    </option>
+                        <span class="nav-text">
+                            Explorar
+                        </span>
 
-                    <option value="Término">
-                        💔 Término
-                    </option>
+                    </a>
 
-                    <option value="Paixão">
-                        🩷 Paixão
-                    </option>
 
-                    <option value="Ele gosta de mim?">
+                    <a href="criar.html" class="nav-item nav-create">
+
+                        <span class="nav-icon">＋</span>
+
+                        <span class="nav-text">
+                            Criar publicação
+                        </span>
+
+                    </a>
+
+
+                    <a href="salvos.html" class="nav-item">
+
+                        <span class="nav-icon">♡</span>
+
+                        <span class="nav-text">
+                            Salvos
+                        </span>
+
+                    </a>
+
+
+                    <a href="notificacoes.html" class="nav-item">
+
+                        <span class="nav-icon">♧</span>
+
+                        <span class="nav-text">
+                            Notificações
+                        </span>
+
+                        <span class="nav-badge">
+                            3
+                        </span>
+
+                    </a>
+
+
+                    <a href="mensagens.html" class="nav-item">
+
+                        <span class="nav-icon">✉</span>
+
+                        <span class="nav-text">
+                            Mensagens
+                        </span>
+
+                    </a>
+
+
+                    <a href="perfil.html" class="nav-item">
+
+                        <span class="nav-icon">◯</span>
+
+                        <span class="nav-text">
+                            Meu perfil
+                        </span>
+
+                    </a>
+
+                </nav>
+
+
+                <!-- DIVISOR -->
+
+                <div class="sidebar-divider"></div>
+
+
+                <!-- CATEGORIAS -->
+
+                <div class="sidebar-section">
+
+                    <h3 class="sidebar-title">
+                        Categorias
+                    </h3>
+
+
+                    <a href="explorar.html?categoria=Paixão" class="sidebar-category">
+                        💕 Paixão
+                    </a>
+
+                    <a href="explorar.html?categoria=Ele gosta de mim?" class="sidebar-category">
                         🤷 Ele gosta de mim?
-                    </option>
+                    </a>
 
-                    <option value="Preciso de conselho">
-                        🫂 Preciso de conselho
-                    </option>
+                    <a href="explorar.html?categoria=Término" class="sidebar-category">
+                        💔 Término
+                    </a>
 
-                    <option value="Primeiro amor">
+                    <a href="explorar.html?categoria=Preciso de conselho" class="sidebar-category">
+                        🫂 Conselho
+                    </a>
+
+                    <a href="explorar.html?categoria=Primeiro amor" class="sidebar-category">
                         🌷 Primeiro amor
-                    </option>
-
-                    <option value="Relacionamento complicado">
-                        🕸️ Relacionamento complicado
-                    </option>
-
-                </select>
+                    </a>
 
 
-                <button
-                    class="btn btn-principal"
-                    id="publicar-post"
-                >
-                    Publicar ♡
-                </button>
-
-            </div>
-
-        </section>
-
-
-        <!-- ÁREA PRINCIPAL -->
-        <div class="layout" id="explorar">
-
-
-            <!-- POSTS -->
-            <section class="posts" id="posts">
-
-                <!--
-                    Os posts serão criados
-                    automaticamente pelo script.js
-                -->
-
-            </section>
-
-
-            <!-- SIDEBAR -->
-            <aside class="sidebar">
-
-                <h3>
-                    Bem-vinda ♡
-                </h3>
-
-                <p>
-                    Aqui você pode falar sobre seus sentimentos
-                    sem medo de ser julgada.
-                </p>
-
-
-                <div class="frase-sidebar">
-
-                    "Às vezes, colocar em palavras já ajuda."
+                    <a href="explorar.html" class="sidebar-see-more">
+                        Ver todas →
+                    </a>
 
                 </div>
 
 
-                <br>
+                <!-- DIVISOR -->
+
+                <div class="sidebar-divider"></div>
 
 
-                <h3>
-                    Categorias populares
-                </h3>
+                <!-- OUTROS -->
+
+                <nav class="secondary-navigation">
+
+                    <a href="configuracoes.html" class="nav-item">
+
+                        <span class="nav-icon">
+                            ⚙
+                        </span>
+
+                        <span class="nav-text">
+                            Configurações
+                        </span>
+
+                    </a>
 
 
-                <p>
-                    🩷 Paixão
+                    <a href="ajuda.html" class="nav-item">
 
-                    <br><br>
+                        <span class="nav-icon">
+                            ?
+                        </span>
 
-                    🤷 Ele gosta de mim?
+                        <span class="nav-text">
+                            Ajuda
+                        </span>
 
-                    <br><br>
+                    </a>
 
-                    💔 Término
+                </nav>
 
-                    <br><br>
 
-                    🫂 Preciso de conselho
-                </p>
+                <!-- FRASE -->
 
-            </aside>
+                <div class="sidebar-quote">
+
+                    <span class="quote-heart">
+                        ♥
+                    </span>
+
+                    <p>
+                        Você não precisa entender
+                        tudo sozinha.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </aside>
+
+
+
+        <!-- =================================================
+             CONTEÚDO
+        ================================================== -->
+
+        <main class="main-content">
+
+
+            <!-- =============================================
+                 HERO
+            ============================================== -->
+
+            <section class="welcome-section">
+
+                <div class="welcome-content">
+
+                    <span class="welcome-label">
+                        UM ESPAÇO PARA VOCÊ ♡
+                    </span>
+
+                    <h1>
+                        Tudo aquilo que
+                        <span>fica preso</span>
+                        no coração.
+                    </h1>
+
+                    <p>
+                        Compartilhe suas histórias, peça conselhos,
+                        desabafe e encontre pessoas que talvez estejam
+                        sentindo exatamente a mesma coisa que você.
+                    </p>
+
+
+                    <div class="welcome-actions">
+
+                        <a href="criar.html" class="btn btn-primary">
+
+                            <span>＋</span>
+
+                            Criar publicação
+
+                        </a>
+
+
+                        <a href="explorar.html" class="btn btn-secondary">
+
+                            Explorar histórias
+
+                            <span>→</span>
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+
+                <div class="welcome-decoration" aria-hidden="true">
+
+                    <div class="heart-decoration heart-one">
+                        ♥
+                    </div>
+
+                    <div class="heart-decoration heart-two">
+                        ♡
+                    </div>
+
+                    <div class="heart-decoration heart-three">
+                        ♥
+                    </div>
+
+                    <div class="heart-circle">
+
+                        <span>
+                            ♡
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =============================================
+                 CATEGORIAS
+            ============================================== -->
+
+            <section class="category-section" id="categorias">
+
+                <div class="section-heading">
+
+                    <div>
+
+                        <span class="section-eyebrow">
+                            ENCONTRE O SEU CANTO
+                        </span>
+
+                        <h2>
+                            O que você quer conversar?
+                        </h2>
+
+                    </div>
+
+
+                    <a href="explorar.html" class="text-link">
+                        Ver todas →
+                    </a>
+
+                </div>
+
+
+                <div class="category-list">
+
+                    <button
+                        type="button"
+                        class="category-chip active"
+                        data-category="Tudo"
+                    >
+                        <span>♡</span>
+                        Tudo
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="category-chip"
+                        data-category="Ele gosta de mim?"
+                    >
+                        <span>🤷</span>
+                        Ele gosta de mim?
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="category-chip"
+                        data-category="Paixão"
+                    >
+                        <span>💕</span>
+                        Paixão
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="category-chip"
+                        data-category="Término"
+                    >
+                        <span>💔</span>
+                        Término
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="category-chip"
+                        data-category="Preciso de conselho"
+                    >
+                        <span>🫂</span>
+                        Preciso de conselho
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="category-chip"
+                        data-category="Primeiro amor"
+                    >
+                        <span>🌷</span>
+                        Primeiro amor
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="category-chip"
+                        data-category="Relacionamento complicado"
+                    >
+                        <span>🥀</span>
+                        Relacionamento complicado
+                    </button>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =============================================
+                 ÁREA DO FEED
+            ============================================== -->
+
+            <section class="feed-section" id="posts">
+
+
+                <!-- CABEÇALHO DO FEED -->
+
+                <div class="feed-header">
+
+                    <div>
+
+                        <span class="section-eyebrow">
+                            HISTÓRIAS DA COMUNIDADE
+                        </span>
+
+                        <h2>
+                            Talvez alguém entenda você.
+                        </h2>
+
+                    </div>
+
+
+                    <div class="feed-filter">
+
+                        <button
+                            type="button"
+                            class="filter-button active"
+                            data-filter="recentes"
+                        >
+                            Recentes
+                        </button>
+
+                        <button
+                            type="button"
+                            class="filter-button"
+                            data-filter="populares"
+                        >
+                            Populares
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =========================================
+                     CARD DE POST 1
+                ========================================== -->
+
+                <article
+                    class="post-card"
+                    data-category="Ele gosta de mim?"
+                    data-post-id="1"
+                >
+
+                    <!-- POST HEADER -->
+
+                    <div class="post-header">
+
+                        <a href="perfil.html" class="post-author">
+
+                            <span class="avatar avatar-flower">
+                                🌸
+                            </span>
+
+
+                            <span class="author-info">
+
+                                <strong>
+                                    Anônima
+                                </strong>
+
+                                <small>
+                                    há 2 horas
+                                </small>
+
+                            </span>
+
+                        </a>
+
+
+                        <button
+                            type="button"
+                            class="post-menu-button"
+                            aria-label="Mais opções"
+                        >
+                            ⋯
+                        </button>
+
+                    </div>
+
+
+
+                    <!-- CATEGORIA -->
+
+                    <a
+                        href="explorar.html?categoria=Ele%20gosta%20de%20mim%3F"
+                        class="post-category"
+                    >
+                        🤷 Ele gosta de mim?
+                    </a>
+
+
+
+                    <!-- CONTEÚDO -->
+
+                    <a
+                        href="post.html?id=1"
+                        class="post-content"
+                    >
+
+                        <h3>
+                            Eu não consigo entender os sinais dele...
+                        </h3>
+
+                        <p>
+                            A gente conversa praticamente todos os dias,
+                            ele sempre procura assunto e parece ficar
+                            diferente quando estamos perto dos nossos amigos.
+                            Mas quando tento entender se existe alguma coisa
+                            a mais, ele simplesmente muda de assunto...
+                        </p>
+
+                    </a>
+
+
+
+                    <!-- HASHTAGS -->
+
+                    <div class="hashtags">
+
+                        <a href="explorar.html?tag=crush">
+                            #crush
+                        </a>
+
+                        <a href="explorar.html?tag=duvida">
+                            #duvida
+                        </a>
+
+                        <a href="explorar.html?tag=conselho">
+                            #conselho
+                        </a>
+
+                    </div>
+
+
+
+                    <!-- AÇÕES -->
+
+                    <div class="post-actions">
+
+                        <div class="post-reactions">
+
+                            <button
+                                type="button"
+                                class="reaction-button"
+                                data-reaction="support"
+                                aria-label="Apoiar"
+                            >
+                                <span>♥</span>
+                                <span class="reaction-count">
+                                    124
+                                </span>
+                            </button>
+
+
+                            <a
+                                href="post.html?id=1#comentarios"
+                                class="post-action"
+                            >
+                                <span>♡</span>
+                                <span>
+                                    32
+                                </span>
+                            </a>
+
+
+                            <button
+                                type="button"
+                                class="post-action share-button"
+                                data-post-id="1"
+                            >
+                                <span>↗</span>
+                                <span>
+                                    Compartilhar
+                                </span>
+                            </button>
+
+                        </div>
+
+
+                        <button
+                            type="button"
+                            class="save-button"
+                            data-post-id="1"
+                            aria-label="Salvar publicação"
+                        >
+                            ♡
+                        </button>
+
+                    </div>
+
+                </article>
+
+
+
+                <!-- =========================================
+                     CARD DE POST 2
+                ========================================== -->
+
+                <article
+                    class="post-card"
+                    data-category="Preciso de conselho"
+                    data-post-id="2"
+                >
+
+                    <div class="post-header">
+
+                        <a href="perfil.html" class="post-author">
+
+                            <span class="avatar avatar-wine">
+                                🌹
+                            </span>
+
+                            <span class="author-info">
+
+                                <strong>
+                                    Bia
+                                </strong>
+
+                                <small>
+                                    há 4 horas
+                                </small>
+
+                            </span>
+
+                        </a>
+
+
+                        <button
+                            type="button"
+                            class="post-menu-button"
+                            aria-label="Mais opções"
+                        >
+                            ⋯
+                        </button>
+
+                    </div>
+
+
+                    <a
+                        href="explorar.html?categoria=Preciso%20de%20conselho"
+                        class="post-category"
+                    >
+                        🫂 Preciso de conselho
+                    </a>
+
+
+                    <a
+                        href="post.html?id=2"
+                        class="post-content"
+                    >
+
+                        <h3>
+                            Vocês voltariam depois de uma mentira?
+                        </h3>
+
+                        <p>
+                            Eu descobri uma coisa que ele escondeu de mim
+                            durante algumas semanas. Ele pediu desculpas e
+                            disse que estava com medo da minha reação.
+                            Eu ainda gosto muito dele, mas não sei se consigo
+                            confiar novamente.
+                        </p>
+
+                    </a>
+
+
+                    <div class="hashtags">
+
+                        <a href="explorar.html?tag=relacionamento">
+                            #relacionamento
+                        </a>
+
+                        <a href="explorar.html?tag=conselho">
+                            #conselho
+                        </a>
+
+                    </div>
+
+
+                    <div class="post-actions">
+
+                        <div class="post-reactions">
+
+                            <button
+                                type="button"
+                                class="reaction-button"
+                                data-reaction="support"
+                                aria-label="Apoiar"
+                            >
+                                <span>♥</span>
+                                <span class="reaction-count">
+                                    89
+                                </span>
+                            </button>
+
+
+                            <a
+                                href="post.html?id=2#comentarios"
+                                class="post-action"
+                            >
+                                <span>♡</span>
+                                <span>
+                                    47
+                                </span>
+                            </a>
+
+
+                            <button
+                                type="button"
+                                class="post-action share-button"
+                                data-post-id="2"
+                            >
+                                <span>↗</span>
+                                <span>
+                                    Compartilhar
+                                </span>
+                            </button>
+
+                        </div>
+
+
+                        <button
+                            type="button"
+                            class="save-button"
+                            data-post-id="2"
+                            aria-label="Salvar publicação"
+                        >
+                            ♡
+                        </button>
+
+                    </div>
+
+                </article>
+
+
+
+                <!-- =========================================
+                     CARD DE POST 3
+                ========================================== -->
+
+                <article
+                    class="post-card"
+                    data-category="Término"
+                    data-post-id="3"
+                >
+
+                    <div class="post-header">
+
+                        <a href="perfil.html" class="post-author">
+
+                            <span class="avatar avatar-cream">
+                                🌷
+                            </span>
+
+                            <span class="author-info">
+
+                                <strong>
+                                    Lua
+                                </strong>
+
+                                <small>
+                                    ontem
+                                </small>
+
+                            </span>
+
+                        </a>
+
+
+                        <button
+                            type="button"
+                            class="post-menu-button"
+                            aria-label="Mais opções"
+                        >
+                            ⋯
+                        </button>
+
+                    </div>
+
+
+                    <a
+                        href="explorar.html?categoria=Término"
+                        class="post-category"
+                    >
+                        💔 Término
+                    </a>
+
+
+                    <a
+                        href="post.html?id=3"
+                        class="post-content"
+                    >
+
+                        <h3>
+                            Acho que estou finalmente conseguindo seguir em frente.
+                        </h3>
+
+                        <p>
+                            Durante meses achei que nunca conseguiria ficar
+                            bem depois do término. Hoje percebi que passei
+                            uma tarde inteira sem pensar nele. Parece pequeno,
+                            mas para mim foi enorme.
+                        </p>
+
+                    </a>
+
+
+                    <div class="hashtags">
+
+                        <a href="explorar.html?tag=superacao">
+                            #superação
+                        </a>
+
+                        <a href="explorar.html?tag=termino">
+                            #término
+                        </a>
+
+                    </div>
+
+
+                    <div class="post-actions">
+
+                        <div class="post-reactions">
+
+                            <button
+                                type="button"
+                                class="reaction-button"
+                                data-reaction="support"
+                                aria-label="Apoiar"
+                            >
+                                <span>♥</span>
+                                <span class="reaction-count">
+                                    215
+                                </span>
+                            </button>
+
+
+                            <a
+                                href="post.html?id=3#comentarios"
+                                class="post-action"
+                            >
+                                <span>♡</span>
+                                <span>
+                                    61
+                                </span>
+                            </a>
+
+
+                            <button
+                                type="button"
+                                class="post-action share-button"
+                                data-post-id="3"
+                            >
+                                <span>↗</span>
+                                <span>
+                                    Compartilhar
+                                </span>
+                            </button>
+
+                        </div>
+
+
+                        <button
+                            type="button"
+                            class="save-button"
+                            data-post-id="3"
+                            aria-label="Salvar publicação"
+                        >
+                            ♡
+                        </button>
+
+                    </div>
+
+                </article>
+
+
+
+                <!-- =========================================
+                     CARREGAR MAIS
+                ========================================== -->
+
+                <div class="load-more">
+
+                    <button
+                        type="button"
+                        class="btn btn-secondary"
+                        id="load-more-posts"
+                    >
+                        Carregar mais histórias
+                    </button>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =============================================
+                 BLOCO DE CTA
+            ============================================== -->
+
+            <section class="community-cta">
+
+                <div class="cta-heart">
+                    ♥
+                </div>
+
+                <div class="cta-content">
+
+                    <span class="section-eyebrow">
+                        QUER CONTAR A SUA HISTÓRIA?
+                    </span>
+
+                    <h2>
+                        Às vezes, colocar em palavras já ajuda.
+                    </h2>
+
+                    <p>
+                        Você pode publicar usando seu nome ou permanecer anônima.
+                        O espaço é seu.
+                    </p>
+
+                </div>
+
+
+                <a href="criar.html" class="btn btn-primary">
+                    Escrever agora →
+                </a>
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         MOBILE NAVIGATION
+    ====================================================== -->
+
+    <nav class="mobile-navigation" aria-label="Navegação mobile">
+
+        <a
+            href="index.html"
+            class="mobile-nav-item active"
+        >
+            <span>⌂</span>
+            <small>Início</small>
+        </a>
+
+
+        <a
+            href="explorar.html"
+            class="mobile-nav-item"
+        >
+            <span>⌕</span>
+            <small>Explorar</small>
+        </a>
+
+
+        <a
+            href="criar.html"
+            class="mobile-nav-create"
+            aria-label="Criar publicação"
+        >
+            ＋
+        </a>
+
+
+        <a
+            href="notificacoes.html"
+            class="mobile-nav-item"
+        >
+            <span>♡</span>
+            <small>Avisos</small>
+        </a>
+
+
+        <a
+            href="perfil.html"
+            class="mobile-nav-item"
+        >
+            <span>◯</span>
+            <small>Perfil</small>
+        </a>
+
+    </nav>
+
+
+
+    <!-- =====================================================
+         TOAST
+    ====================================================== -->
+
+    <div
+        id="toast"
+        class="toast"
+        role="status"
+        aria-live="polite"
+    >
+
+        <span class="toast-icon">
+            ♥
+        </span>
+
+        <span id="toast-message">
+            Feito!
+        </span>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         MODAL DE OPÇÕES DO POST
+    ====================================================== -->
+
+    <div
+        class="modal-overlay"
+        id="post-options-modal"
+        aria-hidden="true"
+    >
+
+        <div
+            class="modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="post-options-title"
+        >
+
+            <button
+                type="button"
+                class="modal-close"
+                id="close-post-modal"
+                aria-label="Fechar"
+            >
+                ×
+            </button>
+
+
+            <span class="modal-heart">
+                ♡
+            </span>
+
+
+            <h2 id="post-options-title">
+                O que você quer fazer?
+            </h2>
+
+
+            <div class="modal-options">
+
+                <button type="button" class="modal-option">
+                    🔖 Salvar publicação
+                </button>
+
+                <button type="button" class="modal-option">
+                    🔗 Copiar link
+                </button>
+
+                <button type="button" class="modal-option">
+                    🚫 Ocultar publicação
+                </button>
+
+                <button
+                    type="button"
+                    class="modal-option danger"
+                >
+                    ⚠️ Denunciar
+                </button>
+
+            </div>
 
         </div>
 
-    </main>
+    </div>
 
 
-    <!-- RODAPÉ -->
-    <footer>
 
-        Feito com <span>♡</span>
-        para quem precisa de um lugar para falar.
+    <!-- =====================================================
+         FOOTER
+    ====================================================== -->
 
-        <br><br>
+    <footer class="site-footer">
 
-        © 2026 Entre Nós
+        <div class="footer-inner">
+
+            <div class="footer-brand">
+
+                <a href="index.html" class="footer-logo">
+                    ♥ Entre Nós
+                </a>
+
+                <p>
+                    Um lugar para falar,
+                    ouvir e ser ouvida.
+                </p>
+
+            </div>
+
+
+            <div class="footer-links">
+
+                <a href="sobre.html">
+                    Sobre nós
+                </a>
+
+                <a href="ajuda.html">
+                    Ajuda
+                </a>
+
+                <a href="sobre.html#regras">
+                    Regras da comunidade
+                </a>
+
+                <a href="sobre.html#privacidade">
+                    Privacidade
+                </a>
+
+                <a href="sobre.html#termos">
+                    Termos
+                </a>
+
+            </div>
+
+
+            <div class="footer-copy">
+
+                Feito com
+                <span>♥</span>
+                para quem precisa de um lugar para falar.
+
+                <br>
+
+                © 2026 Entre Nós
+
+            </div>
+
+        </div>
 
     </footer>
 
 
-    <!-- JAVASCRIPT -->
-    <script src="script.js"></script>
+
+    <!-- =====================================================
+         JAVASCRIPT
+    ====================================================== -->
+
+    <script src="js/app.js"></script>
 
 </body>
 
