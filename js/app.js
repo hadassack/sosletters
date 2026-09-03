@@ -108,11 +108,68 @@ function updateSaveButtons() {
 function toggleSave(postId) {
     postId = String(postId);
 
-    if (savedPosts.includes(postId)) {
+    const buttons = document.querySelectorAll(
+        `.save-button[data-post-id="${postId}"]`
+    );
+
+    const wasSaved = savedPosts.includes(postId);
+
+    if (wasSaved) {
         savedPosts = savedPosts.filter(id => id !== postId);
 
-        showToast("Publicação removida dos salvos", "♡");
+        buttons.forEach(button => {
+            button.classList.remove("saved", "save-pop");
+
+            button.textContent = "♡";
+
+            button.animate(
+                [
+                    { transform: "scale(1)" },
+                    { transform: "scale(.82)" },
+                    { transform: "scale(1)" }
+                ],
+                {
+                    duration: 280,
+                    easing: "cubic-bezier(.34,1.56,.64,1)"
+                }
+            );
+        });
+
+        showToast("Removido dos salvos", "♡");
+
     } else {
+        savedPosts.push(postId);
+
+        buttons.forEach(button => {
+            button.classList.add("saved", "save-pop");
+
+            button.textContent = "♥";
+
+            button.animate(
+                [
+                    { transform: "scale(1)" },
+                    { transform: "scale(1.35)" },
+                    { transform: "scale(.92)" },
+                    { transform: "scale(1.08)" },
+                    { transform: "scale(1)" }
+                ],
+                {
+                    duration: 500,
+                    easing: "cubic-bezier(.34,1.56,.64,1)"
+                }
+            );
+
+            setTimeout(() => {
+                button.classList.remove("save-pop");
+            }, 550);
+        });
+
+        showToast("Publicação salva ♥", "♥");
+    }
+
+    setStorage(STORAGE_KEYS.savedPosts, savedPosts);
+    updateSaveButtons();
+} else {
         savedPosts.push(postId);
 
         showToast("Publicação salva ♥", "♥");
@@ -178,6 +235,105 @@ function initializeReactionCounts() {
 
 
 function toggleReaction(button) {
+    const card = button.closest(".post-card");
+
+    if (!card) return;
+
+    const postId = String(card.dataset.postId);
+    const icon = button.querySelector("span:first-child");
+    const count = button.querySelector(".reaction-count");
+
+    const wasReacted = reactions[postId] === true;
+
+    reactions[postId] = !wasReacted;
+
+    setStorage(STORAGE_KEYS.reactions, reactions);
+
+    const originalCount = parseInt(
+        count?.dataset.originalCount || "0",
+        10
+    );
+
+    if (!wasReacted) {
+
+        button.classList.add("reacted");
+
+        if (icon) {
+            icon.textContent = "❤️";
+        }
+
+        if (count) {
+            count.textContent = originalCount + 1;
+        }
+
+        /* ANIMAÇÃO DO CORAÇÃO */
+
+        button.animate(
+            [
+                {
+                    transform: "scale(1)",
+                },
+                {
+                    transform: "scale(.88)",
+                },
+                {
+                    transform: "scale(1.35)",
+                },
+                {
+                    transform: "scale(.95)",
+                },
+                {
+                    transform: "scale(1.08)",
+                },
+                {
+                    transform: "scale(1)",
+                }
+            ],
+            {
+                duration: 600,
+                easing: "cubic-bezier(.34,1.56,.64,1)"
+            }
+        );
+
+        /* Pequenos corações */
+
+        createFloatingHeart(button);
+
+        showToast(
+            "Você apoiou essa história ❤️",
+            "♥"
+        );
+
+    } else {
+
+        button.classList.remove("reacted");
+
+        if (icon) {
+            icon.textContent = "♥";
+        }
+
+        if (count) {
+            count.textContent = originalCount;
+        }
+
+        button.animate(
+            [
+                { transform: "scale(1)" },
+                { transform: "scale(.85)" },
+                { transform: "scale(1)" }
+            ],
+            {
+                duration: 300,
+                easing: "ease-out"
+            }
+        );
+
+        showToast(
+            "Apoio removido",
+            "♡"
+        );
+    }
+}
     const card = button.closest(".post-card");
 
     if (!card) {
