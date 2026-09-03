@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Meu Perfil • Entre Nós ♡</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- CABEÇALHO -->
+    <header>
+        <div class="header-container">
+
+            <a href="index.html" class="logo">
+                Entre Nós ♡
+            </a>
+
+            <nav>
+                <a href="index.html">Início</a>
+                <a href="index.html#explorar">Explorar</a>
+                <a href="index.html#categorias">Categorias</a>
+                <a href="index.html#posts">Posts</a>
+            </nav>
+
+            <button class="btn btn-principal" id="botao-perfil">
+                Meu perfil
+            </button>
+
+        </div>
+    </header>
+
+
+    <main>
+
+        <!-- PERFIL -->
+        <section class="perfil-card">
+
+            <div class="perfil-avatar" id="avatar-perfil">
+                🩷
+            </div>
+
+            <h1 id="nome-perfil">
+                Meu Perfil
+            </h1>
+
+            <p id="bio-perfil">
+                Conte um pouquinho sobre você ♡
+            </p>
+
+
+            <button
+                class="btn btn-secundario"
+                id="editar-perfil"
+            >
+                Editar perfil
+            </button>
+
+        </section>
+
+
+        <!-- ÁREA DE EDIÇÃO -->
+        <section
+            class="criar-post"
+            id="area-editar-perfil"
+            style="display: none;"
+        >
+
+            <h2>
+                Editar perfil ♡
+            </h2>
+
+
+            <input
+                type="text"
+                id="input-nome"
+                placeholder="Seu nome ou apelido"
+            >
+
+            <br><br>
+
+
+            <textarea
+                id="input-bio"
+                placeholder="Escreva uma pequena bio..."
+            ></textarea>
+
+
+            <div class="post-opcoes">
+
+                <select id="input-avatar">
+
+                    <option value="🩷">🩷 Coração</option>
+                    <option value="🌸">🌸 Flor</option>
+                    <option value="🌙">🌙 Lua</option>
+                    <option value="💌">💌 Carta</option>
+                    <option value="🦋">🦋 Borboleta</option>
+                    <option value="✨">✨ Estrela</option>
+
+                </select>
+
+
+                <button
+                    class="btn btn-principal"
+                    id="salvar-perfil"
+                >
+                    Salvar ♡
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- MEUS POSTS -->
+        <section class="posts" id="meus-posts">
+
+            <h2 class="titulo-secao">
+                Meus posts ♡
+            </h2>
+
+            <!-- Os posts serão adicionados pelo JavaScript -->
+
+        </section>
+
+    </main>
+
+
+    <footer>
+
+        Feito com <span>♡</span>
+        para quem precisa de um lugar para falar.
+
+        <br><br>
+
+        © 2026 Entre Nós
+
+    </footer>
+
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
