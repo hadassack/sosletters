@@ -5,6 +5,7 @@
 
 "use strict";
 
+
 /* =========================================================
    CONFIGURAÇÕES
    ========================================================= */
@@ -30,6 +31,7 @@ function getStorage(key, fallback = []) {
         }
 
         return JSON.parse(value);
+
     } catch (error) {
         console.warn("Erro ao ler localStorage:", error);
         return fallback;
@@ -40,6 +42,7 @@ function getStorage(key, fallback = []) {
 function setStorage(key, value) {
     try {
         localStorage.setItem(key, JSON.stringify(value));
+
     } catch (error) {
         console.warn("Erro ao salvar no localStorage:", error);
     }
@@ -75,9 +78,20 @@ function showToast(message, icon = "♥") {
    ESTADO
    ========================================================= */
 
-let savedPosts = getStorage(STORAGE_KEYS.savedPosts, []);
-let reactions = getStorage(STORAGE_KEYS.reactions, {});
-let hiddenPosts = getStorage(STORAGE_KEYS.hiddenPosts, []);
+let savedPosts = getStorage(
+    STORAGE_KEYS.savedPosts,
+    []
+);
+
+let reactions = getStorage(
+    STORAGE_KEYS.reactions,
+    {}
+);
+
+let hiddenPosts = getStorage(
+    STORAGE_KEYS.hiddenPosts,
+    []
+);
 
 
 /* =========================================================
@@ -85,74 +99,145 @@ let hiddenPosts = getStorage(STORAGE_KEYS.hiddenPosts, []);
    ========================================================= */
 
 function updateSaveButtons() {
-    const buttons = document.querySelectorAll(".save-button");
+
+    const buttons =
+        document.querySelectorAll(".save-button");
 
     buttons.forEach(button => {
-        const postId = String(button.dataset.postId);
+
+        const postId =
+            String(button.dataset.postId);
 
         if (savedPosts.includes(postId)) {
+
             button.classList.add("saved");
+
             button.textContent = "♥";
-            button.setAttribute("aria-label", "Remover dos salvos");
-            button.title = "Remover dos salvos";
+
+            button.setAttribute(
+                "aria-label",
+                "Remover dos salvos"
+            );
+
+            button.title =
+                "Remover dos salvos";
+
         } else {
+
             button.classList.remove("saved");
+
             button.textContent = "♡";
-            button.setAttribute("aria-label", "Salvar publicação");
-            button.title = "Salvar publicação";
+
+            button.setAttribute(
+                "aria-label",
+                "Salvar publicação"
+            );
+
+            button.title =
+                "Salvar publicação";
         }
+
     });
 }
 
 
 function toggleSave(postId) {
-function toggleSave(postId) {
+
     postId = String(postId);
 
-    const buttons = document.querySelectorAll(
-        `.save-button[data-post-id="${postId}"]`
-    );
+    const buttons =
+        document.querySelectorAll(
+            `.save-button[data-post-id="${postId}"]`
+        );
 
-    const wasSaved = savedPosts.includes(postId);
+    const wasSaved =
+        savedPosts.includes(postId);
+
+
+    /* =====================================================
+       REMOVER DOS SALVOS
+       ===================================================== */
 
     if (wasSaved) {
-        savedPosts = savedPosts.filter(id => id !== postId);
+
+        savedPosts =
+            savedPosts.filter(
+                id => id !== postId
+            );
+
 
         buttons.forEach(button => {
-            button.classList.remove("saved", "save-pop");
+
+            button.classList.remove(
+                "saved",
+                "save-pop"
+            );
 
             button.textContent = "♡";
 
             button.animate(
                 [
-                    { transform: "scale(1)" },
-                    { transform: "scale(.82)" },
-                    { transform: "scale(1)" }
+                    {
+                        transform: "scale(1)"
+                    },
+                    {
+                        transform: "scale(.82)"
+                    },
+                    {
+                        transform: "scale(1)"
+                    }
                 ],
                 {
                     duration: 280,
                     easing: "cubic-bezier(.34,1.56,.64,1)"
                 }
             );
+
         });
 
-        showToast("Removido dos salvos", "♡");
+
+        showToast(
+            "Removido dos salvos",
+            "♡"
+        );
+
+
+    /* =====================================================
+       SALVAR
+       ===================================================== */
 
     } else {
+
         savedPosts.push(postId);
 
+
         buttons.forEach(button => {
-            button.classList.add("saved", "save-pop");
+
+            button.classList.add(
+                "saved",
+                "save-pop"
+            );
 
             button.textContent = "♥";
 
+
             button.animate(
                 [
-                    { transform: "scale(1)" },
-                    { transform: "scale(1.35)" },
-                    { transform: "scale(.92)" },
-                    { transform: "scale(1.08)" },
-                    { transform: "scale(1)" }
+                    {
+                        transform: "scale(1)"
+                    },
+                    {
+                        transform: "scale(1.35)"
+                    },
+                    {
+                        transform: "scale(.92)"
+                    },
+                    {
+                        transform: "scale(1.08)"
+                    },
+                    {
+                        transform: "scale(1)"
+                    }
                 ],
                 {
                     duration: 500,
@@ -160,15 +245,30 @@ function toggleSave(postId) {
                 }
             );
 
+
             setTimeout(() => {
-                button.classList.remove("save-pop");
+
+                button.classList.remove(
+                    "save-pop"
+                );
+
             }, 550);
+
         });
 
-        showToast("Publicação salva ♥", "♥");
+
+        showToast(
+            "Publicação salva ♥",
+            "♥"
+        );
     }
 
-    setStorage(STORAGE_KEYS.savedPosts, savedPosts);
+
+    setStorage(
+        STORAGE_KEYS.savedPosts,
+        savedPosts
+    );
+
     updateSaveButtons();
 }
 
@@ -177,112 +277,254 @@ function toggleSave(postId) {
    REAÇÕES
    ========================================================= */
 
-function updateReactionButton(button) {
-    const postId = String(
-        button.closest(".post-card")?.dataset.postId || ""
+function initializeReactionCounts() {
+
+    document
+        .querySelectorAll(".reaction-count")
+        .forEach(count => {
+
+            if (!count.dataset.originalCount) {
+
+                count.dataset.originalCount =
+                    count.textContent.trim();
+
+            }
+
+        });
+}
+
+
+/* =========================================================
+   CORAÇÃO FLUTUANTE
+   ========================================================= */
+
+function createFloatingHeart(button) {
+
+    if (!button) {
+        return;
+    }
+
+
+    const heart =
+        document.createElement("span");
+
+    heart.className =
+        "floating-heart";
+
+    heart.textContent = "♥";
+
+
+    const rect =
+        button.getBoundingClientRect();
+
+
+    heart.style.position = "fixed";
+
+    heart.style.left =
+        `${rect.left + rect.width / 2}px`;
+
+    heart.style.top =
+        `${rect.top + rect.height / 2}px`;
+
+    heart.style.pointerEvents =
+        "none";
+
+    heart.style.zIndex =
+        "9999";
+
+    heart.style.fontSize =
+        "20px";
+
+
+    document.body.appendChild(
+        heart
     );
 
-    const isReacted = reactions[postId] === true;
 
-    const icon = button.querySelector("span:first-child");
-    const count = button.querySelector(".reaction-count");
+    const animation =
+        heart.animate(
+            [
+                {
+                    transform:
+                        "translate(-50%, -50%) scale(.6)",
+                    opacity: 0
+                },
+                {
+                    transform:
+                        "translate(-50%, -75%) scale(1)",
+                    opacity: 1
+                },
+                {
+                    transform:
+                        "translate(-50%, -150%) scale(1.25)",
+                    opacity: 0
+                }
+            ],
+            {
+                duration: 700,
+                easing:
+                    "cubic-bezier(.2,.8,.2,1)"
+            }
+        );
 
-    if (isReacted) {
-        button.classList.add("reacted");
 
-        if (icon) {
-            icon.textContent = "♥";
-        }
-
-        if (count) {
-            const originalCount =
-                parseInt(count.dataset.originalCount || count.textContent, 10);
-
-            count.textContent = originalCount + 1;
-        }
-    } else {
-        button.classList.remove("reacted");
-
-        if (icon) {
-            icon.textContent = "♥";
-        }
-
-        if (count) {
-            const originalCount =
-                parseInt(count.dataset.originalCount || count.textContent, 10);
-
-            count.textContent = originalCount;
-        }
-    }
+    animation.onfinish = () => {
+        heart.remove();
+    };
 }
 
 
-function initializeReactionCounts() {
-    document.querySelectorAll(".reaction-count").forEach(count => {
-        if (!count.dataset.originalCount) {
-            count.dataset.originalCount = count.textContent;
-        }
-    });
-}
-
+/* =========================================================
+   BOTÃO DE REAÇÃO
+   ========================================================= */
 
 function toggleReaction(button) {
-  
-        /* ANIMAÇÃO DO CORAÇÃO */
+
+    const card =
+        button.closest(".post-card");
+
+
+    if (!card) {
+        return;
+    }
+
+
+    const postId =
+        String(card.dataset.postId);
+
+
+    const icon =
+        button.querySelector(
+            "span:first-child"
+        );
+
+
+    const count =
+        button.querySelector(
+            ".reaction-count"
+        );
+
+
+    const wasReacted =
+        reactions[postId] === true;
+
+
+    reactions[postId] =
+        !wasReacted;
+
+
+    setStorage(
+        STORAGE_KEYS.reactions,
+        reactions
+    );
+
+
+    const originalCount =
+        parseInt(
+            count?.dataset.originalCount || "0",
+            10
+        );
+
+
+    /* =====================================================
+       APOIAR
+       ===================================================== */
+
+    if (!wasReacted) {
+
+        button.classList.add(
+            "reacted"
+        );
+
+
+        if (icon) {
+            icon.textContent = "❤️";
+        }
+
+
+        if (count) {
+            count.textContent =
+                originalCount + 1;
+        }
+
+
+        /* Animação principal */
 
         button.animate(
             [
                 {
-                    transform: "scale(1)",
+                    transform: "scale(1)"
                 },
                 {
-                    transform: "scale(.88)",
+                    transform: "scale(.88)"
                 },
                 {
-                    transform: "scale(1.35)",
+                    transform: "scale(1.35)"
                 },
                 {
-                    transform: "scale(.95)",
+                    transform: "scale(.95)"
                 },
                 {
-                    transform: "scale(1.08)",
+                    transform: "scale(1.08)"
                 },
                 {
-                    transform: "scale(1)",
+                    transform: "scale(1)"
                 }
             ],
             {
                 duration: 600,
-                easing: "cubic-bezier(.34,1.56,.64,1)"
+                easing:
+                    "cubic-bezier(.34,1.56,.64,1)"
             }
         );
 
+
         /* Pequenos corações */
 
-        createFloatingHeart(button);
+        createFloatingHeart(
+            button
+        );
+
 
         showToast(
             "Você apoiou essa história ❤️",
             "♥"
         );
 
+
+    /* =====================================================
+       REMOVER APOIO
+       ===================================================== */
+
     } else {
 
-        button.classList.remove("reacted");
+        button.classList.remove(
+            "reacted"
+        );
+
 
         if (icon) {
             icon.textContent = "♥";
         }
 
+
         if (count) {
-            count.textContent = originalCount;
+            count.textContent =
+                originalCount;
         }
+
 
         button.animate(
             [
-                { transform: "scale(1)" },
-                { transform: "scale(.85)" },
-                { transform: "scale(1)" }
+                {
+                    transform: "scale(1)"
+                },
+                {
+                    transform: "scale(.85)"
+                },
+                {
+                    transform: "scale(1)"
+                }
             ],
             {
                 duration: 300,
@@ -290,79 +532,11 @@ function toggleReaction(button) {
             }
         );
 
+
         showToast(
             "Apoio removido",
             "♡"
         );
-    }
-}
-    const card = button.closest(".post-card");
-
-    if (!card) {
-        return;
-    }
-
-    const postId = String(card.dataset.postId);
-
-    reactions[postId] = !reactions[postId];
-
-    setStorage(STORAGE_KEYS.reactions, reactions);
-
-    const count = button.querySelector(".reaction-count");
-
-    if (reactions[postId]) {
-        button.classList.add("reacted");
-
-        const icon = button.querySelector("span:first-child");
-
-        if (icon) {
-            icon.textContent = "❤️";
-        }
-
-        if (count) {
-            const originalCount =
-                parseInt(count.dataset.originalCount, 10);
-
-            count.textContent = originalCount + 1;
-        }
-
-        showToast("Você apoiou essa história ❤️", "♥");
-
-        button.animate(
-            [
-                {
-                    transform: "scale(1)"
-                },
-                {
-                    transform: "scale(1.2)"
-                },
-                {
-                    transform: "scale(1)"
-                }
-            ],
-            {
-                duration: 350,
-                easing: "ease-out"
-            }
-        );
-
-    } else {
-        button.classList.remove("reacted");
-
-        const icon = button.querySelector("span:first-child");
-
-        if (icon) {
-            icon.textContent = "♥";
-        }
-
-        if (count) {
-            const originalCount =
-                parseInt(count.dataset.originalCount, 10);
-
-            count.textContent = originalCount;
-        }
-
-        showToast("Apoio removido", "♡");
     }
 }
 
@@ -372,43 +546,85 @@ function toggleReaction(button) {
    ========================================================= */
 
 async function sharePost(postId) {
+
     const url =
         window.location.origin +
-        window.location.pathname.replace("index.html", "post.html") +
+        window.location.pathname
+            .replace(
+                "index.html",
+                "post.html"
+            ) +
         "?id=" +
         encodeURIComponent(postId);
 
+
     const shareData = {
-        title: "Entre Nós ♡",
-        text: "Olha essa história no Entre Nós.",
-        url: url
+
+        title:
+            "Entre Nós ♡",
+
+        text:
+            "Olha essa história no Entre Nós.",
+
+        url:
+            url
     };
 
-    try {
-        if (navigator.share) {
-            await navigator.share(shareData);
 
-            showToast("Compartilhado ♥", "↗");
+    try {
+
+        if (navigator.share) {
+
+            await navigator.share(
+                shareData
+            );
+
+            showToast(
+                "Compartilhado ♥",
+                "↗"
+            );
+
             return;
         }
 
-        await navigator.clipboard.writeText(url);
 
-        showToast("Link copiado para a área de transferência", "🔗");
+        await navigator.clipboard
+            .writeText(url);
+
+
+        showToast(
+            "Link copiado para a área de transferência",
+            "🔗"
+        );
+
 
     } catch (error) {
 
-        if (error.name === "AbortError") {
+        if (
+            error.name ===
+            "AbortError"
+        ) {
             return;
         }
 
-        try {
-            await navigator.clipboard.writeText(url);
 
-            showToast("Link copiado ♥", "🔗");
+        try {
+
+            await navigator.clipboard
+                .writeText(url);
+
+
+            showToast(
+                "Link copiado ♥",
+                "🔗"
+            );
 
         } catch {
-            showToast("Não foi possível compartilhar", "!");
+
+            showToast(
+                "Não foi possível compartilhar",
+                "!"
+            );
         }
     }
 }
@@ -418,63 +634,114 @@ async function sharePost(postId) {
    MODAL DE OPÇÕES
    ========================================================= */
 
-const modal = document.getElementById("post-options-modal");
-const closeModalButton = document.getElementById("close-post-modal");
+const modal =
+    document.getElementById(
+        "post-options-modal"
+    );
+
+
+const closeModalButton =
+    document.getElementById(
+        "close-post-modal"
+    );
+
 
 let selectedPostId = null;
 
 
 function openPostModal(postId) {
+
     if (!modal) {
         return;
     }
 
-    selectedPostId = String(postId);
 
-    modal.classList.add("active");
-    modal.setAttribute("aria-hidden", "false");
+    selectedPostId =
+        String(postId);
 
-    document.body.style.overflow = "hidden";
+
+    modal.classList.add(
+        "active"
+    );
+
+
+    modal.setAttribute(
+        "aria-hidden",
+        "false"
+    );
+
+
+    document.body.style.overflow =
+        "hidden";
 }
 
 
 function closePostModal() {
+
     if (!modal) {
         return;
     }
 
-    modal.classList.remove("active");
-    modal.setAttribute("aria-hidden", "true");
 
-    document.body.style.overflow = "";
+    modal.classList.remove(
+        "active"
+    );
 
-    selectedPostId = null;
+
+    modal.setAttribute(
+        "aria-hidden",
+        "true"
+    );
+
+
+    document.body.style.overflow =
+        "";
+
+
+    selectedPostId =
+        null;
 }
 
 
 if (closeModalButton) {
-    closeModalButton.addEventListener("click", closePostModal);
+
+    closeModalButton.addEventListener(
+        "click",
+        closePostModal
+    );
 }
 
 
 if (modal) {
-    modal.addEventListener("click", event => {
 
-        if (event.target === modal) {
-            closePostModal();
+    modal.addEventListener(
+        "click",
+        event => {
+
+            if (
+                event.target === modal
+            ) {
+                closePostModal();
+            }
+
         }
-
-    });
+    );
 }
 
 
-document.addEventListener("keydown", event => {
+document.addEventListener(
+    "keydown",
+    event => {
 
-    if (event.key === "Escape") {
-        closePostModal();
+        if (
+            event.key ===
+            "Escape"
+        ) {
+            closePostModal();
+        }
+
     }
-
-});
+);
 
 
 /* =========================================================
@@ -482,30 +749,60 @@ document.addEventListener("keydown", event => {
    ========================================================= */
 
 function hidePost(postId) {
-    postId = String(postId);
 
-    if (!hiddenPosts.includes(postId)) {
-        hiddenPosts.push(postId);
+    postId =
+        String(postId);
+
+
+    if (
+        !hiddenPosts.includes(
+            postId
+        )
+    ) {
+
+        hiddenPosts.push(
+            postId
+        );
     }
 
-    setStorage(STORAGE_KEYS.hiddenPosts, hiddenPosts);
 
-    const card = document.querySelector(
-        `.post-card[data-post-id="${postId}"]`
+    setStorage(
+        STORAGE_KEYS.hiddenPosts,
+        hiddenPosts
     );
+
+
+    const card =
+        document.querySelector(
+            `.post-card[data-post-id="${postId}"]`
+        );
+
 
     if (card) {
 
-        card.style.transition = "0.3s ease";
-        card.style.opacity = "0";
-        card.style.transform = "translateY(-10px)";
+        card.style.transition =
+            "0.3s ease";
+
+        card.style.opacity =
+            "0";
+
+        card.style.transform =
+            "translateY(-10px)";
+
 
         setTimeout(() => {
+
             card.remove();
+
         }, 300);
     }
 
-    showToast("Publicação ocultada", "♡");
+
+    showToast(
+        "Publicação ocultada",
+        "♡"
+    );
+
 
     closePostModal();
 }
@@ -522,6 +819,7 @@ function reportPost() {
         "⚠"
     );
 
+
     closePostModal();
 }
 
@@ -534,21 +832,35 @@ async function copyPostLink(postId) {
 
     const url =
         window.location.origin +
-        window.location.pathname.replace("index.html", "post.html") +
+        window.location.pathname
+            .replace(
+                "index.html",
+                "post.html"
+            ) +
         "?id=" +
         encodeURIComponent(postId);
 
+
     try {
 
-        await navigator.clipboard.writeText(url);
+        await navigator.clipboard
+            .writeText(url);
 
-        showToast("Link copiado ♥", "🔗");
+
+        showToast(
+            "Link copiado ♥",
+            "🔗"
+        );
+
 
     } catch {
 
-        showToast("Não foi possível copiar o link", "!");
-
+        showToast(
+            "Não foi possível copiar o link",
+            "!"
+        );
     }
+
 
     closePostModal();
 }
@@ -560,57 +872,110 @@ async function copyPostLink(postId) {
 
 function setupPostMenus() {
 
-    document.querySelectorAll(".post-menu-button").forEach(button => {
+    document
+        .querySelectorAll(
+            ".post-menu-button"
+        )
+        .forEach(button => {
 
-        button.addEventListener("click", event => {
+            button.addEventListener(
+                "click",
+                event => {
 
-            event.preventDefault();
-            event.stopPropagation();
+                    event.preventDefault();
 
-            const card = button.closest(".post-card");
-
-            if (!card) {
-                return;
-            }
-
-            openPostModal(card.dataset.postId);
-        });
-
-    });
+                    event.stopPropagation();
 
 
-    document.querySelectorAll(".modal-option").forEach(option => {
+                    const card =
+                        button.closest(
+                            ".post-card"
+                        );
 
-        option.addEventListener("click", () => {
 
-            if (!selectedPostId) {
-                return;
-            }
+                    if (!card) {
+                        return;
+                    }
 
-            const text = option.textContent.toLowerCase();
 
-            if (text.includes("salvar")) {
+                    openPostModal(
+                        card.dataset.postId
+                    );
 
-                toggleSave(selectedPostId);
-                closePostModal();
-
-            } else if (text.includes("copiar")) {
-
-                copyPostLink(selectedPostId);
-
-            } else if (text.includes("ocultar")) {
-
-                hidePost(selectedPostId);
-
-            } else if (text.includes("denunciar")) {
-
-                reportPost();
-
-            }
+                }
+            );
 
         });
 
-    });
+
+    document
+        .querySelectorAll(
+            ".modal-option"
+        )
+        .forEach(option => {
+
+            option.addEventListener(
+                "click",
+                () => {
+
+                    if (!selectedPostId) {
+                        return;
+                    }
+
+
+                    const text =
+                        option.textContent
+                            .toLowerCase();
+
+
+                    if (
+                        text.includes(
+                            "salvar"
+                        )
+                    ) {
+
+                        toggleSave(
+                            selectedPostId
+                        );
+
+                        closePostModal();
+
+
+                    } else if (
+                        text.includes(
+                            "copiar"
+                        )
+                    ) {
+
+                        copyPostLink(
+                            selectedPostId
+                        );
+
+
+                    } else if (
+                        text.includes(
+                            "ocultar"
+                        )
+                    ) {
+
+                        hidePost(
+                            selectedPostId
+                        );
+
+
+                    } else if (
+                        text.includes(
+                            "denunciar"
+                        )
+                    ) {
+
+                        reportPost();
+                    }
+
+                }
+            );
+
+        });
 }
 
 
@@ -620,57 +985,100 @@ function setupPostMenus() {
 
 function setupCategoryFilters() {
 
-    const chips = document.querySelectorAll(".category-chip");
-    const posts = document.querySelectorAll(".post-card");
+    const chips =
+        document.querySelectorAll(
+            ".category-chip"
+        );
+
+
+    const posts =
+        document.querySelectorAll(
+            ".post-card"
+        );
+
 
     chips.forEach(chip => {
 
-        chip.addEventListener("click", () => {
+        chip.addEventListener(
+            "click",
+            () => {
 
-            const category = chip.dataset.category;
+                const category =
+                    chip.dataset.category;
 
-            chips.forEach(item => {
-                item.classList.remove("active");
-            });
 
-            chip.classList.add("active");
+                chips.forEach(item => {
 
-            let visiblePosts = 0;
+                    item.classList.remove(
+                        "active"
+                    );
 
-            posts.forEach(post => {
+                });
 
-                const postCategory = post.dataset.category;
+
+                chip.classList.add(
+                    "active"
+                );
+
+
+                let visiblePosts = 0;
+
+
+                posts.forEach(post => {
+
+                    const postCategory =
+                        post.dataset.category;
+
+
+                    if (
+                        category === "Tudo" ||
+                        postCategory === category
+                    ) {
+
+                        post.style.display =
+                            "";
+
+                        visiblePosts++;
+
+                    } else {
+
+                        post.style.display =
+                            "none";
+                    }
+
+                });
+
 
                 if (
-                    category === "Tudo" ||
-                    postCategory === category
+                    category === "Tudo"
                 ) {
 
-                    post.style.display = "";
-                    visiblePosts++;
+                    showToast(
+                        "Mostrando todas as histórias",
+                        "♡"
+                    );
 
                 } else {
 
-                    post.style.display = "none";
-
+                    showToast(
+                        `Mostrando histórias de ${category}`,
+                        "♥"
+                    );
                 }
 
-            });
 
-            if (category === "Tudo") {
-                showToast("Mostrando todas as histórias", "♡");
-            } else {
-                showToast(
-                    `Mostrando histórias de ${category}`,
-                    "♥"
-                );
+                if (
+                    visiblePosts === 0
+                ) {
+
+                    showToast(
+                        "Ainda não há histórias nessa categoria",
+                        "♡"
+                    );
+                }
+
             }
-
-            if (visiblePosts === 0) {
-                showToast("Ainda não há histórias nessa categoria", "♡");
-            }
-
-        });
+        );
 
     });
 }
@@ -683,82 +1091,156 @@ function setupCategoryFilters() {
 function setupFeedFilters() {
 
     const filters =
-        document.querySelectorAll(".filter-button");
+        document.querySelectorAll(
+            ".filter-button"
+        );
+
 
     const feed =
-        document.querySelector(".feed-section");
+        document.querySelector(
+            ".feed-section"
+        );
+
 
     if (!feed) {
         return;
     }
 
+
     const cards =
-        Array.from(feed.querySelectorAll(".post-card"));
+        Array.from(
+            feed.querySelectorAll(
+                ".post-card"
+            )
+        );
+
 
     filters.forEach(filter => {
 
-        filter.addEventListener("click", () => {
+        filter.addEventListener(
+            "click",
+            () => {
 
-            filters.forEach(item => {
-                item.classList.remove("active");
-            });
+                filters.forEach(item => {
 
-            filter.classList.add("active");
+                    item.classList.remove(
+                        "active"
+                    );
 
-            const type = filter.dataset.filter;
+                });
 
-            if (type === "populares") {
 
-                cards.sort((a, b) => {
+                filter.classList.add(
+                    "active"
+                );
 
-                    const aCount =
-                        parseInt(
-                            a.querySelector(".reaction-count")?.textContent || "0",
-                            10
+
+                const type =
+                    filter.dataset.filter;
+
+
+                if (
+                    type === "populares"
+                ) {
+
+                    cards.sort(
+                        (a, b) => {
+
+                            const aCount =
+                                parseInt(
+                                    a.querySelector(
+                                        ".reaction-count"
+                                    )?.textContent ||
+                                    "0",
+                                    10
+                                );
+
+
+                            const bCount =
+                                parseInt(
+                                    b.querySelector(
+                                        ".reaction-count"
+                                    )?.textContent ||
+                                    "0",
+                                    10
+                                );
+
+
+                            return (
+                                bCount -
+                                aCount
+                            );
+                        }
+                    );
+
+
+                    cards.forEach(card => {
+
+                        feed.insertBefore(
+                            card,
+                            feed.querySelector(
+                                ".load-more"
+                            )
                         );
 
-                    const bCount =
-                        parseInt(
-                            b.querySelector(".reaction-count")?.textContent || "0",
-                            10
+                    });
+
+
+                    showToast(
+                        "Histórias mais apoiadas primeiro",
+                        "♥"
+                    );
+
+
+                } else {
+
+                    cards.sort(
+                        (a, b) => {
+
+                            const idA =
+                                parseInt(
+                                    a.dataset.postId ||
+                                    "0",
+                                    10
+                                );
+
+
+                            const idB =
+                                parseInt(
+                                    b.dataset.postId ||
+                                    "0",
+                                    10
+                                );
+
+
+                            return (
+                                idA -
+                                idB
+                            );
+                        }
+                    );
+
+
+                    cards.forEach(card => {
+
+                        feed.insertBefore(
+                            card,
+                            feed.querySelector(
+                                ".load-more"
+                            )
                         );
 
-                    return bCount - aCount;
-                });
+                    });
 
-                cards.forEach(card => {
-                    feed.insertBefore(
-                        card,
-                        feed.querySelector(".load-more")
+
+                    showToast(
+                        "Histórias mais recentes primeiro",
+                        "♡"
                     );
-                });
+                }
 
-                showToast("Histórias mais apoiadas primeiro", "♥");
-
-            } else {
-
-                cards.sort((a, b) => {
-
-                    const idA =
-                        parseInt(a.dataset.postId || "0", 10);
-
-                    const idB =
-                        parseInt(b.dataset.postId || "0", 10);
-
-                    return idA - idB;
-                });
-
-                cards.forEach(card => {
-                    feed.insertBefore(
-                        card,
-                        feed.querySelector(".load-more")
-                    );
-                });
-
-                showToast("Histórias mais recentes primeiro", "♡");
             }
-
-        });
+        );
 
     });
 }
@@ -770,90 +1252,130 @@ function setupFeedFilters() {
 
 function setupSearch() {
 
-    const form = document.getElementById("search-form");
-    const input = document.getElementById("search-input");
+    const form =
+        document.getElementById(
+            "search-form"
+        );
+
+
+    const input =
+        document.getElementById(
+            "search-input"
+        );
+
 
     if (!form || !input) {
         return;
     }
 
-    form.addEventListener("submit", event => {
 
-        event.preventDefault();
+    form.addEventListener(
+        "submit",
+        event => {
 
-        const query =
-            input.value.trim().toLowerCase();
+            event.preventDefault();
 
-        if (!query) {
-            showToast("Digite algo para pesquisar", "🔍");
-            input.focus();
-            return;
-        }
 
-        const posts =
-            document.querySelectorAll(".post-card");
+            const query =
+                input.value
+                    .trim()
+                    .toLowerCase();
 
-        let found = 0;
 
-        posts.forEach(post => {
+            if (!query) {
 
-            const content =
-                post.textContent.toLowerCase();
+                showToast(
+                    "Digite algo para pesquisar",
+                    "🔍"
+                );
 
-            if (content.includes(query)) {
+                input.focus();
 
-                post.style.display = "";
+                return;
+            }
 
-                found++;
 
-                post.scrollIntoView({
-                    behavior: "smooth",
-                    block: "center"
-                });
+            const posts =
+                document.querySelectorAll(
+                    ".post-card"
+                );
 
-                post.animate(
-                    [
+
+            let found = 0;
+
+
+            posts.forEach(post => {
+
+                const content =
+                    post.textContent
+                        .toLowerCase();
+
+
+                if (
+                    content.includes(
+                        query
+                    )
+                ) {
+
+                    post.style.display =
+                        "";
+
+                    found++;
+
+
+                    post.scrollIntoView({
+                        behavior: "smooth",
+                        block: "center"
+                    });
+
+
+                    post.animate(
+                        [
+                            {
+                                transform:
+                                    "scale(1)"
+                            },
+                            {
+                                transform:
+                                    "scale(1.02)"
+                            },
+                            {
+                                transform:
+                                    "scale(1)"
+                            }
+                        ],
                         {
-                            transform: "scale(1)"
-                        },
-                        {
-                            transform: "scale(1.02)"
-                        },
-                        {
-                            transform: "scale(1)"
+                            duration: 500
                         }
-                    ],
-                    {
-                        duration: 500
-                    }
+                    );
+
+
+                } else {
+
+                    post.style.display =
+                        "none";
+                }
+
+            });
+
+
+            if (found > 0) {
+
+                showToast(
+                    `${found} história(s) encontrada(s)`,
+                    "🔍"
                 );
 
             } else {
 
-                post.style.display = "none";
-
+                showToast(
+                    "Nenhuma história encontrada",
+                    "♡"
+                );
             }
 
-        });
-
-        if (found > 0) {
-
-            showToast(
-                `${found} história(s) encontrada(s)`,
-                "🔍"
-            );
-
-        } else {
-
-            showToast(
-                "Nenhuma história encontrada",
-                "♡"
-            );
-
         }
-
-    });
-
+    );
 }
 
 
@@ -863,20 +1385,31 @@ function setupSearch() {
 
 function setupShareButtons() {
 
-    document.querySelectorAll(".share-button").forEach(button => {
+    document
+        .querySelectorAll(
+            ".share-button"
+        )
+        .forEach(button => {
 
-        button.addEventListener("click", event => {
+            button.addEventListener(
+                "click",
+                event => {
 
-            event.preventDefault();
+                    event.preventDefault();
 
-            const postId = button.dataset.postId;
 
-            sharePost(postId);
+                    const postId =
+                        button.dataset.postId;
+
+
+                    sharePost(
+                        postId
+                    );
+
+                }
+            );
 
         });
-
-    });
-
 }
 
 
@@ -886,21 +1419,33 @@ function setupShareButtons() {
 
 function setupSaveButtons() {
 
-    document.querySelectorAll(".save-button").forEach(button => {
+    document
+        .querySelectorAll(
+            ".save-button"
+        )
+        .forEach(button => {
 
-        button.addEventListener("click", event => {
+            button.addEventListener(
+                "click",
+                event => {
 
-            event.preventDefault();
-            event.stopPropagation();
+                    event.preventDefault();
 
-            const postId = button.dataset.postId;
+                    event.stopPropagation();
 
-            toggleSave(postId);
+
+                    const postId =
+                        button.dataset.postId;
+
+
+                    toggleSave(
+                        postId
+                    );
+
+                }
+            );
 
         });
-
-    });
-
 }
 
 
@@ -910,18 +1455,93 @@ function setupSaveButtons() {
 
 function setupReactionButtons() {
 
-    document.querySelectorAll(".reaction-button").forEach(button => {
+    document
+        .querySelectorAll(
+            ".reaction-button"
+        )
+        .forEach(button => {
 
-        button.addEventListener("click", event => {
+            button.addEventListener(
+                "click",
+                event => {
 
-            event.preventDefault();
+                    event.preventDefault();
 
-            toggleReaction(button);
+
+                    toggleReaction(
+                        button
+                    );
+
+                }
+            );
 
         });
+}
 
-    });
 
+/* =========================================================
+   BOTÕES DE COMENTÁRIOS
+   ========================================================= */
+
+function setupCommentButtons() {
+
+    document
+        .querySelectorAll(
+            'a.post-action[href*="#comentarios"]'
+        )
+        .forEach(link => {
+
+            link.addEventListener(
+                "click",
+                event => {
+
+                    event.preventDefault();
+
+
+                    link.animate(
+                        [
+                            {
+                                transform:
+                                    "scale(1)"
+                            },
+                            {
+                                transform:
+                                    "scale(.88)"
+                            },
+                            {
+                                transform:
+                                    "scale(1.08)"
+                            },
+                            {
+                                transform:
+                                    "scale(1)"
+                            }
+                        ],
+                        {
+                            duration: 300,
+                            easing:
+                                "cubic-bezier(.34,1.56,.64,1)"
+                        }
+                    );
+
+
+                    const href =
+                        link.getAttribute(
+                            "href"
+                        );
+
+
+                    setTimeout(() => {
+
+                        window.location.href =
+                            href;
+
+                    }, 220);
+
+                }
+            );
+
+        });
 }
 
 
@@ -932,37 +1552,48 @@ function setupReactionButtons() {
 function setupLoadMore() {
 
     const button =
-        document.getElementById("load-more-posts");
+        document.getElementById(
+            "load-more-posts"
+        );
+
 
     if (!button) {
         return;
     }
 
-    button.addEventListener("click", () => {
 
-        showToast(
-            "Novas histórias estarão disponíveis em breve ♥",
-            "♥"
-        );
+    button.addEventListener(
+        "click",
+        () => {
 
-        button.animate(
-            [
+            showToast(
+                "Novas histórias estarão disponíveis em breve ♥",
+                "♥"
+            );
+
+
+            button.animate(
+                [
+                    {
+                        transform:
+                            "scale(1)"
+                    },
+                    {
+                        transform:
+                            "scale(.97)"
+                    },
+                    {
+                        transform:
+                            "scale(1)"
+                    }
+                ],
                 {
-                    transform: "scale(1)"
-                },
-                {
-                    transform: "scale(0.97)"
-                },
-                {
-                    transform: "scale(1)"
+                    duration: 250
                 }
-            ],
-            {
-                duration: 250
-            }
-        );
+            );
 
-    });
+        }
+    );
 }
 
 
@@ -972,24 +1603,35 @@ function setupLoadMore() {
 
 function setupCategoryLinks() {
 
-    document.querySelectorAll(
-        ".sidebar-category, .sidebar-see-more"
-    ).forEach(link => {
+    document
+        .querySelectorAll(
+            ".sidebar-category, .sidebar-see-more"
+        )
+        .forEach(link => {
 
-        link.addEventListener("click", () => {
+            link.addEventListener(
+                "click",
+                () => {
 
-            const href = link.getAttribute("href");
+                    const href =
+                        link.getAttribute(
+                            "href"
+                        );
 
-            if (
-                href &&
-                href.includes("explorar.html")
-            ) {
-                return;
-            }
+
+                    if (
+                        href &&
+                        href.includes(
+                            "explorar.html"
+                        )
+                    ) {
+                        return;
+                    }
+
+                }
+            );
 
         });
-
-    });
 }
 
 
@@ -999,66 +1641,100 @@ function setupCategoryLinks() {
 
 function applyHiddenPosts() {
 
-    hiddenPosts.forEach(postId => {
+    hiddenPosts.forEach(
+        postId => {
 
-        const card = document.querySelector(
-            `.post-card[data-post-id="${postId}"]`
-        );
+            const card =
+                document.querySelector(
+                    `.post-card[data-post-id="${postId}"]`
+                );
 
-        if (card) {
-            card.remove();
+
+            if (card) {
+                card.remove();
+            }
+
         }
-
-    });
+    );
 }
 
 
 /* =========================================================
-   ESTADO DAS REAÇÕES
+   RESTAURAR REAÇÕES
    ========================================================= */
 
 function restoreReactions() {
 
     initializeReactionCounts();
 
-    document.querySelectorAll(".reaction-button").forEach(button => {
 
-        const card = button.closest(".post-card");
+    document
+        .querySelectorAll(
+            ".reaction-button"
+        )
+        .forEach(button => {
 
-        if (!card) {
-            return;
-        }
+            const card =
+                button.closest(
+                    ".post-card"
+                );
 
-        const postId = String(card.dataset.postId);
 
-        if (reactions[postId]) {
-            button.classList.add("reacted");
-
-            const icon =
-                button.querySelector("span:first-child");
-
-            const count =
-                button.querySelector(".reaction-count");
-
-            if (icon) {
-                icon.textContent = "❤️";
+            if (!card) {
+                return;
             }
 
-            if (count) {
 
-                const originalCount =
-                    parseInt(
-                        count.dataset.originalCount,
-                        10
+            const postId =
+                String(
+                    card.dataset.postId
+                );
+
+
+            if (
+                reactions[postId]
+            ) {
+
+                button.classList.add(
+                    "reacted"
+                );
+
+
+                const icon =
+                    button.querySelector(
+                        "span:first-child"
                     );
 
-                count.textContent =
-                    originalCount + 1;
+
+                const count =
+                    button.querySelector(
+                        ".reaction-count"
+                    );
+
+
+                if (icon) {
+                    icon.textContent =
+                        "❤️";
+                }
+
+
+                if (count) {
+
+                    const originalCount =
+                        parseInt(
+                            count.dataset.originalCount ||
+                            "0",
+                            10
+                        );
+
+
+                    count.textContent =
+                        originalCount + 1;
+                }
+
             }
-        }
 
-    });
-
+        });
 }
 
 
@@ -1068,26 +1744,37 @@ function restoreReactions() {
 
 function setupPostLinks() {
 
-    document.querySelectorAll(".post-content").forEach(link => {
+    document
+        .querySelectorAll(
+            ".post-content"
+        )
+        .forEach(link => {
 
-        link.addEventListener("click", event => {
+            link.addEventListener(
+                "click",
+                event => {
 
-            const href =
-                link.getAttribute("href");
+                    const href =
+                        link.getAttribute(
+                            "href"
+                        );
 
-            if (!href) {
-                event.preventDefault();
 
-                showToast(
-                    "Abrindo história...",
-                    "♡"
-                );
-            }
+                    if (!href) {
+
+                        event.preventDefault();
+
+
+                        showToast(
+                            "Abrindo história...",
+                            "♡"
+                        );
+                    }
+
+                }
+            );
 
         });
-
-    });
-
 }
 
 
@@ -1097,74 +1784,109 @@ function setupPostLinks() {
 
 function setupHeartHover() {
 
-    document.querySelectorAll(
-        ".logo-heart, .heart-decoration, .cta-heart"
-    ).forEach(element => {
+    document
+        .querySelectorAll(
+            ".logo-heart, .heart-decoration, .cta-heart"
+        )
+        .forEach(element => {
 
-        element.addEventListener("mouseenter", () => {
+            element.addEventListener(
+                "mouseenter",
+                () => {
 
-            element.animate(
-                [
-                    {
-                        transform: "scale(1)"
-                    },
-                    {
-                        transform: "scale(1.12)"
-                    },
-                    {
-                        transform: "scale(1)"
-                    }
-                ],
-                {
-                    duration: 450,
-                    easing: "ease-out"
+                    element.animate(
+                        [
+                            {
+                                transform:
+                                    "scale(1)"
+                            },
+                            {
+                                transform:
+                                    "scale(1.12)"
+                            },
+                            {
+                                transform:
+                                    "scale(1)"
+                            }
+                        ],
+                        {
+                            duration: 450,
+                            easing:
+                                "ease-out"
+                        }
+                    );
+
                 }
             );
 
         });
-
-    });
-
 }
 
 
 /* =========================================================
-   CARREGAR PUBLICAÇÕES CRIADAS PELO USUÁRIO
-========================================================= */
+   POSTS CRIADOS PELO USUÁRIO
+   ========================================================= */
 
 function getUserPosts() {
+
     try {
+
         return JSON.parse(
-            localStorage.getItem("entreNos_userPosts") || "[]"
+            localStorage.getItem(
+                "entreNos_userPosts"
+            ) || "[]"
         );
+
     } catch {
+
         return [];
     }
 }
 
 
 function escapeUserPostHTML(text) {
-    const div = document.createElement("div");
-    div.textContent = text || "";
+
+    const div =
+        document.createElement(
+            "div"
+        );
+
+
+    div.textContent =
+        text || "";
+
+
     return div.innerHTML;
 }
 
 
 function renderUserPosts() {
 
-    const feed = document.querySelector(".feed-section");
+    const feed =
+        document.querySelector(
+            ".feed-section"
+        );
+
 
     if (!feed) {
         return;
     }
 
-    const loadMore = feed.querySelector(".load-more");
+
+    const loadMore =
+        feed.querySelector(
+            ".load-more"
+        );
+
 
     if (!loadMore) {
         return;
     }
 
-    const userPosts = getUserPosts();
+
+    const userPosts =
+        getUserPosts();
+
 
     if (!userPosts.length) {
         return;
@@ -1173,7 +1895,7 @@ function renderUserPosts() {
 
     userPosts.forEach(post => {
 
-        /* Evita duplicar a publicação */
+        /* Evita duplicação */
 
         if (
             feed.querySelector(
@@ -1184,9 +1906,13 @@ function renderUserPosts() {
         }
 
 
-        /* Retira o emoji da categoria para o filtro */
+        /* Remove emoji da categoria
+           para o filtro */
 
-        const categoryText = String(post.categoria || "")
+        const categoryText =
+            String(
+                post.categoria || ""
+            )
             .replace(
                 /^[\p{Emoji_Presentation}\p{Extended_Pictographic}\s]+/u,
                 ""
@@ -1194,33 +1920,51 @@ function renderUserPosts() {
             .trim();
 
 
-        const article = document.createElement("article");
+        const article =
+            document.createElement(
+                "article"
+            );
 
-        article.className = "post-card";
 
-        article.dataset.category = categoryText;
+        article.className =
+            "post-card";
 
-        article.dataset.postId = String(post.id);
+
+        article.dataset.category =
+            categoryText;
+
+
+        article.dataset.postId =
+            String(post.id);
 
 
         article.innerHTML = `
 
             <div class="post-header">
 
-                <a href="perfil.html" class="post-author">
+                <a
+                    href="perfil.html"
+                    class="post-author"
+                >
 
                     <span class="avatar avatar-flower">
-                        ${escapeUserPostHTML(post.avatar || "🌸")}
+                        ${escapeUserPostHTML(
+                            post.avatar || "🌸"
+                        )}
                     </span>
 
                     <span class="author-info">
 
                         <strong>
-                            ${escapeUserPostHTML(post.nome || "Anônima")}
+                            ${escapeUserPostHTML(
+                                post.nome || "Anônima"
+                            )}
                         </strong>
 
                         <small>
-                            ${escapeUserPostHTML(post.tempo || "agora")}
+                            ${escapeUserPostHTML(
+                                post.tempo || "agora"
+                            )}
                         </small>
 
                     </span>
@@ -1240,24 +1984,34 @@ function renderUserPosts() {
 
 
             <a
-                href="explorar.html?categoria=${encodeURIComponent(categoryText)}"
+                href="explorar.html?categoria=${encodeURIComponent(
+                    categoryText
+                )}"
                 class="post-category"
             >
-                ${escapeUserPostHTML(post.categoria || "💭 Desabafo")}
+                ${escapeUserPostHTML(
+                    post.categoria || "💭 Desabafo"
+                )}
             </a>
 
 
             <a
-                href="post.html?id=${encodeURIComponent(post.id)}"
+                href="post.html?id=${encodeURIComponent(
+                    post.id
+                )}"
                 class="post-content"
             >
 
                 <h3>
-                    ${escapeUserPostHTML(post.titulo)}
+                    ${escapeUserPostHTML(
+                        post.titulo || "Sem título"
+                    )}
                 </h3>
 
                 <p>
-                    ${escapeUserPostHTML(post.texto)}
+                    ${escapeUserPostHTML(
+                        post.texto || ""
+                    )}
                 </p>
 
             </a>
@@ -1265,16 +2019,20 @@ function renderUserPosts() {
 
             <div class="hashtags">
 
-                <a href="explorar.html?tag=entre-nos">
+                <a
+                    href="explorar.html?tag=entre-nos"
+                >
                     #entreNós
                 </a>
 
                 ${
                     post.askingAdvice
                         ? `
-                        <a href="explorar.html?tag=conselho">
-                            #conselho
-                        </a>
+                            <a
+                                href="explorar.html?tag=conselho"
+                            >
+                                #conselho
+                            </a>
                         `
                         : ""
                 }
@@ -1303,7 +2061,9 @@ function renderUserPosts() {
 
 
                     <a
-                        href="post.html?id=${encodeURIComponent(post.id)}#comentarios"
+                        href="post.html?id=${encodeURIComponent(
+                            post.id
+                        )}#comentarios"
                         class="post-action"
                     >
 
@@ -1319,7 +2079,9 @@ function renderUserPosts() {
                     <button
                         type="button"
                         class="post-action share-button"
-                        data-post-id="${escapeUserPostHTML(post.id)}"
+                        data-post-id="${escapeUserPostHTML(
+                            post.id
+                        )}"
                     >
 
                         <span>↗</span>
@@ -1336,7 +2098,9 @@ function renderUserPosts() {
                 <button
                     type="button"
                     class="save-button"
-                    data-post-id="${escapeUserPostHTML(post.id)}"
+                    data-post-id="${escapeUserPostHTML(
+                        post.id
+                    )}"
                     aria-label="Salvar publicação"
                 >
                     ♡
@@ -1347,124 +2111,99 @@ function renderUserPosts() {
         `;
 
 
-        /* Coloca o novo post no topo do feed */
+        /* Coloca no topo */
 
-        feed.insertBefore(article, feed.firstElementChild);
-
-
-        /* Configura imediatamente os botões do novo post */
-
-        const saveButton =
-            article.querySelector(".save-button");
-
-        const reactionButton =
-            article.querySelector(".reaction-button");
-
-        const shareButton =
-            article.querySelector(".share-button");
-
-        const menuButton =
-            article.querySelector(".post-menu-button");
-
-
-        if (saveButton) {
-
-            saveButton.addEventListener("click", event => {
-
-                event.preventDefault();
-                event.stopPropagation();
-
-                toggleSave(post.id);
-
-            });
-
-        }
-
-
-        if (reactionButton) {
-
-            reactionButton.addEventListener("click", event => {
-
-                event.preventDefault();
-
-                toggleReaction(reactionButton);
-
-            });
-
-        }
-
-
-        if (shareButton) {
-
-            shareButton.addEventListener("click", event => {
-
-                event.preventDefault();
-
-                sharePost(post.id);
-
-            });
-
-        }
-
-
-        if (menuButton) {
-
-            menuButton.addEventListener("click", event => {
-
-                event.preventDefault();
-                event.stopPropagation();
-
-                openPostModal(post.id);
-
-            });
-
-        }
+        feed.insertBefore(
+            article,
+            feed.firstElementChild
+        );
 
     });
 
 
-    /* Atualiza o estado dos botões */
+    /*
+       IMPORTANTE:
+       Não colocamos listeners aqui.
+
+       Os listeners são configurados
+       globalmente pelo initializeApp().
+       Isso evita que os botões sejam
+       ativados duas vezes.
+    */
+
 
     updateSaveButtons();
 
     initializeReactionCounts();
 
     restoreReactions();
+}
 
-}/* =========================================================
+
+/* =========================================================
    INICIALIZAÇÃO
    ========================================================= */
 
 function initializeApp() {
 
+    /* Posts criados pelo usuário */
+
     renderUserPosts();
+
+
+    /* Posts ocultos */
 
     applyHiddenPosts();
 
+
+    /* Estados */
+
     initializeReactionCounts();
+
     restoreReactions();
 
     updateSaveButtons();
 
+
+    /* Botões */
+
     setupSaveButtons();
+
     setupReactionButtons();
+
     setupShareButtons();
+
+    setupCommentButtons();
 
     setupPostMenus();
 
+
+    /* Filtros */
+
     setupCategoryFilters();
+
     setupFeedFilters();
 
+
+    /* Pesquisa */
+
     setupSearch();
+
+
+    /* Outros */
 
     setupLoadMore();
 
     setupCategoryLinks();
+
     setupPostLinks();
 
     setupHeartHover();
 
-    console.log("Entre Nós ♡ carregado com sucesso!");
+
+    console.log(
+        "Entre Nós ♡ carregado com sucesso!"
+    );
 }
 
 
@@ -1472,7 +2211,10 @@ function initializeApp() {
    INICIAR
    ========================================================= */
 
-if (document.readyState === "loading") {
+if (
+    document.readyState ===
+    "loading"
+) {
 
     document.addEventListener(
         "DOMContentLoaded",
@@ -1482,5 +2224,4 @@ if (document.readyState === "loading") {
 } else {
 
     initializeApp();
-
 }
