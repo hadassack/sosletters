@@ -18,7 +18,8 @@ const postsIniciais = [
         titulo: "Eu não consigo entender os sinais dele...",
         texto: "Gente, preciso MUITO de uma opinião. Às vezes parece que ele gosta de mim, mas em outros momentos parece que eu estou simplesmente imaginando tudo. Vocês já passaram por isso?",
         curtidas: 128,
-        comentarios: 34
+        comentarios: 34,
+        autor: false
     },
     {
         id: 2,
@@ -30,7 +31,8 @@ const postsIniciais = [
         titulo: "Acho que estou gostando dele de verdade...",
         texto: "Eu tentei fingir que não era nada, mas ultimamente penso nele o tempo inteiro. Tenho medo de estragar nossa amizade, mas também tenho medo de nunca descobrir o que poderia acontecer.",
         curtidas: 96,
-        comentarios: 21
+        comentarios: 21,
+        autor: false
     },
     {
         id: 3,
@@ -42,21 +44,28 @@ const postsIniciais = [
         titulo: "Como vocês conseguiram superar alguém?",
         texto: "Eu sei que terminar foi a decisão certa, mas ainda sinto falta de várias coisas. Parece estranho tentar seguir em frente quando uma pessoa fez parte da sua rotina por tanto tempo.",
         curtidas: 203,
-        comentarios: 58
+        comentarios: 58,
+        autor: false
     }
 ];
 
 
 // ========================================
-// PEGAR POSTS SALVOS
+// CARREGAR POSTS
 // ========================================
 
 let postsSalvos = JSON.parse(
     localStorage.getItem("posts")
-) || postsIniciais;
+);
+
+if (!postsSalvos) {
+    postsSalvos = postsIniciais;
+}
 
 
-// Salva os posts
+// ========================================
+// SALVAR POSTS
+// ========================================
 
 function salvarPosts() {
 
@@ -69,7 +78,45 @@ function salvarPosts() {
 
 
 // ========================================
-// PEGAR ELEMENTOS DA PÁGINA
+// POSTS SALVOS / CURTIDOS
+// ========================================
+
+let postsFavoritos = JSON.parse(
+    localStorage.getItem("postsFavoritos")
+) || [];
+
+
+let postsCurtidos = JSON.parse(
+    localStorage.getItem("postsCurtidos")
+) || [];
+
+
+// ========================================
+// SALVAR LISTAS
+// ========================================
+
+function salvarFavoritos() {
+
+    localStorage.setItem(
+        "postsFavoritos",
+        JSON.stringify(postsFavoritos)
+    );
+
+}
+
+
+function salvarCurtidos() {
+
+    localStorage.setItem(
+        "postsCurtidos",
+        JSON.stringify(postsCurtidos)
+    );
+
+}
+
+
+// ========================================
+// ELEMENTOS PRINCIPAIS
 // ========================================
 
 const areaPosts =
@@ -97,15 +144,13 @@ function mostrarPosts(
         postsSalvos;
 
 
-    // FILTRAR
-
     if (
         categoriaSelecionada !== "Tudo"
     ) {
 
         postsParaMostrar =
             postsSalvos.filter(
-                (post) =>
+                post =>
                     post.categoria ===
                     categoriaSelecionada
             );
@@ -113,18 +158,13 @@ function mostrarPosts(
     }
 
 
-    // SE NÃO HOUVER POSTS
-
     if (
         postsParaMostrar.length === 0
     ) {
 
         areaPosts.innerHTML = `
             <div class="sem-posts">
-                <h3>
-                    Ainda não existem posts aqui ♡
-                </h3>
-
+                <h3>Ainda não existem posts aqui ♡</h3>
                 <p>
                     Que tal ser a primeira pessoa
                     a compartilhar algo?
@@ -137,250 +177,11 @@ function mostrarPosts(
     }
 
 
-    // CRIAR CARDS
-
     postsParaMostrar.forEach(
-        (post) => {
+        post => {
 
             const card =
-                document.createElement(
-                    "article"
-                );
-
-
-            card.className =
-                "post-card";
-
-
-            card.dataset.id =
-                post.id;
-
-
-            card.innerHTML = `
-
-                <div class="post-topo">
-
-                    <div class="usuario">
-
-                        <div class="avatar">
-                            ${post.avatar}
-                        </div>
-
-
-                        <div>
-
-                            <div class="nome-usuario">
-                                ${post.nome}
-                            </div>
-
-
-                            <div class="tempo-post">
-                                ${post.tempo}
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <div class="post-categoria">
-
-                    ${post.emoji}
-                    ${post.categoria}
-
-                </div>
-
-
-                <h3>
-                    ${post.titulo}
-                </h3>
-
-
-                <p>
-                    ${post.texto}
-                </p>
-
-
-                <div class="post-acoes">
-
-                    <button
-                        class="acao curtir"
-                    >
-                        ♡
-                        <span>
-                            ${post.curtidas}
-                        </span>
-                    </button>
-
-
-                    <button
-                        class="acao comentar"
-                    >
-                        💬
-                        <span>
-                            ${post.comentarios}
-                        </span>
-                    </button>
-
-
-                    <button
-                        class="acao salvar"
-                    >
-                        🔖 Salvar
-                    </button>
-
-                </div>
-
-            `;
-
-
-            // =================================
-            // ABRIR POST AO CLICAR NO CARD
-            // =================================
-
-            card.addEventListener(
-                "click",
-                (evento) => {
-
-                    // Não abre se clicar em botão
-
-                    if (
-                        evento.target.closest(
-                            "button"
-                        )
-                    ) {
-
-                        return;
-
-                    }
-
-
-                    abrirPost(
-                        post.id
-                    );
-
-                }
-            );
-
-
-            card.style.cursor =
-                "pointer";
-
-
-            // =================================
-            // CURTIR
-            // =================================
-
-            const botaoCurtir =
-                card.querySelector(
-                    ".curtir"
-                );
-
-
-            botaoCurtir.addEventListener(
-                "click",
-                (evento) => {
-
-                    evento.stopPropagation();
-
-
-                    const index =
-                        postsSalvos.findIndex(
-                            (p) =>
-                                p.id ===
-                                post.id
-                        );
-
-
-                    postsSalvos[
-                        index
-                    ].curtidas++;
-
-
-                    salvarPosts();
-
-
-                    mostrarPosts(
-                        categoriaSelecionada
-                    );
-
-                }
-            );
-
-
-            // =================================
-            // COMENTAR
-            // =================================
-
-            const botaoComentar =
-                card.querySelector(
-                    ".comentar"
-                );
-
-
-            botaoComentar.addEventListener(
-                "click",
-                (evento) => {
-
-                    evento.stopPropagation();
-
-
-                    abrirPost(
-                        post.id
-                    );
-
-                }
-            );
-
-
-            // =================================
-            // SALVAR
-            // =================================
-
-            const botaoSalvar =
-                card.querySelector(
-                    ".salvar"
-                );
-
-
-            botaoSalvar.addEventListener(
-                "click",
-                (evento) => {
-
-                    evento.stopPropagation();
-
-
-                    if (
-                        botaoSalvar.classList.contains(
-                            "salvo"
-                        )
-                    ) {
-
-                        botaoSalvar.classList.remove(
-                            "salvo"
-                        );
-
-
-                        botaoSalvar.innerHTML =
-                            "🔖 Salvar";
-
-                    } else {
-
-                        botaoSalvar.classList.add(
-                            "salvo"
-                        );
-
-
-                        botaoSalvar.innerHTML =
-                            "📌 Salvo";
-
-                    }
-
-                }
-            );
-
+                criarCardPost(post);
 
             areaPosts.appendChild(
                 card
@@ -388,6 +189,312 @@ function mostrarPosts(
 
         }
     );
+
+}
+
+
+// ========================================
+// CRIAR CARD
+// ========================================
+
+function criarCardPost(post) {
+
+    const card =
+        document.createElement("article");
+
+
+    card.className =
+        "post-card";
+
+
+    card.dataset.id =
+        post.id;
+
+
+    const estaSalvo =
+        postsFavoritos.includes(
+            post.id
+        );
+
+
+    const estaCurtido =
+        postsCurtidos.includes(
+            post.id
+        );
+
+
+    card.innerHTML = `
+
+        <div class="post-topo">
+
+            <div class="usuario">
+
+                <div class="avatar">
+                    ${post.avatar}
+                </div>
+
+                <div>
+
+                    <div class="nome-usuario">
+                        ${post.nome}
+                    </div>
+
+                    <div class="tempo-post">
+                        ${post.tempo}
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="post-categoria">
+
+            ${post.emoji}
+            ${post.categoria}
+
+        </div>
+
+
+        <h3>
+            ${post.titulo}
+        </h3>
+
+
+        <p>
+            ${post.texto}
+        </p>
+
+
+        <div class="post-acoes">
+
+            <button class="acao curtir">
+
+                ${estaCurtido ? "♥" : "♡"}
+
+                <span>
+                    ${post.curtidas}
+                </span>
+
+            </button>
+
+
+            <button class="acao comentar">
+
+                💬
+
+                <span>
+                    ${post.comentarios}
+                </span>
+
+            </button>
+
+
+            <button class="acao salvar">
+
+                ${
+                    estaSalvo
+                    ? "📌 Salvo"
+                    : "🔖 Salvar"
+                }
+
+            </button>
+
+        </div>
+
+    `;
+
+
+    // ====================================
+    // ABRIR POST
+    // ====================================
+
+    card.addEventListener(
+        "click",
+        evento => {
+
+            if (
+                evento.target.closest(
+                    "button"
+                )
+            ) {
+
+                return;
+
+            }
+
+
+            abrirPost(
+                post.id
+            );
+
+        }
+    );
+
+
+    card.style.cursor =
+        "pointer";
+
+
+    // ====================================
+    // CURTIR
+    // ====================================
+
+    const botaoCurtir =
+        card.querySelector(
+            ".curtir"
+        );
+
+
+    botaoCurtir.addEventListener(
+        "click",
+        evento => {
+
+            evento.stopPropagation();
+
+
+            const index =
+                postsCurtidos.indexOf(
+                    post.id
+                );
+
+
+            if (index === -1) {
+
+                postsCurtidos.push(
+                    post.id
+                );
+
+
+                post.curtidas++;
+
+            } else {
+
+                postsCurtidos.splice(
+                    index,
+                    1
+                );
+
+
+                post.curtidas = Math.max(
+                    0,
+                    post.curtidas - 1
+                );
+
+            }
+
+
+            salvarPosts();
+
+            salvarCurtidos();
+
+
+            const categoriaAtiva =
+                document
+                    .querySelector(
+                        ".categoria.ativa"
+                    )
+                    ?.dataset.categoria
+                    || "Tudo";
+
+
+            mostrarPosts(
+                categoriaAtiva
+            );
+
+        }
+    );
+
+
+    // ====================================
+    // COMENTAR
+    // ====================================
+
+    const botaoComentar =
+        card.querySelector(
+            ".comentar"
+        );
+
+
+    botaoComentar.addEventListener(
+        "click",
+        evento => {
+
+            evento.stopPropagation();
+
+            abrirPost(
+                post.id
+            );
+
+        }
+    );
+
+
+    // ====================================
+    // SALVAR
+    // ====================================
+
+    const botaoSalvar =
+        card.querySelector(
+            ".salvar"
+        );
+
+
+    botaoSalvar.addEventListener(
+        "click",
+        evento => {
+
+            evento.stopPropagation();
+
+
+            const index =
+                postsFavoritos.indexOf(
+                    post.id
+                );
+
+
+            if (index === -1) {
+
+                postsFavoritos.push(
+                    post.id
+                );
+
+            } else {
+
+                postsFavoritos.splice(
+                    index,
+                    1
+                );
+
+            }
+
+
+            salvarFavoritos();
+
+
+            const categoriaAtiva =
+                document
+                    .querySelector(
+                        ".categoria.ativa"
+                    )
+                    ?.dataset.categoria
+                    || "Tudo";
+
+
+            mostrarPosts(
+                categoriaAtiva
+            );
+
+
+            atualizarPerfil();
+
+        }
+    );
+
+
+    return card;
 
 }
 
@@ -409,16 +516,14 @@ function abrirPost(id) {
 // ========================================
 
 botoesCategoria.forEach(
-    (botao) => {
+    botao => {
 
         botao.addEventListener(
             "click",
             () => {
 
-                // Remove seleção anterior
-
                 botoesCategoria.forEach(
-                    (categoria) => {
+                    categoria => {
 
                         categoria.classList.remove(
                             "ativa"
@@ -427,8 +532,6 @@ botoesCategoria.forEach(
                     }
                 );
 
-
-                // Seleciona botão
 
                 botao.classList.add(
                     "ativa"
@@ -444,13 +547,14 @@ botoesCategoria.forEach(
                 );
 
 
-                // Vai até os posts
-
                 document
                     .getElementById("posts")
                     ?.scrollIntoView({
+
                         behavior: "smooth",
+
                         block: "start"
+
                     });
 
             }
@@ -478,18 +582,14 @@ if (botaoPublicar) {
 
             const titulo =
                 document
-                    .getElementById(
-                        "titulo"
-                    )
+                    .getElementById("titulo")
                     .value
                     .trim();
 
 
             const texto =
                 document
-                    .getElementById(
-                        "texto"
-                    )
+                    .getElementById("texto")
                     .value
                     .trim();
 
@@ -502,16 +602,14 @@ if (botaoPublicar) {
                     .value;
 
 
-            // VERIFICAÇÃO
-
             if (
-                titulo === "" ||
-                texto === "" ||
-                categoria === ""
+                !titulo ||
+                !texto ||
+                !categoria
             ) {
 
                 alert(
-                    "Preencha o título, a história e a categoria ♡"
+                    "Preencha todas as informações ♡"
                 );
 
                 return;
@@ -519,29 +617,29 @@ if (botaoPublicar) {
             }
 
 
-            // NOVO ID
+            const perfil =
+                carregarPerfil();
 
-            const novoId =
-                Date.now();
-
-
-            // NOVO POST
 
             const novoPost = {
 
-                id: novoId,
+                id: Date.now(),
 
                 categoria: categoria,
 
-                emoji: pegarEmojiCategoria(
-                    categoria
-                ),
+                emoji:
+                    pegarEmojiCategoria(
+                        categoria
+                    ),
 
-                avatar: "🩷",
+                avatar:
+                    perfil.avatar,
 
-                nome: "Você",
+                nome:
+                    perfil.nome,
 
-                tempo: "agora mesmo",
+                tempo:
+                    "agora mesmo",
 
                 titulo: titulo,
 
@@ -549,12 +647,12 @@ if (botaoPublicar) {
 
                 curtidas: 0,
 
-                comentarios: 0
+                comentarios: 0,
+
+                autor: true
 
             };
 
-
-            // ADICIONA
 
             postsSalvos.unshift(
                 novoPost
@@ -563,8 +661,6 @@ if (botaoPublicar) {
 
             salvarPosts();
 
-
-            // LIMPA OS CAMPOS
 
             document.getElementById(
                 "titulo"
@@ -581,17 +677,8 @@ if (botaoPublicar) {
             ).value = "";
 
 
-            // MOSTRA TODOS
-
-            mostrarPosts(
-                "Tudo"
-            );
-
-
-            // ATIVA "TUDO"
-
             botoesCategoria.forEach(
-                (botao) => {
+                botao => {
 
                     botao.classList.remove(
                         "ativa"
@@ -613,6 +700,11 @@ if (botaoPublicar) {
             );
 
 
+            mostrarPosts(
+                "Tudo"
+            );
+
+
             alert(
                 "Seu post foi publicado! ♡"
             );
@@ -624,7 +716,7 @@ if (botaoPublicar) {
 
 
 // ========================================
-// EMOJIS DAS CATEGORIAS
+// EMOJIS
 // ========================================
 
 function pegarEmojiCategoria(
@@ -643,12 +735,506 @@ function pegarEmojiCategoria(
 
         "Primeiro amor": "🌷",
 
-        "Relacionamento complicado": "🕸️"
+        "Relacionamento complicado":
+            "🕸️"
 
     };
 
 
     return emojis[categoria] || "💌";
+
+}
+
+
+// ========================================
+// PERFIL
+// ========================================
+
+function carregarPerfil() {
+
+    return JSON.parse(
+        localStorage.getItem(
+            "perfil"
+        )
+    ) || {
+
+        nome:
+            "Meu Perfil",
+
+        bio:
+            "Conte um pouquinho sobre você ♡",
+
+        avatar:
+            "🩷"
+
+    };
+
+}
+
+
+// ========================================
+// ATUALIZAR PERFIL
+// ========================================
+
+function atualizarPerfil() {
+
+    const avatarPerfil =
+        document.getElementById(
+            "avatar-perfil"
+        );
+
+
+    if (!avatarPerfil) return;
+
+
+    const perfil =
+        carregarPerfil();
+
+
+    document.getElementById(
+        "nome-perfil"
+    ).textContent =
+        perfil.nome;
+
+
+    document.getElementById(
+        "bio-perfil"
+    ).textContent =
+        perfil.bio;
+
+
+    avatarPerfil.textContent =
+        perfil.avatar;
+
+
+    // ESTATÍSTICAS
+
+    const meusPosts =
+        postsSalvos.filter(
+            post =>
+                post.autor === true
+        );
+
+
+    const curtidasRecebidas =
+        meusPosts.reduce(
+            (
+                total,
+                post
+            ) =>
+                total +
+                post.curtidas,
+            0
+        );
+
+
+    document.getElementById(
+        "numero-meus-posts"
+    ).textContent =
+        meusPosts.length;
+
+
+    document.getElementById(
+        "numero-salvos"
+    ).textContent =
+        postsFavoritos.length;
+
+
+    document.getElementById(
+        "numero-curtidas"
+    ).textContent =
+        curtidasRecebidas;
+
+}
+
+
+// ========================================
+// EDITAR PERFIL
+// ========================================
+
+let avatarSelecionado =
+    carregarPerfil().avatar;
+
+
+const botaoEditarPerfil =
+    document.getElementById(
+        "editar-perfil"
+    );
+
+
+const areaEditarPerfil =
+    document.getElementById(
+        "area-editar-perfil"
+    );
+
+
+const botaoCancelarEdicao =
+    document.getElementById(
+        "cancelar-edicao"
+    );
+
+
+if (botaoEditarPerfil) {
+
+    botaoEditarPerfil.addEventListener(
+        "click",
+        () => {
+
+            const perfil =
+                carregarPerfil();
+
+
+            document.getElementById(
+                "input-nome"
+            ).value =
+                perfil.nome;
+
+
+            document.getElementById(
+                "input-bio"
+            ).value =
+                perfil.bio;
+
+
+            avatarSelecionado =
+                perfil.avatar;
+
+
+            areaEditarPerfil.style.display =
+                "block";
+
+
+            areaEditarPerfil.scrollIntoView({
+
+                behavior:
+                    "smooth",
+
+                block:
+                    "center"
+
+            });
+
+        }
+    );
+
+}
+
+
+// ========================================
+// FECHAR EDIÇÃO
+// ========================================
+
+if (botaoCancelarEdicao) {
+
+    botaoCancelarEdicao.addEventListener(
+        "click",
+        () => {
+
+            areaEditarPerfil.style.display =
+                "none";
+
+        }
+    );
+
+}
+
+
+// ========================================
+// ESCOLHER AVATAR
+// ========================================
+
+document
+    .querySelectorAll(
+        ".avatar-opcao"
+    )
+    .forEach(
+        botao => {
+
+            botao.addEventListener(
+                "click",
+                () => {
+
+                    avatarSelecionado =
+                        botao.dataset.avatar;
+
+
+                    document
+                        .querySelectorAll(
+                            ".avatar-opcao"
+                        )
+                        .forEach(
+                            opcao => {
+
+                                opcao.classList.remove(
+                                    "selecionado"
+                                );
+
+                            }
+                        );
+
+
+                    botao.classList.add(
+                        "selecionado"
+                    );
+
+                }
+            );
+
+        }
+    );
+
+
+// ========================================
+// SALVAR PERFIL
+// ========================================
+
+const botaoSalvarPerfil =
+    document.getElementById(
+        "salvar-perfil"
+    );
+
+
+if (botaoSalvarPerfil) {
+
+    botaoSalvarPerfil.addEventListener(
+        "click",
+        () => {
+
+            const nome =
+                document
+                    .getElementById(
+                        "input-nome"
+                    )
+                    .value
+                    .trim();
+
+
+            const bio =
+                document
+                    .getElementById(
+                        "input-bio"
+                    )
+                    .value
+                    .trim();
+
+
+            const perfilAtual = {
+
+                nome:
+                    nome ||
+                    "Meu Perfil",
+
+                bio:
+                    bio ||
+                    "Conte um pouquinho sobre você ♡",
+
+                avatar:
+                    avatarSelecionado
+
+            };
+
+
+            localStorage.setItem(
+                "perfil",
+                JSON.stringify(
+                    perfilAtual
+                )
+            );
+
+
+            areaEditarPerfil.style.display =
+                "none";
+
+
+            atualizarPerfil();
+
+
+            alert(
+                "Perfil atualizado! ♡"
+            );
+
+        }
+    );
+
+}
+
+
+// ========================================
+// ABAS DO PERFIL
+// ========================================
+
+const abasPerfil =
+    document.querySelectorAll(
+        ".perfil-aba"
+    );
+
+
+abasPerfil.forEach(
+    aba => {
+
+        aba.addEventListener(
+            "click",
+            () => {
+
+                abasPerfil.forEach(
+                    item => {
+
+                        item.classList.remove(
+                            "ativa"
+                        );
+
+                    }
+                );
+
+
+                aba.classList.add(
+                    "ativa"
+                );
+
+
+                mostrarAbaPerfil(
+                    aba.dataset.aba
+                );
+
+            }
+        );
+
+    }
+);
+
+
+// ========================================
+// MOSTRAR ABA
+// ========================================
+
+function mostrarAbaPerfil(tipo) {
+
+    const conteudo =
+        document.getElementById(
+            "conteudo-perfil"
+        );
+
+
+    if (!conteudo) return;
+
+
+    conteudo.innerHTML = "";
+
+
+    let posts =
+        [];
+
+
+    let mensagem =
+        "";
+
+
+    if (tipo === "meus") {
+
+        posts =
+            postsSalvos.filter(
+                post =>
+                    post.autor === true
+            );
+
+
+        mensagem =
+            "Você ainda não publicou nenhum post ♡";
+
+    }
+
+
+    if (tipo === "salvos") {
+
+        posts =
+            postsSalvos.filter(
+                post =>
+                    postsFavoritos.includes(
+                        post.id
+                    )
+            );
+
+
+        mensagem =
+            "Você ainda não salvou nenhum post ♡";
+
+    }
+
+
+    if (tipo === "curtidos") {
+
+        posts =
+            postsSalvos.filter(
+                post =>
+                    postsCurtidos.includes(
+                        post.id
+                    )
+            );
+
+
+        mensagem =
+            "Você ainda não curtiu nenhum post ♡";
+
+    }
+
+
+    if (posts.length === 0) {
+
+        conteudo.innerHTML = `
+
+            <div class="perfil-vazio">
+
+                <span>♡</span>
+
+                <h3>
+                    Nada por aqui ainda
+                </h3>
+
+                <p>
+                    ${mensagem}
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    posts.forEach(
+        post => {
+
+            const card =
+                criarCardPost(post);
+
+
+            conteudo.appendChild(
+                card
+            );
+
+        }
+    );
+
+}
+
+
+// ========================================
+// CARREGAR PÁGINA DO PERFIL
+// ========================================
+
+if (
+    document.getElementById(
+        "avatar-perfil"
+    )
+) {
+
+    atualizarPerfil();
+
+    mostrarAbaPerfil(
+        "meus"
+    );
 
 }
 
@@ -668,8 +1254,6 @@ function carregarPaginaPost() {
     if (!paginaPost) return;
 
 
-    // PEGA ID DA URL
-
     const parametros =
         new URLSearchParams(
             window.location.search
@@ -680,31 +1264,16 @@ function carregarPaginaPost() {
         parametros.get("id");
 
 
-    // PROCURA O POST
-
     const post =
         postsSalvos.find(
-            (p) =>
-                String(p.id) ===
+            item =>
+                String(item.id) ===
                 String(id)
         );
 
 
-    // SE NÃO ENCONTRAR
+    if (!post) return;
 
-    if (!post) {
-
-        document.getElementById(
-            "titulo-post"
-        ).textContent =
-            "Post não encontrado";
-
-        return;
-
-    }
-
-
-    // PREENCHE INFORMAÇÕES
 
     document.getElementById(
         "titulo-post"
@@ -718,63 +1287,61 @@ function carregarPaginaPost() {
         post.texto;
 
 
-    const categoriaElemento =
+    const categoria =
         paginaPost.querySelector(
             ".post-categoria"
         );
 
 
-    if (categoriaElemento) {
+    if (categoria) {
 
-        categoriaElemento.textContent =
+        categoria.textContent =
             `${post.emoji} ${post.categoria}`;
 
     }
 
 
-    const nomeElemento =
+    const nome =
         paginaPost.querySelector(
             ".nome-usuario"
         );
 
 
-    if (nomeElemento) {
+    if (nome) {
 
-        nomeElemento.textContent =
+        nome.textContent =
             post.nome;
 
     }
 
 
-    const tempoElemento =
+    const tempo =
         paginaPost.querySelector(
             ".tempo-post"
         );
 
 
-    if (tempoElemento) {
+    if (tempo) {
 
-        tempoElemento.textContent =
+        tempo.textContent =
             post.tempo;
 
     }
 
 
-    const avatarElemento =
+    const avatar =
         paginaPost.querySelector(
             ".avatar"
         );
 
 
-    if (avatarElemento) {
+    if (avatar) {
 
-        avatarElemento.textContent =
+        avatar.textContent =
             post.avatar;
 
     }
 
-
-    // CURTIDAS
 
     const botaoCurtir =
         paginaPost.querySelector(
@@ -784,22 +1351,65 @@ function carregarPaginaPost() {
 
     if (botaoCurtir) {
 
-        botaoCurtir.innerHTML =
-            `♡ <span>${post.curtidas}</span>`;
+        const curtido =
+            postsCurtidos.includes(
+                post.id
+            );
+
+
+        botaoCurtir.innerHTML = `
+
+            ${curtido ? "♥" : "♡"}
+
+            <span>
+                ${post.curtidas}
+            </span>
+
+        `;
 
 
         botaoCurtir.addEventListener(
             "click",
             () => {
 
-                post.curtidas++;
+                const index =
+                    postsCurtidos.indexOf(
+                        post.id
+                    );
+
+
+                if (index === -1) {
+
+                    postsCurtidos.push(
+                        post.id
+                    );
+
+
+                    post.curtidas++;
+
+                } else {
+
+                    postsCurtidos.splice(
+                        index,
+                        1
+                    );
+
+
+                    post.curtidas =
+                        Math.max(
+                            0,
+                            post.curtidas - 1
+                        );
+
+                }
 
 
                 salvarPosts();
 
+                salvarCurtidos();
 
-                botaoCurtir.innerHTML =
-                    `♥ <span>${post.curtidas}</span>`;
+
+                carregarPaginaPost();
 
             }
         );
