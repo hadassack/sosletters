@@ -227,37 +227,7 @@ function initializeReactionCounts() {
 
 
 function toggleReaction(button) {
-    const card = button.closest(".post-card");
-
-    if (!card) return;
-
-    const postId = String(card.dataset.postId);
-    const icon = button.querySelector("span:first-child");
-    const count = button.querySelector(".reaction-count");
-
-    const wasReacted = reactions[postId] === true;
-
-    reactions[postId] = !wasReacted;
-
-    setStorage(STORAGE_KEYS.reactions, reactions);
-
-    const originalCount = parseInt(
-        count?.dataset.originalCount || "0",
-        10
-    );
-
-    if (!wasReacted) {
-
-        button.classList.add("reacted");
-
-        if (icon) {
-            icon.textContent = "❤️";
-        }
-
-        if (count) {
-            count.textContent = originalCount + 1;
-        }
-
+  
         /* ANIMAÇÃO DO CORAÇÃO */
 
         button.animate(
