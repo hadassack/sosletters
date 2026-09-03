@@ -1,3 +1,4 @@
+```javascript
 // ========================================
 // ENTRE NÓS — SCRIPT.JS
 // ========================================
@@ -21,6 +22,7 @@ const postsIniciais = [
         comentarios: 34,
         autor: false
     },
+
     {
         id: 2,
         categoria: "Paixão",
@@ -34,6 +36,7 @@ const postsIniciais = [
         comentarios: 21,
         autor: false
     },
+
     {
         id: 3,
         categoria: "Término",
@@ -59,7 +62,8 @@ let postsSalvos = JSON.parse(
 );
 
 if (!postsSalvos) {
-    postsSalvos = postsIniciais;
+    postsSalvos = [...postsIniciais];
+    salvarPosts();
 }
 
 
@@ -68,12 +72,10 @@ if (!postsSalvos) {
 // ========================================
 
 function salvarPosts() {
-
     localStorage.setItem(
         "posts",
         JSON.stringify(postsSalvos)
     );
-
 }
 
 
@@ -81,14 +83,15 @@ function salvarPosts() {
 // POSTS SALVOS / CURTIDOS
 // ========================================
 
-let postsFavoritos = JSON.parse(
-    localStorage.getItem("postsFavoritos")
-) || [];
+let postsFavoritos =
+    JSON.parse(
+        localStorage.getItem("postsFavoritos")
+    ) || [];
 
-
-let postsCurtidos = JSON.parse(
-    localStorage.getItem("postsCurtidos")
-) || [];
+let postsCurtidos =
+    JSON.parse(
+        localStorage.getItem("postsCurtidos")
+    ) || [];
 
 
 // ========================================
@@ -96,22 +99,17 @@ let postsCurtidos = JSON.parse(
 // ========================================
 
 function salvarFavoritos() {
-
     localStorage.setItem(
         "postsFavoritos",
         JSON.stringify(postsFavoritos)
     );
-
 }
 
-
 function salvarCurtidos() {
-
     localStorage.setItem(
         "postsCurtidos",
         JSON.stringify(postsCurtidos)
     );
-
 }
 
 
@@ -136,17 +134,11 @@ function mostrarPosts(
 
     if (!areaPosts) return;
 
-
     areaPosts.innerHTML = "";
 
+    let postsParaMostrar = postsSalvos;
 
-    let postsParaMostrar =
-        postsSalvos;
-
-
-    if (
-        categoriaSelecionada !== "Tudo"
-    ) {
+    if (categoriaSelecionada !== "Tudo") {
 
         postsParaMostrar =
             postsSalvos.filter(
@@ -154,17 +146,14 @@ function mostrarPosts(
                     post.categoria ===
                     categoriaSelecionada
             );
-
     }
 
-
-    if (
-        postsParaMostrar.length === 0
-    ) {
+    if (postsParaMostrar.length === 0) {
 
         areaPosts.innerHTML = `
             <div class="sem-posts">
                 <h3>Ainda não existem posts aqui ♡</h3>
+
                 <p>
                     Que tal ser a primeira pessoa
                     a compartilhar algo?
@@ -173,23 +162,16 @@ function mostrarPosts(
         `;
 
         return;
-
     }
 
+    postsParaMostrar.forEach(post => {
 
-    postsParaMostrar.forEach(
-        post => {
+        const card =
+            criarCardPost(post);
 
-            const card =
-                criarCardPost(post);
+        areaPosts.appendChild(card);
 
-            areaPosts.appendChild(
-                card
-            );
-
-        }
-    );
-
+    });
 }
 
 
@@ -202,25 +184,18 @@ function criarCardPost(post) {
     const card =
         document.createElement("article");
 
-
     card.className =
         "post-card";
-
 
     card.dataset.id =
         post.id;
 
 
     const estaSalvo =
-        postsFavoritos.includes(
-            post.id
-        );
-
+        postsFavoritos.includes(post.id);
 
     const estaCurtido =
-        postsCurtidos.includes(
-            post.id
-        );
+        postsCurtidos.includes(post.id);
 
 
     card.innerHTML = `
@@ -230,17 +205,17 @@ function criarCardPost(post) {
             <div class="usuario">
 
                 <div class="avatar">
-                    ${post.avatar}
+                    ${post.avatar || "🩷"}
                 </div>
 
                 <div>
 
                     <div class="nome-usuario">
-                        ${post.nome}
+                        ${post.nome || "Anônima"}
                     </div>
 
                     <div class="tempo-post">
-                        ${post.tempo}
+                        ${post.tempo || "agora mesmo"}
                     </div>
 
                 </div>
@@ -252,7 +227,7 @@ function criarCardPost(post) {
 
         <div class="post-categoria">
 
-            ${post.emoji}
+            ${post.emoji || "💌"}
             ${post.categoria}
 
         </div>
@@ -270,40 +245,48 @@ function criarCardPost(post) {
 
         <div class="post-acoes">
 
-            <button class="acao curtir">
+            <button
+                type="button"
+                class="acao curtir"
+            >
 
                 ${estaCurtido ? "♥" : "♡"}
 
                 <span>
-                    ${post.curtidas}
+                    ${post.curtidas || 0}
                 </span>
 
             </button>
 
 
-            <button class="acao comentar">
+            <button
+                type="button"
+                class="acao comentar"
+            >
 
                 💬
 
                 <span>
-                    ${post.comentarios}
+                    ${post.comentarios || 0}
                 </span>
 
             </button>
 
 
-            <button class="acao salvar">
+            <button
+                type="button"
+                class="acao salvar"
+            >
 
                 ${
                     estaSalvo
-                    ? "📌 Salvo"
-                    : "🔖 Salvar"
+                        ? "📌 Salvo"
+                        : "🔖 Salvar"
                 }
 
             </button>
 
         </div>
-
     `;
 
 
@@ -316,26 +299,17 @@ function criarCardPost(post) {
         evento => {
 
             if (
-                evento.target.closest(
-                    "button"
-                )
+                evento.target.closest("button")
             ) {
-
                 return;
-
             }
 
-
-            abrirPost(
-                post.id
-            );
+            abrirPost(post.id);
 
         }
     );
 
-
-    card.style.cursor =
-        "pointer";
+    card.style.cursor = "pointer";
 
 
     // ====================================
@@ -343,69 +317,55 @@ function criarCardPost(post) {
     // ====================================
 
     const botaoCurtir =
-        card.querySelector(
-            ".curtir"
-        );
+        card.querySelector(".curtir");
+
+    if (botaoCurtir) {
+
+        botaoCurtir.addEventListener(
+            "click",
+            evento => {
+
+                evento.stopPropagation();
+
+                const index =
+                    postsCurtidos.indexOf(
+                        post.id
+                    );
 
 
-    botaoCurtir.addEventListener(
-        "click",
-        evento => {
+                if (index === -1) {
 
-            evento.stopPropagation();
+                    postsCurtidos.push(
+                        post.id
+                    );
 
+                    post.curtidas =
+                        (post.curtidas || 0) + 1;
 
-            const index =
-                postsCurtidos.indexOf(
-                    post.id
-                );
+                } else {
 
+                    postsCurtidos.splice(
+                        index,
+                        1
+                    );
 
-            if (index === -1) {
-
-                postsCurtidos.push(
-                    post.id
-                );
-
-
-                post.curtidas++;
-
-            } else {
-
-                postsCurtidos.splice(
-                    index,
-                    1
-                );
+                    post.curtidas =
+                        Math.max(
+                            0,
+                            (post.curtidas || 0) - 1
+                        );
+                }
 
 
-                post.curtidas = Math.max(
-                    0,
-                    post.curtidas - 1
-                );
+                salvarPosts();
+                salvarCurtidos();
+
+
+                atualizarTudo();
 
             }
-
-
-            salvarPosts();
-
-            salvarCurtidos();
-
-
-            const categoriaAtiva =
-                document
-                    .querySelector(
-                        ".categoria.ativa"
-                    )
-                    ?.dataset.categoria
-                    || "Tudo";
-
-
-            mostrarPosts(
-                categoriaAtiva
-            );
-
-        }
-    );
+        );
+    }
 
 
     // ====================================
@@ -413,23 +373,21 @@ function criarCardPost(post) {
     // ====================================
 
     const botaoComentar =
-        card.querySelector(
-            ".comentar"
+        card.querySelector(".comentar");
+
+    if (botaoComentar) {
+
+        botaoComentar.addEventListener(
+            "click",
+            evento => {
+
+                evento.stopPropagation();
+
+                abrirPost(post.id);
+
+            }
         );
-
-
-    botaoComentar.addEventListener(
-        "click",
-        evento => {
-
-            evento.stopPropagation();
-
-            abrirPost(
-                post.id
-            );
-
-        }
-    );
+    }
 
 
     // ====================================
@@ -437,65 +395,78 @@ function criarCardPost(post) {
     // ====================================
 
     const botaoSalvar =
-        card.querySelector(
-            ".salvar"
-        );
+        card.querySelector(".salvar");
+
+    if (botaoSalvar) {
+
+        botaoSalvar.addEventListener(
+            "click",
+            evento => {
+
+                evento.stopPropagation();
+
+                const index =
+                    postsFavoritos.indexOf(
+                        post.id
+                    );
 
 
-    botaoSalvar.addEventListener(
-        "click",
-        evento => {
+                if (index === -1) {
 
-            evento.stopPropagation();
+                    postsFavoritos.push(
+                        post.id
+                    );
+
+                } else {
+
+                    postsFavoritos.splice(
+                        index,
+                        1
+                    );
+                }
 
 
-            const index =
-                postsFavoritos.indexOf(
-                    post.id
-                );
+                salvarFavoritos();
 
-
-            if (index === -1) {
-
-                postsFavoritos.push(
-                    post.id
-                );
-
-            } else {
-
-                postsFavoritos.splice(
-                    index,
-                    1
-                );
+                atualizarTudo();
 
             }
-
-
-            salvarFavoritos();
-
-
-            const categoriaAtiva =
-                document
-                    .querySelector(
-                        ".categoria.ativa"
-                    )
-                    ?.dataset.categoria
-                    || "Tudo";
-
-
-            mostrarPosts(
-                categoriaAtiva
-            );
-
-
-            atualizarPerfil();
-
-        }
-    );
+        );
+    }
 
 
     return card;
+}
 
+
+// ========================================
+// ATUALIZAR TUDO
+// ========================================
+
+function atualizarTudo() {
+
+    atualizarPerfil();
+
+    const categoriaAtiva =
+        document
+            .querySelector(".categoria.ativa")
+            ?.dataset.categoria || "Tudo";
+
+    if (areaPosts) {
+        mostrarPosts(categoriaAtiva);
+    }
+
+    const abaAtiva =
+        document.querySelector(
+            ".perfil-aba.ativa"
+        );
+
+    if (abaAtiva) {
+
+        mostrarAbaPerfil(
+            abaAtiva.dataset.aba
+        );
+    }
 }
 
 
@@ -507,7 +478,6 @@ function abrirPost(id) {
 
     window.location.href =
         `post.html?id=${id}`;
-
 }
 
 
@@ -538,28 +508,20 @@ botoesCategoria.forEach(
                 );
 
 
-                const categoria =
-                    botao.dataset.categoria;
-
-
                 mostrarPosts(
-                    categoria
+                    botao.dataset.categoria
                 );
 
 
                 document
                     .getElementById("posts")
                     ?.scrollIntoView({
-
                         behavior: "smooth",
-
                         block: "start"
-
                     });
 
             }
         );
-
     }
 );
 
@@ -583,23 +545,21 @@ if (botaoPublicar) {
             const titulo =
                 document
                     .getElementById("titulo")
-                    .value
+                    ?.value
                     .trim();
-
 
             const texto =
                 document
                     .getElementById("texto")
-                    .value
+                    ?.value
                     .trim();
-
 
             const categoria =
                 document
                     .getElementById(
                         "categoria-post"
                     )
-                    .value;
+                    ?.value;
 
 
             if (
@@ -613,7 +573,6 @@ if (botaoPublicar) {
                 );
 
                 return;
-
             }
 
 
@@ -625,32 +584,47 @@ if (botaoPublicar) {
 
                 id: Date.now(),
 
-                categoria: categoria,
+                categoria:
+
+                    categoria,
 
                 emoji:
+
                     pegarEmojiCategoria(
                         categoria
                     ),
 
                 avatar:
+
                     perfil.avatar,
 
                 nome:
+
                     perfil.nome,
 
                 tempo:
+
                     "agora mesmo",
 
-                titulo: titulo,
+                titulo:
 
-                texto: texto,
+                    titulo,
 
-                curtidas: 0,
+                texto:
 
-                comentarios: 0,
+                    texto,
 
-                autor: true
+                curtidas:
 
+                    0,
+
+                comentarios:
+
+                    0,
+
+                autor:
+
+                    true
             };
 
 
@@ -662,19 +636,30 @@ if (botaoPublicar) {
             salvarPosts();
 
 
-            document.getElementById(
-                "titulo"
-            ).value = "";
+            const campoTitulo =
+                document.getElementById(
+                    "titulo"
+                );
+
+            const campoTexto =
+                document.getElementById(
+                    "texto"
+                );
+
+            const campoCategoria =
+                document.getElementById(
+                    "categoria-post"
+                );
 
 
-            document.getElementById(
-                "texto"
-            ).value = "";
+            if (campoTitulo)
+                campoTitulo.value = "";
 
+            if (campoTexto)
+                campoTexto.value = "";
 
-            document.getElementById(
-                "categoria-post"
-            ).value = "";
+            if (campoCategoria)
+                campoCategoria.value = "";
 
 
             botoesCategoria.forEach(
@@ -684,7 +669,6 @@ if (botaoPublicar) {
                         "ativa"
                     );
 
-
                     if (
                         botao.dataset.categoria ===
                         "Tudo"
@@ -693,17 +677,15 @@ if (botaoPublicar) {
                         botao.classList.add(
                             "ativa"
                         );
-
                     }
 
                 }
             );
 
 
-            mostrarPosts(
-                "Tudo"
-            );
+            mostrarPosts("Tudo");
 
+            atualizarPerfil();
 
             alert(
                 "Seu post foi publicado! ♡"
@@ -711,7 +693,6 @@ if (botaoPublicar) {
 
         }
     );
-
 }
 
 
@@ -742,7 +723,6 @@ function pegarEmojiCategoria(
 
 
     return emojis[categoria] || "💌";
-
 }
 
 
@@ -752,23 +732,38 @@ function pegarEmojiCategoria(
 
 function carregarPerfil() {
 
-    return JSON.parse(
-        localStorage.getItem(
-            "perfil"
-        )
-    ) || {
+    const perfilSalvo =
+        localStorage.getItem("perfil");
 
-        nome:
-            "Meu Perfil",
+
+    if (perfilSalvo) {
+
+        try {
+
+            return JSON.parse(
+                perfilSalvo
+            );
+
+        } catch (erro) {
+
+            console.warn(
+                "Erro ao carregar perfil."
+            );
+
+        }
+    }
+
+
+    return {
+
+        nome: "Meu Perfil",
 
         bio:
             "Conte um pouquinho sobre você ♡",
 
-        avatar:
-            "🩷"
+        avatar: "🩷"
 
     };
-
 }
 
 
@@ -783,7 +778,6 @@ function atualizarPerfil() {
             "avatar-perfil"
         );
 
-
     if (!avatarPerfil) return;
 
 
@@ -791,23 +785,40 @@ function atualizarPerfil() {
         carregarPerfil();
 
 
-    document.getElementById(
-        "nome-perfil"
-    ).textContent =
-        perfil.nome;
+    const nomePerfil =
+        document.getElementById(
+            "nome-perfil"
+        );
+
+    const bioPerfil =
+        document.getElementById(
+            "bio-perfil"
+        );
 
 
-    document.getElementById(
-        "bio-perfil"
-    ).textContent =
-        perfil.bio;
+    if (nomePerfil) {
+
+        nomePerfil.textContent =
+            perfil.nome;
+
+    }
+
+
+    if (bioPerfil) {
+
+        bioPerfil.textContent =
+            perfil.bio;
+
+    }
 
 
     avatarPerfil.textContent =
         perfil.avatar;
 
 
+    // ====================================
     // ESTATÍSTICAS
+    // ====================================
 
     const meusPosts =
         postsSalvos.filter(
@@ -823,28 +834,49 @@ function atualizarPerfil() {
                 post
             ) =>
                 total +
-                post.curtidas,
+                (post.curtidas || 0),
             0
         );
 
 
-    document.getElementById(
-        "numero-meus-posts"
-    ).textContent =
-        meusPosts.length;
+    const numeroMeusPosts =
+        document.getElementById(
+            "numero-meus-posts"
+        );
+
+    const numeroSalvos =
+        document.getElementById(
+            "numero-salvos"
+        );
+
+    const numeroCurtidas =
+        document.getElementById(
+            "numero-curtidas"
+        );
 
 
-    document.getElementById(
-        "numero-salvos"
-    ).textContent =
-        postsFavoritos.length;
+    if (numeroMeusPosts) {
+
+        numeroMeusPosts.textContent =
+            meusPosts.length;
+
+    }
 
 
-    document.getElementById(
-        "numero-curtidas"
-    ).textContent =
-        curtidasRecebidas;
+    if (numeroSalvos) {
 
+        numeroSalvos.textContent =
+            postsFavoritos.length;
+
+    }
+
+
+    if (numeroCurtidas) {
+
+        numeroCurtidas.textContent =
+            curtidasRecebidas;
+
+    }
 }
 
 
@@ -861,12 +893,10 @@ const botaoEditarPerfil =
         "editar-perfil"
     );
 
-
 const areaEditarPerfil =
     document.getElementById(
         "area-editar-perfil"
     );
-
 
 const botaoCancelarEdicao =
     document.getElementById(
@@ -874,7 +904,10 @@ const botaoCancelarEdicao =
     );
 
 
-if (botaoEditarPerfil) {
+if (
+    botaoEditarPerfil &&
+    areaEditarPerfil
+) {
 
     botaoEditarPerfil.addEventListener(
         "click",
@@ -884,20 +917,54 @@ if (botaoEditarPerfil) {
                 carregarPerfil();
 
 
-            document.getElementById(
-                "input-nome"
-            ).value =
-                perfil.nome;
+            const inputNome =
+                document.getElementById(
+                    "input-nome"
+                );
+
+            const inputBio =
+                document.getElementById(
+                    "input-bio"
+                );
 
 
-            document.getElementById(
-                "input-bio"
-            ).value =
-                perfil.bio;
+            if (inputNome) {
+
+                inputNome.value =
+                    perfil.nome;
+
+            }
+
+
+            if (inputBio) {
+
+                inputBio.value =
+                    perfil.bio;
+
+            }
 
 
             avatarSelecionado =
                 perfil.avatar;
+
+
+            // Atualiza visual dos avatares
+
+            document
+                .querySelectorAll(
+                    ".avatar-opcao"
+                )
+                .forEach(
+                    opcao => {
+
+                        opcao.classList.toggle(
+                            "selecionado",
+                            opcao.dataset.avatar ===
+                            avatarSelecionado
+                        );
+
+                    }
+                );
 
 
             areaEditarPerfil.style.display =
@@ -906,17 +973,14 @@ if (botaoEditarPerfil) {
 
             areaEditarPerfil.scrollIntoView({
 
-                behavior:
-                    "smooth",
+                behavior: "smooth",
 
-                block:
-                    "center"
+                block: "center"
 
             });
 
         }
     );
-
 }
 
 
@@ -924,7 +988,10 @@ if (botaoEditarPerfil) {
 // FECHAR EDIÇÃO
 // ========================================
 
-if (botaoCancelarEdicao) {
+if (
+    botaoCancelarEdicao &&
+    areaEditarPerfil
+) {
 
     botaoCancelarEdicao.addEventListener(
         "click",
@@ -935,7 +1002,6 @@ if (botaoCancelarEdicao) {
 
         }
     );
-
 }
 
 
@@ -952,7 +1018,9 @@ document
 
             botao.addEventListener(
                 "click",
-                () => {
+                evento => {
+
+                    evento.preventDefault();
 
                     avatarSelecionado =
                         botao.dataset.avatar;
@@ -994,42 +1062,47 @@ const botaoSalvarPerfil =
     );
 
 
-if (botaoSalvarPerfil) {
+if (
+    botaoSalvarPerfil &&
+    areaEditarPerfil
+) {
 
     botaoSalvarPerfil.addEventListener(
         "click",
         () => {
 
+            const inputNome =
+                document.getElementById(
+                    "input-nome"
+                );
+
+            const inputBio =
+                document.getElementById(
+                    "input-bio"
+                );
+
+
             const nome =
-                document
-                    .getElementById(
-                        "input-nome"
-                    )
-                    .value
-                    .trim();
+                inputNome
+                    ?.value
+                    .trim() || "Meu Perfil";
 
 
             const bio =
-                document
-                    .getElementById(
-                        "input-bio"
-                    )
-                    .value
-                    .trim();
+                inputBio
+                    ?.value
+                    .trim() ||
+                "Conte um pouquinho sobre você ♡";
 
 
             const perfilAtual = {
 
-                nome:
-                    nome ||
-                    "Meu Perfil",
+                nome: nome,
 
-                bio:
-                    bio ||
-                    "Conte um pouquinho sobre você ♡",
+                bio: bio,
 
                 avatar:
-                    avatarSelecionado
+                    avatarSelecionado || "🩷"
 
             };
 
@@ -1042,11 +1115,30 @@ if (botaoSalvarPerfil) {
             );
 
 
+            atualizarPerfil();
+
+
             areaEditarPerfil.style.display =
                 "none";
 
 
-            atualizarPerfil();
+            // Atualiza avatar selecionado
+
+            document
+                .querySelectorAll(
+                    ".avatar-opcao"
+                )
+                .forEach(
+                    opcao => {
+
+                        opcao.classList.toggle(
+                            "selecionado",
+                            opcao.dataset.avatar ===
+                            perfilAtual.avatar
+                        );
+
+                    }
+                );
 
 
             alert(
@@ -1055,7 +1147,6 @@ if (botaoSalvarPerfil) {
 
         }
     );
-
 }
 
 
@@ -1104,7 +1195,7 @@ abasPerfil.forEach(
 
 
 // ========================================
-// MOSTRAR ABA
+// MOSTRAR ABA DO PERFIL
 // ========================================
 
 function mostrarAbaPerfil(tipo) {
@@ -1121,13 +1212,14 @@ function mostrarAbaPerfil(tipo) {
     conteudo.innerHTML = "";
 
 
-    let posts =
-        [];
+    let posts = [];
+
+    let mensagem = "";
 
 
-    let mensagem =
-        "";
-
+    // ====================================
+    // MEUS POSTS
+    // ====================================
 
     if (tipo === "meus") {
 
@@ -1140,9 +1232,12 @@ function mostrarAbaPerfil(tipo) {
 
         mensagem =
             "Você ainda não publicou nenhum post ♡";
-
     }
 
+
+    // ====================================
+    // SALVOS
+    // ====================================
 
     if (tipo === "salvos") {
 
@@ -1157,9 +1252,12 @@ function mostrarAbaPerfil(tipo) {
 
         mensagem =
             "Você ainda não salvou nenhum post ♡";
-
     }
 
+
+    // ====================================
+    // CURTIDOS
+    // ====================================
 
     if (tipo === "curtidos") {
 
@@ -1174,9 +1272,12 @@ function mostrarAbaPerfil(tipo) {
 
         mensagem =
             "Você ainda não curtiu nenhum post ♡";
-
     }
 
+
+    // ====================================
+    // NENHUM POST
+    // ====================================
 
     if (posts.length === 0) {
 
@@ -1199,9 +1300,12 @@ function mostrarAbaPerfil(tipo) {
         `;
 
         return;
-
     }
 
+
+    // ====================================
+    // CRIAR CARDS
+    // ====================================
 
     posts.forEach(
         post => {
@@ -1216,7 +1320,6 @@ function mostrarAbaPerfil(tipo) {
 
         }
     );
-
 }
 
 
@@ -1232,10 +1335,27 @@ if (
 
     atualizarPerfil();
 
-    mostrarAbaPerfil(
-        "meus"
-    );
 
+    // Deixa o primeiro avatar selecionado
+
+    document
+        .querySelectorAll(
+            ".avatar-opcao"
+        )
+        .forEach(
+            opcao => {
+
+                opcao.classList.toggle(
+                    "selecionado",
+                    opcao.dataset.avatar ===
+                    avatarSelecionado
+                );
+
+            }
+        );
+
+
+    mostrarAbaPerfil("meus");
 }
 
 
@@ -1275,16 +1395,31 @@ function carregarPaginaPost() {
     if (!post) return;
 
 
-    document.getElementById(
-        "titulo-post"
-    ).textContent =
-        post.titulo;
+    const titulo =
+        document.getElementById(
+            "titulo-post"
+        );
+
+    const texto =
+        document.getElementById(
+            "texto-post"
+        );
 
 
-    document.getElementById(
-        "texto-post"
-    ).textContent =
-        post.texto;
+    if (titulo) {
+
+        titulo.textContent =
+            post.titulo;
+
+    }
+
+
+    if (texto) {
+
+        texto.textContent =
+            post.texto;
+
+    }
 
 
     const categoria =
@@ -1362,14 +1497,15 @@ function carregarPaginaPost() {
             ${curtido ? "♥" : "♡"}
 
             <span>
-                ${post.curtidas}
+                ${post.curtidas || 0}
             </span>
 
         `;
 
 
-        botaoCurtir.addEventListener(
-            "click",
+        // Evita adicionar vários eventos
+
+        botaoCurtir.onclick =
             () => {
 
                 const index =
@@ -1384,8 +1520,8 @@ function carregarPaginaPost() {
                         post.id
                     );
 
-
-                    post.curtidas++;
+                    post.curtidas =
+                        (post.curtidas || 0) + 1;
 
                 } else {
 
@@ -1394,13 +1530,11 @@ function carregarPaginaPost() {
                         1
                     );
 
-
                     post.curtidas =
                         Math.max(
                             0,
-                            post.curtidas - 1
+                            (post.curtidas || 0) - 1
                         );
-
                 }
 
 
@@ -1411,23 +1545,26 @@ function carregarPaginaPost() {
 
                 carregarPaginaPost();
 
-            }
-        );
+            };
 
     }
-
 }
 
 
 // ========================================
-// INICIAR
+// INICIAR SITE
 // ========================================
 
 if (areaPosts) {
 
-    mostrarPosts();
+    mostrarPosts("Tudo");
 
 }
 
 
+// ========================================
+// INICIAR POST DETALHADO
+// ========================================
+
 carregarPaginaPost();
+```
