@@ -383,7 +383,30 @@
         const urlParams = new URLSearchParams(window.location.search);
         const postId = Number(urlParams.get("id")) || 1;
 
-        const post = posts[postId];
+        const userPosts = JSON.parse(
+    localStorage.getItem("entreNos_userPosts") || "[]"
+);
+
+const allPosts = {
+    ...posts
+};
+
+userPosts.forEach(userPost => {
+
+    allPosts[userPost.id] = {
+        id: userPost.id,
+        categoria: userPost.categoria || "💭 Desabafo",
+        avatar: userPost.avatar || "🌸",
+        nome: userPost.nome || "Anônima",
+        tempo: userPost.tempo || "agora",
+        titulo: userPost.titulo || "Sem título",
+        texto: userPost.texto || "",
+        views: userPost.views || 0
+    };
+
+});
+
+const post = allPosts[postId];
 
         const postContainer = document.getElementById("postContainer");
         const commentsList = document.getElementById("commentsList");
