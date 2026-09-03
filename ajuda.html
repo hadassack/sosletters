@@ -1,0 +1,1170 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Ajuda — Entre Nós</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        /* ========================================
+           AJUDA
+        ======================================== */
+
+        .help-page {
+            max-width: 1050px;
+            margin: 0 auto;
+            padding: 35px 25px 80px;
+        }
+
+        .help-hero {
+            background: linear-gradient(
+                135deg,
+                #6E1424,
+                #8F1D32
+            );
+            color: white;
+            border-radius: 28px;
+            padding: 38px;
+            margin-bottom: 28px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .help-hero::after {
+            content: "♥";
+            position: absolute;
+            right: 35px;
+            bottom: -30px;
+            font-size: 150px;
+            opacity: .08;
+        }
+
+        .help-hero h1 {
+            font-size: 34px;
+            margin: 0 0 8px;
+        }
+
+        .help-hero p {
+            margin: 0 0 25px;
+            opacity: .9;
+            max-width: 600px;
+            line-height: 1.6;
+        }
+
+        .help-search {
+            max-width: 650px;
+            background: white;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            padding: 0 17px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .help-search span {
+            color: #765C61;
+            font-size: 22px;
+        }
+
+        .help-search input {
+            width: 100%;
+            border: 0;
+            outline: none;
+            padding: 16px 12px;
+            font-size: 14px;
+            color: #29171B;
+            background: transparent;
+        }
+
+        /* CATEGORIAS */
+
+        .help-topics {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .topic-card {
+            background: white;
+            border: 1px solid rgba(110,20,36,.08);
+            border-radius: 20px;
+            padding: 22px 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .topic-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(70,20,30,.08);
+        }
+
+        .topic-icon {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 12px;
+            border-radius: 15px;
+            background: #F5E7E3;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 23px;
+        }
+
+        .topic-card h3 {
+            margin: 0 0 5px;
+            font-size: 14px;
+            color: #29171B;
+        }
+
+        .topic-card p {
+            margin: 0;
+            font-size: 12px;
+            color: #765C61;
+        }
+
+        /* FAQ */
+
+        .help-title {
+            margin: 35px 0 17px;
+        }
+
+        .help-title h2 {
+            margin: 0 0 5px;
+            color: #29171B;
+            font-size: 22px;
+        }
+
+        .help-title p {
+            margin: 0;
+            color: #765C61;
+            font-size: 14px;
+        }
+
+        .faq-container {
+            background: white;
+            border-radius: 24px;
+            overflow: hidden;
+            border: 1px solid rgba(110,20,36,.08);
+        }
+
+        .faq-item {
+            border-bottom: 1px solid rgba(110,20,36,.08);
+        }
+
+        .faq-item:last-child {
+            border-bottom: 0;
+        }
+
+        .faq-question {
+            width: 100%;
+            border: 0;
+            background: transparent;
+            padding: 20px 23px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            text-align: left;
+            cursor: pointer;
+            color: #29171B;
+            font-weight: 750;
+            font-size: 14px;
+        }
+
+        .faq-question:hover {
+            background: rgba(110,20,36,.025);
+        }
+
+        .faq-plus {
+            font-size: 22px;
+            color: #8F1D32;
+            transition: transform .2s;
+        }
+
+        .faq-answer {
+            display: none;
+            padding: 0 23px 21px;
+            color: #765C61;
+            line-height: 1.65;
+            font-size: 13px;
+        }
+
+        .faq-item.open .faq-answer {
+            display: block;
+        }
+
+        .faq-item.open .faq-plus {
+            transform: rotate(45deg);
+        }
+
+        /* PASSO A PASSO */
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 17px;
+        }
+
+        .step-card {
+            background: white;
+            border-radius: 20px;
+            padding: 23px;
+            border: 1px solid rgba(110,20,36,.08);
+        }
+
+        .step-number {
+            width: 38px;
+            height: 38px;
+            border-radius: 12px;
+            background: #6E1424;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            margin-bottom: 14px;
+        }
+
+        .step-card h3 {
+            margin: 0 0 7px;
+            font-size: 15px;
+            color: #29171B;
+        }
+
+        .step-card p {
+            margin: 0;
+            color: #765C61;
+            font-size: 13px;
+            line-height: 1.55;
+        }
+
+        /* SEGURANÇA */
+
+        .safety-box {
+            background: #FFF8F5;
+            border: 1px solid rgba(110,20,36,.09);
+            border-radius: 24px;
+            padding: 25px;
+        }
+
+        .safety-box h3 {
+            margin: 0 0 10px;
+            color: #6E1424;
+        }
+
+        .safety-box p {
+            color: #765C61;
+            line-height: 1.6;
+            font-size: 13px;
+            margin: 0 0 15px;
+        }
+
+        .safety-list {
+            display: grid;
+            gap: 10px;
+        }
+
+        .safety-list div {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            font-size: 13px;
+            color: #29171B;
+        }
+
+        /* CONTATO */
+
+        .contact-box {
+            margin-top: 28px;
+            background: #6E1424;
+            color: white;
+            border-radius: 24px;
+            padding: 28px;
+            text-align: center;
+        }
+
+        .contact-box h2 {
+            margin: 0 0 7px;
+        }
+
+        .contact-box p {
+            margin: 0 auto 20px;
+            max-width: 550px;
+            opacity: .9;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .contact-button {
+            display: inline-block;
+            border: 0;
+            background: white;
+            color: #6E1424;
+            padding: 12px 20px;
+            border-radius: 13px;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        .contact-button:hover {
+            transform: translateY(-2px);
+        }
+
+        /* RESULTADO DA PESQUISA */
+
+        .no-results {
+            display: none;
+            padding: 35px;
+            text-align: center;
+            color: #765C61;
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 800px) {
+
+            .help-topics {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .steps {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+
+            .help-page {
+                padding: 25px 15px 100px;
+            }
+
+            .help-hero {
+                padding: 27px 22px;
+            }
+
+            .help-hero h1 {
+                font-size: 27px;
+            }
+
+            .help-hero::after {
+                display: none;
+            }
+
+            .help-topics {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+
+            .topic-card {
+                padding: 17px 10px;
+            }
+
+            .faq-question {
+                padding: 17px;
+                font-size: 13px;
+            }
+
+            .faq-answer {
+                padding: 0 17px 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- ========================================
+     HEADER
+======================================== -->
+
+<header class="top-header">
+
+    <a href="index.html" class="logo">
+        <span>♥</span>
+        Entre Nós
+    </a>
+
+    <div class="search-bar">
+
+        <span>⌕</span>
+
+        <input
+            type="text"
+            placeholder="Pesquisar no Entre Nós..."
+            onclick="window.location.href='explorar.html'"
+        >
+
+    </div>
+
+    <div class="header-actions">
+
+        <a href="notificacoes.html" class="header-icon">
+            ♡
+        </a>
+
+        <a href="mensagens.html" class="header-icon">
+            💌
+        </a>
+
+        <a href="perfil.html" class="header-avatar">
+            🌸
+        </a>
+
+    </div>
+
+</header>
+
+
+<!-- ========================================
+     SIDEBAR
+======================================== -->
+
+<aside class="sidebar">
+
+    <nav>
+
+        <a href="index.html">
+            <span>⌂</span>
+            Início
+        </a>
+
+        <a href="explorar.html">
+            <span>⌕</span>
+            Explorar
+        </a>
+
+        <a href="criar.html">
+            <span>＋</span>
+            Criar publicação
+        </a>
+
+        <a href="salvos.html">
+            <span>♡</span>
+            Salvos
+        </a>
+
+        <a href="notificacoes.html">
+            <span>🔔</span>
+            Notificações
+        </a>
+
+        <a href="mensagens.html">
+            <span>💌</span>
+            Mensagens
+        </a>
+
+        <a href="perfil.html">
+            <span>🌸</span>
+            Meu perfil
+        </a>
+
+        <a href="configuracoes.html">
+            <span>⚙️</span>
+            Configurações
+        </a>
+
+        <a href="ajuda.html" class="active">
+            <span>❔</span>
+            Ajuda
+        </a>
+
+    </nav>
+
+</aside>
+
+
+<!-- ========================================
+     CONTEÚDO
+======================================== -->
+
+<main class="main-content">
+
+    <div class="help-page">
+
+        <!-- HERO -->
+
+        <section class="help-hero">
+
+            <h1>Como podemos ajudar? 💌</h1>
+
+            <p>
+                Encontre respostas para suas dúvidas e descubra
+                como aproveitar melhor o Entre Nós.
+            </p>
+
+            <div class="help-search">
+
+                <span>⌕</span>
+
+                <input
+                    type="text"
+                    id="helpSearch"
+                    placeholder="Pesquise uma dúvida..."
+                >
+
+            </div>
+
+        </section>
+
+
+        <!-- TÓPICOS -->
+
+        <div class="help-topics">
+
+            <div class="topic-card" data-search="conta perfil usuário">
+                <div class="topic-icon">👤</div>
+                <h3>Minha conta</h3>
+                <p>Perfil e configurações</p>
+            </div>
+
+            <div class="topic-card" data-search="publicação post criar">
+                <div class="topic-icon">📝</div>
+                <h3>Publicações</h3>
+                <p>Posts e comentários</p>
+            </div>
+
+            <div class="topic-card" data-search="privacidade anônimo segurança">
+                <div class="topic-icon">🔒</div>
+                <h3>Privacidade</h3>
+                <p>Segurança e anonimato</p>
+            </div>
+
+            <div class="topic-card" data-search="mensagem conversar chat">
+                <div class="topic-icon">💌</div>
+                <h3>Mensagens</h3>
+                <p>Conversas e contatos</p>
+            </div>
+
+        </div>
+
+
+        <!-- FAQ -->
+
+        <div class="help-title">
+
+            <h2>Perguntas frequentes</h2>
+
+            <p>
+                As respostas para as dúvidas mais comuns.
+            </p>
+
+        </div>
+
+
+        <div class="faq-container" id="faqContainer">
+
+
+            <div
+                class="faq-item"
+                data-search="como criar publicação post publicar"
+            >
+
+                <button class="faq-question">
+
+                    <span>
+                        Como faço para criar uma publicação?
+                    </span>
+
+                    <span class="faq-plus">+</span>
+
+                </button>
+
+                <div class="faq-answer">
+
+                    Clique em <strong>“Criar publicação”</strong>
+                    no menu lateral. Depois escolha uma categoria,
+                    escreva sua história e escolha se deseja publicar
+                    anonimamente ou pelo seu perfil.
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="faq-item"
+                data-search="anonimato anônimo identidade nome"
+            >
+
+                <button class="faq-question">
+
+                    <span>
+                        Posso publicar anonimamente?
+                    </span>
+
+                    <span class="faq-plus">+</span>
+
+                </button>
+
+                <div class="faq-answer">
+
+                    Sim. Ao criar uma publicação, você pode escolher
+                    a opção <strong>“Publicar anonimamente”</strong>.
+                    Assim, a publicação aparece como anônima para
+                    as outras pessoas.
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="faq-item"
+                data-search="reação coração apoiar reagir"
+            >
+
+                <button class="faq-question">
+
+                    <span>
+                        Como funcionam as reações?
+                    </span>
+
+                    <span class="faq-plus">+</span>
+
+                </button>
+
+                <div class="faq-answer">
+
+                    Você pode reagir às histórias usando diferentes
+                    opções, como ❤️ Apoiar, 🫂 Estou com você,
+                    😭 Me identifiquei e outras reações.
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="faq-item"
+                data-search="salvar salvo favoritos guardar"
+            >
+
+                <button class="faq-question">
+
+                    <span>
+                        Como salvo uma publicação?
+                    </span>
+
+                    <span class="faq-plus">+</span>
+
+                </button>
+
+                <div class="faq-answer">
+
+                    Clique no ícone de salvar em uma publicação.
+                    Depois você poderá encontrar o conteúdo na área
+                    <strong>“Salvos”</strong>.
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="faq-item"
+                data-search="comentário comentar resposta responder"
+            >
+
+                <button class="faq-question">
+
+                    <span>
+                        Posso comentar em uma publicação?
+                    </span>
+
+                    <span class="faq-plus">+</span>
+
+                </button>
+
+                <div class="faq-answer">
+
+                    Sim. Quando os comentários estiverem permitidos,
+                    você poderá deixar sua opinião ou responder ao
+                    comentário de outra pessoa.
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="faq-item"
+                data-search="mensagem chat conversar enviar"
+            >
+
+                <button class="faq-question">
+
+                    <span>
+                        Como funcionam as mensagens?
+                    </span>
+
+                    <span class="faq-plus">+</span>
+
+                </button>
+
+                <div class="faq-answer">
+
+                    Entre em <strong>“Mensagens”</strong> pelo menu.
+                    Você poderá escolher uma conversa, escrever uma
+                    mensagem e enviá-la pelo campo de texto.
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="faq-item"
+                data-search="denunciar reportar denúncia"
+            >
+
+                <button class="faq-question">
+
+                    <span>
+                        Como denuncio algo que me incomodou?
+                    </span>
+
+                    <span class="faq-plus">+</span>
+
+                </button>
+
+                <div class="faq-answer">
+
+                    Nas publicações e interações, procure a opção
+                    de denúncia. Escolha o motivo correspondente
+                    e envie o relato.
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="faq-item"
+                data-search="bloquear bloqueio usuário pessoa"
+            >
+
+                <button class="faq-question">
+
+                    <span>
+                        Posso bloquear alguém?
+                    </span>
+
+                    <span class="faq-plus">+</span>
+
+                </button>
+
+                <div class="faq-answer">
+
+                    Sim. O bloqueio faz parte das ferramentas de
+                    segurança planejadas para o perfil e para as
+                    interações da comunidade.
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="faq-item"
+                data-search="tema escuro claro aparência"
+            >
+
+                <button class="faq-question">
+
+                    <span>
+                        Posso mudar o tema do site?
+                    </span>
+
+                    <span class="faq-plus">+</span>
+
+                </button>
+
+                <div class="faq-answer">
+
+                    Sim. Vá em <strong>Configurações → Aparência</strong>
+                    e escolha entre tema claro, escuro ou sistema.
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="faq-item"
+                data-search="notificação notificações aviso"
+            >
+
+                <button class="faq-question">
+
+                    <span>
+                        Posso controlar minhas notificações?
+                    </span>
+
+                    <span class="faq-plus">+</span>
+
+                </button>
+
+                <div class="faq-answer">
+
+                    Sim. Em <strong>Configurações → Notificações</strong>
+                    você pode ativar ou desativar categorias de
+                    notificações.
+
+                </div>
+
+            </div>
+
+
+            <div class="no-results" id="noResults">
+
+                💭 Nenhuma dúvida encontrada.
+
+                <br>
+
+                Tente pesquisar por outra palavra.
+
+            </div>
+
+        </div>
+
+
+        <!-- PASSO A PASSO -->
+
+        <div class="help-title">
+
+            <h2>Começando no Entre Nós 🌷</h2>
+
+            <p>
+                Um pequeno guia para quem está chegando agora.
+            </p>
+
+        </div>
+
+
+        <div class="steps">
+
+            <div class="step-card">
+
+                <div class="step-number">
+                    1
+                </div>
+
+                <h3>Explore</h3>
+
+                <p>
+                    Conheça histórias e experiências compartilhadas
+                    pela comunidade.
+                </p>
+
+            </div>
+
+
+            <div class="step-card">
+
+                <div class="step-number">
+                    2
+                </div>
+
+                <h3>Compartilhe</h3>
+
+                <p>
+                    Crie sua própria publicação e conte o que está
+                    acontecendo com você.
+                </p>
+
+            </div>
+
+
+            <div class="step-card">
+
+                <div class="step-number">
+                    3
+                </div>
+
+                <h3>Conecte-se</h3>
+
+                <p>
+                    Apoie outras meninas, deixe conselhos e participe
+                    das conversas.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- SEGURANÇA -->
+
+        <div class="help-title">
+
+            <h2>Segurança primeiro 🔒</h2>
+
+        </div>
+
+
+        <div class="safety-box">
+
+            <h3>Cuide de você e das outras pessoas.</h3>
+
+            <p>
+                O Entre Nós foi pensado para ser um espaço acolhedor.
+                Algumas atitudes ajudam a manter a comunidade saudável:
+            </p>
+
+            <div class="safety-list">
+
+                <div>
+                    <span>❤️</span>
+                    <span>Respeite as experiências das outras pessoas.</span>
+                </div>
+
+                <div>
+                    <span>🚫</span>
+                    <span>Não compartilhe informações pessoais de outras pessoas.</span>
+                </div>
+
+                <div>
+                    <span>🛡️</span>
+                    <span>Denuncie conteúdos que violem as regras da comunidade.</span>
+                </div>
+
+                <div>
+                    <span>💭</span>
+                    <span>Lembre-se de que opiniões diferentes podem existir.</span>
+                </div>
+
+                <div>
+                    <span>🔒</span>
+                    <span>Evite compartilhar senhas, endereços ou informações sensíveis.</span>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- CONTATO -->
+
+        <div class="contact-box">
+
+            <h2>Ainda precisa de ajuda? 💌</h2>
+
+            <p>
+                Não encontrou o que estava procurando?
+                Entre em contato com o suporte da comunidade.
+            </p>
+
+            <button
+                class="contact-button"
+                onclick="showContactMessage()"
+            >
+                Falar com o suporte
+            </button>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<!-- ========================================
+     MOBILE NAV
+======================================== -->
+
+<nav class="mobile-nav">
+
+    <a href="index.html">
+        <span>⌂</span>
+        Início
+    </a>
+
+    <a href="explorar.html">
+        <span>⌕</span>
+        Explorar
+    </a>
+
+    <a href="criar.html">
+        <span>＋</span>
+        Criar
+    </a>
+
+    <a href="salvos.html">
+        <span>♡</span>
+        Salvos
+    </a>
+
+    <a href="perfil.html">
+        <span>🌸</span>
+        Perfil
+    </a>
+
+</nav>
+
+
+<!-- ========================================
+     JAVASCRIPT
+======================================== -->
+
+<script>
+
+    /* ========================================
+       FAQ
+    ======================================== */
+
+    document
+        .querySelectorAll(".faq-question")
+        .forEach(button => {
+
+            button.addEventListener("click", () => {
+
+                const item =
+                    button.closest(".faq-item");
+
+                const wasOpen =
+                    item.classList.contains("open");
+
+                document
+                    .querySelectorAll(".faq-item")
+                    .forEach(other => {
+                        other.classList.remove("open");
+                    });
+
+                if (!wasOpen) {
+                    item.classList.add("open");
+                }
+
+            });
+
+        });
+
+
+    /* ========================================
+       PESQUISA
+    ======================================== */
+
+    const helpSearch =
+        document.getElementById("helpSearch");
+
+    const faqItems =
+        document.querySelectorAll(".faq-item");
+
+    const topicCards =
+        document.querySelectorAll(".topic-card");
+
+    const noResults =
+        document.getElementById("noResults");
+
+
+    helpSearch.addEventListener("input", () => {
+
+        const search =
+            helpSearch.value
+                .toLowerCase()
+                .trim();
+
+        let found = 0;
+
+
+        faqItems.forEach(item => {
+
+            const text =
+                (
+                    item.innerText +
+                    " " +
+                    (item.dataset.search || "")
+                ).toLowerCase();
+
+            if (!search || text.includes(search)) {
+
+                item.style.display = "block";
+                found++;
+
+            } else {
+
+                item.style.display = "none";
+
+            }
+
+        });
+
+
+        topicCards.forEach(card => {
+
+            const text =
+                (
+                    card.innerText +
+                    " " +
+                    (card.dataset.search || "")
+                ).toLowerCase();
+
+            if (!search || text.includes(search)) {
+
+                card.style.display = "block";
+
+            } else {
+
+                card.style.display = "none";
+
+            }
+
+        });
+
+
+        noResults.style.display =
+            found === 0 ? "block" : "none";
+
+    });
+
+
+    /* ========================================
+       TÓPICOS
+    ======================================== */
+
+    topicCards.forEach(card => {
+
+        card.addEventListener("click", () => {
+
+            const searchTerms =
+                card.dataset.search.split(" ");
+
+            helpSearch.value =
+                searchTerms[0];
+
+            helpSearch.dispatchEvent(
+                new Event("input")
+            );
+
+            document
+                .getElementById("faqContainer")
+                .scrollIntoView({
+                    behavior: "smooth"
+                });
+
+        });
+
+    });
+
+
+    /* ========================================
+       SUPORTE
+    ======================================== */
+
+    function showContactMessage() {
+
+        alert(
+            "💌 O suporte estará disponível em uma próxima versão do Entre Nós."
+        );
+
+    }
+
+</script>
+
+</body>
+</html>
