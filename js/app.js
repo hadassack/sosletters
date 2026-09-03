@@ -1011,10 +1011,315 @@ function setupHeartHover() {
 
 
 /* =========================================================
+   CARREGAR PUBLICAÇÕES CRIADAS PELO USUÁRIO
+========================================================= */
+
+function getUserPosts() {
+    try {
+        return JSON.parse(
+            localStorage.getItem("entreNos_userPosts") || "[]"
+        );
+    } catch {
+        return [];
+    }
+}
+
+
+function escapeUserPostHTML(text) {
+    const div = document.createElement("div");
+    div.textContent = text || "";
+    return div.innerHTML;
+}
+
+
+function renderUserPosts() {
+
+    const feed = document.querySelector(".feed-section");
+
+    if (!feed) {
+        return;
+    }
+
+    const loadMore = feed.querySelector(".load-more");
+
+    if (!loadMore) {
+        return;
+    }
+
+    const userPosts = getUserPosts();
+
+    if (!userPosts.length) {
+        return;
+    }
+
+
+    userPosts.forEach(post => {
+
+        /* Evita duplicar a publicação */
+
+        if (
+            feed.querySelector(
+                `.post-card[data-post-id="${post.id}"]`
+            )
+        ) {
+            return;
+        }
+
+
+        /* Retira o emoji da categoria para o filtro */
+
+        const categoryText = String(post.categoria || "")
+            .replace(
+                /^[\p{Emoji_Presentation}\p{Extended_Pictographic}\s]+/u,
+                ""
+            )
+            .trim();
+
+
+        const article = document.createElement("article");
+
+        article.className = "post-card";
+
+        article.dataset.category = categoryText;
+
+        article.dataset.postId = String(post.id);
+
+
+        article.innerHTML = `
+
+            <div class="post-header">
+
+                <a href="perfil.html" class="post-author">
+
+                    <span class="avatar avatar-flower">
+                        ${escapeUserPostHTML(post.avatar || "🌸")}
+                    </span>
+
+                    <span class="author-info">
+
+                        <strong>
+                            ${escapeUserPostHTML(post.nome || "Anônima")}
+                        </strong>
+
+                        <small>
+                            ${escapeUserPostHTML(post.tempo || "agora")}
+                        </small>
+
+                    </span>
+
+                </a>
+
+
+                <button
+                    type="button"
+                    class="post-menu-button"
+                    aria-label="Mais opções"
+                >
+                    ⋯
+                </button>
+
+            </div>
+
+
+            <a
+                href="explorar.html?categoria=${encodeURIComponent(categoryText)}"
+                class="post-category"
+            >
+                ${escapeUserPostHTML(post.categoria || "💭 Desabafo")}
+            </a>
+
+
+            <a
+                href="post.html?id=${encodeURIComponent(post.id)}"
+                class="post-content"
+            >
+
+                <h3>
+                    ${escapeUserPostHTML(post.titulo)}
+                </h3>
+
+                <p>
+                    ${escapeUserPostHTML(post.texto)}
+                </p>
+
+            </a>
+
+
+            <div class="hashtags">
+
+                <a href="explorar.html?tag=entre-nos">
+                    #entreNós
+                </a>
+
+                ${
+                    post.askingAdvice
+                        ? `
+                        <a href="explorar.html?tag=conselho">
+                            #conselho
+                        </a>
+                        `
+                        : ""
+                }
+
+            </div>
+
+
+            <div class="post-actions">
+
+                <div class="post-reactions">
+
+                    <button
+                        type="button"
+                        class="reaction-button"
+                        data-reaction="support"
+                        aria-label="Apoiar"
+                    >
+
+                        <span>♥</span>
+
+                        <span class="reaction-count">
+                            0
+                        </span>
+
+                    </button>
+
+
+                    <a
+                        href="post.html?id=${encodeURIComponent(post.id)}#comentarios"
+                        class="post-action"
+                    >
+
+                        <span>♡</span>
+
+                        <span>
+                            0
+                        </span>
+
+                    </a>
+
+
+                    <button
+                        type="button"
+                        class="post-action share-button"
+                        data-post-id="${escapeUserPostHTML(post.id)}"
+                    >
+
+                        <span>↗</span>
+
+                        <span>
+                            Compartilhar
+                        </span>
+
+                    </button>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="save-button"
+                    data-post-id="${escapeUserPostHTML(post.id)}"
+                    aria-label="Salvar publicação"
+                >
+                    ♡
+                </button>
+
+            </div>
+
+        `;
+
+
+        /* Coloca o novo post no topo do feed */
+
+        feed.insertBefore(article, feed.firstElementChild);
+
+
+        /* Configura imediatamente os botões do novo post */
+
+        const saveButton =
+            article.querySelector(".save-button");
+
+        const reactionButton =
+            article.querySelector(".reaction-button");
+
+        const shareButton =
+            article.querySelector(".share-button");
+
+        const menuButton =
+            article.querySelector(".post-menu-button");
+
+
+        if (saveButton) {
+
+            saveButton.addEventListener("click", event => {
+
+                event.preventDefault();
+                event.stopPropagation();
+
+                toggleSave(post.id);
+
+            });
+
+        }
+
+
+        if (reactionButton) {
+
+            reactionButton.addEventListener("click", event => {
+
+                event.preventDefault();
+
+                toggleReaction(reactionButton);
+
+            });
+
+        }
+
+
+        if (shareButton) {
+
+            shareButton.addEventListener("click", event => {
+
+                event.preventDefault();
+
+                sharePost(post.id);
+
+            });
+
+        }
+
+
+        if (menuButton) {
+
+            menuButton.addEventListener("click", event => {
+
+                event.preventDefault();
+                event.stopPropagation();
+
+                openPostModal(post.id);
+
+            });
+
+        }
+
+    });
+
+
+    /* Atualiza o estado dos botões */
+
+    updateSaveButtons();
+
+    initializeReactionCounts();
+
+    restoreReactions();
+
+}/* =========================================================
    INICIALIZAÇÃO
    ========================================================= */
 
 function initializeApp() {
+
+    renderUserPosts();
 
     applyHiddenPosts();
 
