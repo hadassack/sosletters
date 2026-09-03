@@ -1,0 +1,1096 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Configurações — Entre Nós</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        /* ========================================
+           CONFIGURAÇÕES
+        ======================================== */
+
+        .settings-page {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 35px 25px 70px;
+        }
+
+        .settings-header {
+            margin-bottom: 30px;
+        }
+
+        .settings-header h1 {
+            font-size: 32px;
+            margin-bottom: 8px;
+            color: var(--text, #29171B);
+        }
+
+        .settings-header p {
+            color: var(--secondary, #765C61);
+            font-size: 15px;
+        }
+
+        .settings-section {
+            background: var(--card, #fff);
+            border-radius: 24px;
+            margin-bottom: 22px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(70, 20, 30, 0.06);
+            border: 1px solid rgba(110, 20, 36, 0.08);
+        }
+
+        .settings-section-title {
+            padding: 22px 25px 15px;
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--wine, #6E1424);
+        }
+
+        .setting-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            padding: 20px 25px;
+            border-top: 1px solid rgba(110, 20, 36, 0.08);
+            transition: background .2s ease;
+        }
+
+        .setting-item:hover {
+            background: rgba(110, 20, 36, 0.025);
+        }
+
+        .setting-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            min-width: 0;
+        }
+
+        .setting-icon {
+            width: 45px;
+            height: 45px;
+            flex-shrink: 0;
+            border-radius: 14px;
+            background: #F5E7E3;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 21px;
+        }
+
+        .setting-text h3 {
+            margin: 0 0 4px;
+            font-size: 15px;
+            color: var(--text, #29171B);
+        }
+
+        .setting-text p {
+            margin: 0;
+            font-size: 13px;
+            line-height: 1.45;
+            color: var(--secondary, #765C61);
+        }
+
+        .setting-action {
+            flex-shrink: 0;
+        }
+
+        .setting-button {
+            border: 0;
+            background: #F5E7E3;
+            color: #6E1424;
+            padding: 10px 17px;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .setting-button:hover {
+            background: #6E1424;
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        /* TOGGLE */
+
+        .toggle {
+            position: relative;
+            width: 52px;
+            height: 29px;
+            flex-shrink: 0;
+        }
+
+        .toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            inset: 0;
+            background: #D8C5C8;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: .25s;
+        }
+
+        .toggle-slider::before {
+            content: "";
+            position: absolute;
+            width: 21px;
+            height: 21px;
+            left: 4px;
+            top: 4px;
+            background: white;
+            border-radius: 50%;
+            transition: .25s;
+            box-shadow: 0 2px 5px rgba(0,0,0,.15);
+        }
+
+        .toggle input:checked + .toggle-slider {
+            background: #6E1424;
+        }
+
+        .toggle input:checked + .toggle-slider::before {
+            transform: translateX(23px);
+        }
+
+        /* SELECT */
+
+        .setting-select {
+            border: 1px solid #E5D5D8;
+            background: white;
+            color: #29171B;
+            border-radius: 12px;
+            padding: 10px 14px;
+            font-weight: 600;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .setting-select:focus {
+            border-color: #8F1D32;
+        }
+
+        /* PERFIL */
+
+        .profile-preview {
+            margin: 0 25px 20px;
+            padding: 20px;
+            border-radius: 18px;
+            background: #FFF8F5;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .profile-avatar {
+            width: 62px;
+            height: 62px;
+            border-radius: 50%;
+            background: #F5E7E3;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+        }
+
+        .profile-preview h3 {
+            margin: 0 0 3px;
+            color: #29171B;
+        }
+
+        .profile-preview p {
+            margin: 0;
+            color: #765C61;
+            font-size: 13px;
+        }
+
+        /* DANGER */
+
+        .danger-section {
+            border: 1px solid rgba(160, 30, 50, .15);
+        }
+
+        .danger-section .settings-section-title {
+            color: #9B2338;
+        }
+
+        .danger-button {
+            border: 0;
+            background: #FFF0F2;
+            color: #A21F38;
+            padding: 10px 17px;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .danger-button:hover {
+            background: #A21F38;
+            color: white;
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 700px) {
+
+            .settings-page {
+                padding: 25px 15px 100px;
+            }
+
+            .settings-header h1 {
+                font-size: 27px;
+            }
+
+            .setting-item {
+                align-items: flex-start;
+                padding: 18px;
+            }
+
+            .setting-info {
+                gap: 12px;
+            }
+
+            .setting-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 18px;
+            }
+
+            .setting-action {
+                margin-top: 3px;
+            }
+
+            .setting-button,
+            .danger-button {
+                padding: 9px 12px;
+                font-size: 12px;
+            }
+
+            .setting-select {
+                max-width: 120px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- ========================================
+     HEADER
+======================================== -->
+
+<header class="top-header">
+
+    <a href="index.html" class="logo">
+        <span>♥</span>
+        Entre Nós
+    </a>
+
+    <div class="search-bar">
+        <span>⌕</span>
+        <input
+            type="text"
+            placeholder="Pesquisar no Entre Nós..."
+            onclick="window.location.href='explorar.html'"
+        >
+    </div>
+
+    <div class="header-actions">
+
+        <a href="notificacoes.html" class="header-icon" title="Notificações">
+            ♡
+        </a>
+
+        <a href="mensagens.html" class="header-icon" title="Mensagens">
+            💌
+        </a>
+
+        <a href="perfil.html" class="header-avatar" title="Meu perfil">
+            🌸
+        </a>
+
+    </div>
+
+</header>
+
+
+<!-- ========================================
+     SIDEBAR
+======================================== -->
+
+<aside class="sidebar">
+
+    <nav>
+
+        <a href="index.html">
+            <span>⌂</span>
+            Início
+        </a>
+
+        <a href="explorar.html">
+            <span>⌕</span>
+            Explorar
+        </a>
+
+        <a href="criar.html">
+            <span>＋</span>
+            Criar publicação
+        </a>
+
+        <a href="salvos.html">
+            <span>♡</span>
+            Salvos
+        </a>
+
+        <a href="notificacoes.html">
+            <span>🔔</span>
+            Notificações
+        </a>
+
+        <a href="mensagens.html">
+            <span>💌</span>
+            Mensagens
+        </a>
+
+        <a href="perfil.html">
+            <span>🌸</span>
+            Meu perfil
+        </a>
+
+        <a href="configuracoes.html" class="active">
+            <span>⚙️</span>
+            Configurações
+        </a>
+
+        <a href="ajuda.html">
+            <span>❔</span>
+            Ajuda
+        </a>
+
+    </nav>
+
+</aside>
+
+
+<!-- ========================================
+     CONTEÚDO
+======================================== -->
+
+<main class="main-content">
+
+    <div class="settings-page">
+
+        <div class="settings-header">
+            <h1>⚙️ Configurações</h1>
+            <p>Personalize sua experiência no Entre Nós.</p>
+        </div>
+
+
+        <!-- ========================================
+             CONTA
+        ======================================== -->
+
+        <section class="settings-section">
+
+            <div class="settings-section-title">
+                👤 Conta
+            </div>
+
+            <div class="profile-preview">
+
+                <div class="profile-avatar">
+                    🌸
+                </div>
+
+                <div>
+                    <h3>Meu perfil</h3>
+                    <p>Edite suas informações pessoais e sua aparência.</p>
+                </div>
+
+            </div>
+
+            <div class="setting-item">
+
+                <div class="setting-info">
+
+                    <div class="setting-icon">
+                        👤
+                    </div>
+
+                    <div class="setting-text">
+                        <h3>Editar perfil</h3>
+                        <p>Altere seu nome, usuário, bio e foto.</p>
+                    </div>
+
+                </div>
+
+                <div class="setting-action">
+                    <button
+                        class="setting-button"
+                        onclick="window.location.href='perfil.html'"
+                    >
+                        Editar
+                    </button>
+                </div>
+
+            </div>
+
+
+            <div class="setting-item">
+
+                <div class="setting-info">
+
+                    <div class="setting-icon">
+                        🔐
+                    </div>
+
+                    <div class="setting-text">
+                        <h3>Senha</h3>
+                        <p>Altere sua senha de acesso.</p>
+                    </div>
+
+                </div>
+
+                <div class="setting-action">
+                    <button
+                        class="setting-button"
+                        onclick="showMessage('A área de senha será aberta aqui.')"
+                    >
+                        Alterar
+                    </button>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ========================================
+             PRIVACIDADE
+        ======================================== -->
+
+        <section class="settings-section">
+
+            <div class="settings-section-title">
+                🔒 Privacidade
+            </div>
+
+
+            <div class="setting-item">
+
+                <div class="setting-info">
+
+                    <div class="setting-icon">
+                        👻
+                    </div>
+
+                    <div class="setting-text">
+                        <h3>Modo anônimo</h3>
+                        <p>Use seu perfil de forma anônima ao criar publicações.</p>
+                    </div>
+
+                </div>
+
+                <label class="toggle">
+                    <input type="checkbox" id="anonymousMode">
+                    <span class="toggle-slider"></span>
+                </label>
+
+            </div>
+
+
+            <div class="setting-item">
+
+                <div class="setting-info">
+
+                    <div class="setting-icon">
+                        💬
+                    </div>
+
+                    <div class="setting-text">
+                        <h3>Permitir mensagens</h3>
+                        <p>Permita que outras pessoas enviem mensagens para você.</p>
+                    </div>
+
+                </div>
+
+                <label class="toggle">
+                    <input type="checkbox" id="allowMessages" checked>
+                    <span class="toggle-slider"></span>
+                </label>
+
+            </div>
+
+
+            <div class="setting-item">
+
+                <div class="setting-info">
+
+                    <div class="setting-icon">
+                        💭
+                    </div>
+
+                    <div class="setting-text">
+                        <h3>Permitir comentários</h3>
+                        <p>Outras pessoas poderão comentar nas suas publicações.</p>
+                    </div>
+
+                </div>
+
+                <label class="toggle">
+                    <input type="checkbox" id="allowComments" checked>
+                    <span class="toggle-slider"></span>
+                </label>
+
+            </div>
+
+        </section>
+
+
+        <!-- ========================================
+             NOTIFICAÇÕES
+        ======================================== -->
+
+        <section class="settings-section">
+
+            <div class="settings-section-title">
+                🔔 Notificações
+            </div>
+
+
+            <div class="setting-item">
+
+                <div class="setting-info">
+
+                    <div class="setting-icon">
+                        ❤️
+                    </div>
+
+                    <div class="setting-text">
+                        <h3>Reações</h3>
+                        <p>Receba notificações quando alguém reagir às suas publicações.</p>
+                    </div>
+
+                </div>
+
+                <label class="toggle">
+                    <input type="checkbox" id="reactionNotifications" checked>
+                    <span class="toggle-slider"></span>
+                </label>
+
+            </div>
+
+
+            <div class="setting-item">
+
+                <div class="setting-info">
+
+                    <div class="setting-icon">
+                        💬
+                    </div>
+
+                    <div class="setting-text">
+                        <h3>Comentários</h3>
+                        <p>Avise quando alguém comentar ou responder você.</p>
+                    </div>
+
+                </div>
+
+                <label class="toggle">
+                    <input type="checkbox" id="commentNotifications" checked>
+                    <span class="toggle-slider"></span>
+                </label>
+
+            </div>
+
+
+            <div class="setting-item">
+
+                <div class="setting-info">
+
+                    <div class="setting-icon">
+                        👥
+                    </div>
+
+                    <div class="setting-text">
+                        <h3>Novos seguidores</h3>
+                        <p>Receba avisos quando alguém começar a seguir você.</p>
+                    </div>
+
+                </div>
+
+                <label class="toggle">
+                    <input type="checkbox" id="followNotifications" checked>
+                    <span class="toggle-slider"></span>
+                </label>
+
+            </div>
+
+        </section>
+
+
+        <!-- ========================================
+             APARÊNCIA
+        ======================================== -->
+
+        <section class="settings-section">
+
+            <div class="settings-section-title">
+                🎨 Aparência
+            </div>
+
+
+            <div class="setting-item">
+
+                <div class="setting-info">
+
+                    <div class="setting-icon">
+                        🌓
+                    </div>
+
+                    <div class="setting-text">
+                        <h3>Tema</h3>
+                        <p>Escolha como o Entre Nós deve aparecer.</p>
+                    </div>
+
+                </div>
+
+                <select
+                    class="setting-select"
+                    id="themeSelect"
+                >
+                    <option value="light">Claro</option>
+                    <option value="dark">Escuro</option>
+                    <option value="system">Sistema</option>
+                </select>
+
+            </div>
+
+
+            <div class="setting-item">
+
+                <div class="setting-info">
+
+                    <div class="setting-icon">
+                        ✨
+                    </div>
+
+                    <div class="setting-text">
+                        <h3>Animações</h3>
+                        <p>Ative pequenas animações e efeitos visuais.</p>
+                    </div>
+
+                </div>
+
+                <label class="toggle">
+                    <input type="checkbox" id="animations" checked>
+                    <span class="toggle-slider"></span>
+                </label>
+
+            </div>
+
+        </section>
+
+
+        <!-- ========================================
+             SEGURANÇA
+        ======================================== -->
+
+        <section class="settings-section">
+
+            <div class="settings-section-title">
+                🛡️ Segurança
+            </div>
+
+
+            <div class="setting-item">
+
+                <div class="setting-info">
+
+                    <div class="setting-icon">
+                        🚫
+                    </div>
+
+                    <div class="setting-text">
+                        <h3>Contas bloqueadas</h3>
+                        <p>Veja e gerencie as pessoas que você bloqueou.</p>
+                    </div>
+
+                </div>
+
+                <button
+                    class="setting-button"
+                    onclick="showMessage('Você ainda não possui contas bloqueadas.')"
+                >
+                    Ver
+                </button>
+
+            </div>
+
+
+            <div class="setting-item">
+
+                <div class="setting-info">
+
+                    <div class="setting-icon">
+                        📱
+                    </div>
+
+                    <div class="setting-text">
+                        <h3>Sessões ativas</h3>
+                        <p>Confira onde sua conta está conectada.</p>
+                    </div>
+
+                </div>
+
+                <button
+                    class="setting-button"
+                    onclick="showMessage('Esta é a sua sessão atual.')"
+                >
+                    Ver
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- ========================================
+             SOBRE
+        ======================================== -->
+
+        <section class="settings-section">
+
+            <div class="settings-section-title">
+                💌 Sobre o Entre Nós
+            </div>
+
+
+            <div class="setting-item">
+
+                <div class="setting-info">
+
+                    <div class="setting-icon">
+                        📖
+                    </div>
+
+                    <div class="setting-text">
+                        <h3>Regras da comunidade</h3>
+                        <p>Conheça as regras para manter nossa comunidade segura.</p>
+                    </div>
+
+                </div>
+
+                <button
+                    class="setting-button"
+                    onclick="showMessage('As regras da comunidade estarão disponíveis em breve.')"
+                >
+                    Abrir
+                </button>
+
+            </div>
+
+
+            <div class="setting-item">
+
+                <div class="setting-info">
+
+                    <div class="setting-icon">
+                        ❓
+                    </div>
+
+                    <div class="setting-text">
+                        <h3>Central de ajuda</h3>
+                        <p>Precisa de ajuda? Encontre respostas e orientações.</p>
+                    </div>
+
+                </div>
+
+                <button
+                    class="setting-button"
+                    onclick="window.location.href='ajuda.html'"
+                >
+                    Ajuda
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- ========================================
+             ZONA DE PERIGO
+        ======================================== -->
+
+        <section class="settings-section danger-section">
+
+            <div class="settings-section-title">
+                ⚠️ Zona de perigo
+            </div>
+
+
+            <div class="setting-item">
+
+                <div class="setting-info">
+
+                    <div class="setting-icon">
+                        🗑️
+                    </div>
+
+                    <div class="setting-text">
+                        <h3>Excluir dados locais</h3>
+                        <p>
+                            Remove publicações, reações e preferências salvas neste navegador.
+                        </p>
+                    </div>
+
+                </div>
+
+                <button
+                    class="danger-button"
+                    onclick="clearDemoData()"
+                >
+                    Limpar
+                </button>
+
+            </div>
+
+
+            <div class="setting-item">
+
+                <div class="setting-info">
+
+                    <div class="setting-icon">
+                        💔
+                    </div>
+
+                    <div class="setting-text">
+                        <h3>Excluir conta</h3>
+                        <p>
+                            Esta opção faz parte da demonstração do site.
+                        </p>
+                    </div>
+
+                </div>
+
+                <button
+                    class="danger-button"
+                    onclick="deleteDemoAccount()"
+                >
+                    Excluir
+                </button>
+
+            </div>
+
+        </section>
+
+    </div>
+
+</main>
+
+
+<!-- ========================================
+     MOBILE NAV
+======================================== -->
+
+<nav class="mobile-nav">
+
+    <a href="index.html">
+        <span>⌂</span>
+        Início
+    </a>
+
+    <a href="explorar.html">
+        <span>⌕</span>
+        Explorar
+    </a>
+
+    <a href="criar.html">
+        <span>＋</span>
+        Criar
+    </a>
+
+    <a href="salvos.html">
+        <span>♡</span>
+        Salvos
+    </a>
+
+    <a href="perfil.html">
+        <span>🌸</span>
+        Perfil
+    </a>
+
+</nav>
+
+
+<!-- ========================================
+     JAVASCRIPT
+======================================== -->
+
+<script>
+
+    function showMessage(message) {
+
+        let toast = document.getElementById("settingsToast");
+
+        if (!toast) {
+
+            toast = document.createElement("div");
+
+            toast.id = "settingsToast";
+
+            toast.style.position = "fixed";
+            toast.style.bottom = "30px";
+            toast.style.left = "50%";
+            toast.style.transform = "translateX(-50%)";
+            toast.style.background = "#6E1424";
+            toast.style.color = "#fff";
+            toast.style.padding = "14px 20px";
+            toast.style.borderRadius = "14px";
+            toast.style.fontWeight = "700";
+            toast.style.zIndex = "9999";
+            toast.style.boxShadow = "0 10px 30px rgba(0,0,0,.2)";
+
+            document.body.appendChild(toast);
+        }
+
+        toast.textContent = message;
+        toast.style.opacity = "1";
+
+        clearTimeout(window.toastTimeout);
+
+        window.toastTimeout = setTimeout(() => {
+            toast.style.opacity = "0";
+        }, 2500);
+    }
+
+
+    /* ========================================
+       SALVAR CONFIGURAÇÕES
+    ======================================== */
+
+    const settingsIds = [
+        "anonymousMode",
+        "allowMessages",
+        "allowComments",
+        "reactionNotifications",
+        "commentNotifications",
+        "followNotifications",
+        "animations"
+    ];
+
+
+    settingsIds.forEach(id => {
+
+        const element = document.getElementById(id);
+
+        const saved =
+            localStorage.getItem("entreNos_setting_" + id);
+
+        if (saved !== null) {
+            element.checked = saved === "true";
+        }
+
+        element.addEventListener("change", () => {
+
+            localStorage.setItem(
+                "entreNos_setting_" + id,
+                element.checked
+            );
+
+            showMessage("Configuração salva ❤️");
+        });
+
+    });
+
+
+    /* ========================================
+       TEMA
+    ======================================== */
+
+    const themeSelect =
+        document.getElementById("themeSelect");
+
+    const savedTheme =
+        localStorage.getItem("entreNos_theme") || "light";
+
+    themeSelect.value = savedTheme;
+
+    themeSelect.addEventListener("change", () => {
+
+        localStorage.setItem(
+            "entreNos_theme",
+            themeSelect.value
+        );
+
+        if (themeSelect.value === "dark") {
+            document.body.classList.add("dark-mode");
+        } else {
+            document.body.classList.remove("dark-mode");
+        }
+
+        showMessage("Tema salvo ✨");
+    });
+
+
+    if (savedTheme === "dark") {
+        document.body.classList.add("dark-mode");
+    }
+
+
+    /* ========================================
+       LIMPAR DADOS
+    ======================================== */
+
+    function clearDemoData() {
+
+        const confirmed = confirm(
+            "Tem certeza que deseja limpar os dados da demonstração?"
+        );
+
+        if (!confirmed) return;
+
+        Object.keys(localStorage)
+            .filter(key => key.startsWith("entreNos_"))
+            .forEach(key => localStorage.removeItem(key));
+
+        showMessage("Dados locais removidos.");
+
+        setTimeout(() => {
+            window.location.reload();
+        }, 1200);
+    }
+
+
+    /* ========================================
+       EXCLUIR CONTA
+    ======================================== */
+
+    function deleteDemoAccount() {
+
+        const confirmed = confirm(
+            "Essa é uma demonstração. Deseja simular a exclusão da conta?"
+        );
+
+        if (!confirmed) return;
+
+        showMessage("Conta excluída da demonstração 💔");
+
+        setTimeout(() => {
+            window.location.href = "index.html";
+        }, 1800);
+    }
+
+</script>
+
+</body>
+</html>
