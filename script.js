@@ -1,599 +1,823 @@
-// =========================================
+// ========================================
 // ENTRE NÓS — SCRIPT.JS
-// =========================================
+// ========================================
 
 
-// =========================================
-// 1. PEGAR OS ELEMENTOS
-// =========================================
+// ========================================
+// POSTS INICIAIS
+// ========================================
 
-const botoesCategoria = document.querySelectorAll(".categoria");
-const areaPosts = document.querySelector(".posts");
-
-
-// =========================================
-// 2. SELEÇÃO DE CATEGORIAS
-// =========================================
-
-botoesCategoria.forEach((botao) => {
-
-    botao.addEventListener("click", () => {
-
-        botoesCategoria.forEach((categoria) => {
-            categoria.classList.remove("ativa");
-        });
-
-        botao.classList.add("ativa");
-
-    });
-
-});
-
-
-// =========================================
-// 3. ABRIR UM POST
-// =========================================
-
-function abrirPost(post) {
-
-    const tituloElemento = post.querySelector("h3");
-    const textoElemento = post.querySelector("p");
-    const categoriaElemento = post.querySelector(".post-categoria");
-    const nomeElemento = post.querySelector(".nome-usuario");
-    const tempoElemento = post.querySelector(".tempo-post");
-    const avatarElemento = post.querySelector(".avatar");
-
-    const titulo = tituloElemento
-        ? tituloElemento.textContent.trim()
-        : "";
-
-    const texto = textoElemento
-        ? textoElemento.textContent.trim()
-        : "";
-
-    const categoria = categoriaElemento
-        ? categoriaElemento.textContent.trim()
-        : "";
-
-    const nome = nomeElemento
-        ? nomeElemento.textContent.trim()
-        : "Anônima";
-
-    const tempo = tempoElemento
-        ? tempoElemento.textContent.trim()
-        : "agora mesmo";
-
-    const avatar = avatarElemento
-        ? avatarElemento.textContent.trim()
-        : "🌸";
+const postsIniciais = [
+    {
+        id: 1,
+        categoria: "Ele gosta de mim?",
+        emoji: "🤷",
+        avatar: "🌸",
+        nome: "Anônima",
+        tempo: "há 2 horas",
+        titulo: "Eu não consigo entender os sinais dele...",
+        texto: "Gente, preciso MUITO de uma opinião. Às vezes parece que ele gosta de mim, mas em outros momentos parece que eu estou simplesmente imaginando tudo. Vocês já passaram por isso?",
+        curtidas: 128,
+        comentarios: 34
+    },
+    {
+        id: 2,
+        categoria: "Paixão",
+        emoji: "🩷",
+        avatar: "💌",
+        nome: "Coração Confuso",
+        tempo: "há 4 horas",
+        titulo: "Acho que estou gostando dele de verdade...",
+        texto: "Eu tentei fingir que não era nada, mas ultimamente penso nele o tempo inteiro. Tenho medo de estragar nossa amizade, mas também tenho medo de nunca descobrir o que poderia acontecer.",
+        curtidas: 96,
+        comentarios: 21
+    },
+    {
+        id: 3,
+        categoria: "Término",
+        emoji: "💔",
+        avatar: "🌙",
+        nome: "Lua Perdida",
+        tempo: "ontem",
+        titulo: "Como vocês conseguiram superar alguém?",
+        texto: "Eu sei que terminar foi a decisão certa, mas ainda sinto falta de várias coisas. Parece estranho tentar seguir em frente quando uma pessoa fez parte da sua rotina por tanto tempo.",
+        curtidas: 203,
+        comentarios: 58
+    }
+];
 
 
-    // Salva as informações do post
-    localStorage.setItem("postTitulo", titulo);
-    localStorage.setItem("postTexto", texto);
-    localStorage.setItem("postCategoria", categoria);
-    localStorage.setItem("postNome", nome);
-    localStorage.setItem("postTempo", tempo);
-    localStorage.setItem("postAvatar", avatar);
+// ========================================
+// PEGAR POSTS SALVOS
+// ========================================
+
+let postsSalvos = JSON.parse(
+    localStorage.getItem("posts")
+) || postsIniciais;
 
 
-    // Abre a página do post
-    window.location.href = "post.html";
+// Salva os posts
+
+function salvarPosts() {
+
+    localStorage.setItem(
+        "posts",
+        JSON.stringify(postsSalvos)
+    );
 
 }
 
 
-// =========================================
-// 4. FAZER OS CARDS CLICÁVEIS
-// =========================================
+// ========================================
+// PEGAR ELEMENTOS DA PÁGINA
+// ========================================
 
-function adicionarCliqueNoCard(post) {
+const areaPosts =
+    document.getElementById("posts");
 
-    post.addEventListener("click", (evento) => {
-
-        // Não abre o post se clicar em um botão
-        if (evento.target.closest("button")) {
-            return;
-        }
-
-        abrirPost(post);
-
-    });
+const botoesCategoria =
+    document.querySelectorAll(".categoria");
 
 
-    // Cursor de clique
-    post.style.cursor = "pointer";
+// ========================================
+// MOSTRAR POSTS
+// ========================================
 
-}
+function mostrarPosts(
+    categoriaSelecionada = "Tudo"
+) {
+
+    if (!areaPosts) return;
 
 
-// Adiciona aos posts que já existem
+    areaPosts.innerHTML = "";
 
-document.querySelectorAll(".post-card").forEach((post) => {
 
-    // Só adiciona o clique se NÃO estiver
-    // na página post.html
+    let postsParaMostrar =
+        postsSalvos;
 
-    if (!post.classList.contains("post-detalhe")) {
 
-        adicionarCliqueNoCard(post);
+    // FILTRAR
+
+    if (
+        categoriaSelecionada !== "Tudo"
+    ) {
+
+        postsParaMostrar =
+            postsSalvos.filter(
+                (post) =>
+                    post.categoria ===
+                    categoriaSelecionada
+            );
 
     }
 
-});
+
+    // SE NÃO HOUVER POSTS
+
+    if (
+        postsParaMostrar.length === 0
+    ) {
+
+        areaPosts.innerHTML = `
+            <div class="sem-posts">
+                <h3>
+                    Ainda não existem posts aqui ♡
+                </h3>
+
+                <p>
+                    Que tal ser a primeira pessoa
+                    a compartilhar algo?
+                </p>
+            </div>
+        `;
+
+        return;
+
+    }
 
 
-// =========================================
-// 5. CURTIR POSTS
-// =========================================
+    // CRIAR CARDS
 
-function configurarCurtir(post) {
+    postsParaMostrar.forEach(
+        (post) => {
 
-    const botoes = post.querySelectorAll(".acao");
-
-    botoes.forEach((botao) => {
-
-        if (
-            botao.textContent.includes("♡") ||
-            botao.classList.contains("curtir")
-        ) {
-
-            botao.addEventListener("click", (evento) => {
-
-                evento.stopPropagation();
-
-                let texto = botao.textContent.trim();
-
-                let numero = parseInt(
-                    texto.replace(/[^\d]/g, "")
+            const card =
+                document.createElement(
+                    "article"
                 );
 
-                if (isNaN(numero)) {
-                    numero = 0;
-                }
 
+            card.className =
+                "post-card";
 
-                if (botao.classList.contains("curtido")) {
 
-                    numero--;
+            card.dataset.id =
+                post.id;
 
-                    botao.classList.remove("curtido");
 
-                    botao.innerHTML = `♡ ${numero}`;
+            card.innerHTML = `
 
-                } else {
+                <div class="post-topo">
 
-                    numero++;
+                    <div class="usuario">
 
-                    botao.classList.add("curtido");
-
-                    botao.innerHTML = `♥ ${numero}`;
-
-                }
-
-            });
-
-        }
-
-    });
-
-}
-
-
-// =========================================
-// 6. SALVAR POSTS
-// =========================================
-
-function configurarSalvar(post) {
-
-    const botoes = post.querySelectorAll(".acao");
-
-    botoes.forEach((botao) => {
-
-        if (
-            botao.textContent.includes("Salvar") ||
-            botao.classList.contains("salvar")
-        ) {
-
-            botao.addEventListener("click", (evento) => {
-
-                evento.stopPropagation();
-
-
-                if (botao.classList.contains("salvo")) {
-
-                    botao.classList.remove("salvo");
-
-                    botao.innerHTML = "🔖 Salvar";
-
-                } else {
-
-                    botao.classList.add("salvo");
-
-                    botao.innerHTML = "📌 Salvo";
-
-                }
-
-            });
-
-        }
-
-    });
-
-}
-
-
-// =========================================
-// 7. CONFIGURAR POSTS EXISTENTES
-// =========================================
-
-document.querySelectorAll(".post-card").forEach((post) => {
-
-    configurarCurtir(post);
-    configurarSalvar(post);
-
-});
-
-
-// =========================================
-// 8. PUBLICAR NOVO POST
-// =========================================
-
-const botaoPublicar =
-    document.querySelector(".criar-post .btn-principal");
-
-
-const campoTitulo =
-    document.querySelector(
-        '.criar-post input[type="text"]'
-    );
-
-
-const campoTexto =
-    document.querySelector(".criar-post textarea");
-
-
-const campoCategoria =
-    document.querySelector(".criar-post select");
-
-
-if (
-    botaoPublicar &&
-    campoTitulo &&
-    campoTexto &&
-    campoCategoria &&
-    areaPosts
-) {
-
-    botaoPublicar.addEventListener("click", () => {
-
-        const titulo = campoTitulo.value.trim();
-
-        const texto = campoTexto.value.trim();
-
-        const categoria = campoCategoria.value;
-
-
-        if (titulo === "" || texto === "") {
-
-            alert(
-                "Escreva um título e conte o que está acontecendo ♡"
-            );
-
-            return;
-
-        }
-
-
-        // Cria o novo post
-
-        const novoPost =
-            document.createElement("article");
-
-
-        novoPost.classList.add("post-card");
-
-
-        novoPost.innerHTML = `
-
-            <div class="post-topo">
-
-                <div class="usuario">
-
-                    <div class="avatar">
-                        🩷
-                    </div>
-
-                    <div>
-
-                        <div class="nome-usuario">
-                            Você
+                        <div class="avatar">
+                            ${post.avatar}
                         </div>
 
-                        <div class="tempo-post">
-                            agora mesmo
+
+                        <div>
+
+                            <div class="nome-usuario">
+                                ${post.nome}
+                            </div>
+
+
+                            <div class="tempo-post">
+                                ${post.tempo}
+                            </div>
+
                         </div>
 
                     </div>
 
                 </div>
 
-            </div>
+
+                <div class="post-categoria">
+
+                    ${post.emoji}
+                    ${post.categoria}
+
+                </div>
 
 
-            <div class="post-categoria">
-
-                ${categoria}
-
-            </div>
+                <h3>
+                    ${post.titulo}
+                </h3>
 
 
-            <h3>
-
-                ${titulo}
-
-            </h3>
+                <p>
+                    ${post.texto}
+                </p>
 
 
-            <p>
+                <div class="post-acoes">
 
-                ${texto}
-
-            </p>
-
-
-            <div class="post-acoes">
-
-                <button class="acao curtir">
-                    ♡ 0
-                </button>
+                    <button
+                        class="acao curtir"
+                    >
+                        ♡
+                        <span>
+                            ${post.curtidas}
+                        </span>
+                    </button>
 
 
-                <button class="acao comentar">
-                    💬 0
-                </button>
+                    <button
+                        class="acao comentar"
+                    >
+                        💬
+                        <span>
+                            ${post.comentarios}
+                        </span>
+                    </button>
 
 
-                <button class="acao salvar">
-                    🔖 Salvar
-                </button>
+                    <button
+                        class="acao salvar"
+                    >
+                        🔖 Salvar
+                    </button>
 
-            </div>
+                </div>
 
-        `;
-
-
-        // Coloca o novo post no topo
-
-        areaPosts.prepend(novoPost);
+            `;
 
 
-        // Adiciona as funcionalidades
+            // =================================
+            // ABRIR POST AO CLICAR NO CARD
+            // =================================
 
-        adicionarCliqueNoCard(novoPost);
+            card.addEventListener(
+                "click",
+                (evento) => {
 
-        configurarCurtir(novoPost);
+                    // Não abre se clicar em botão
 
-        configurarSalvar(novoPost);
+                    if (
+                        evento.target.closest(
+                            "button"
+                        )
+                    ) {
+
+                        return;
+
+                    }
 
 
-        // Limpa os campos
+                    abrirPost(
+                        post.id
+                    );
 
-        campoTitulo.value = "";
-
-        campoTexto.value = "";
-
-        campoCategoria.selectedIndex = 0;
+                }
+            );
 
 
-        alert("Seu post foi publicado ♡");
+            card.style.cursor =
+                "pointer";
 
-    });
+
+            // =================================
+            // CURTIR
+            // =================================
+
+            const botaoCurtir =
+                card.querySelector(
+                    ".curtir"
+                );
+
+
+            botaoCurtir.addEventListener(
+                "click",
+                (evento) => {
+
+                    evento.stopPropagation();
+
+
+                    const index =
+                        postsSalvos.findIndex(
+                            (p) =>
+                                p.id ===
+                                post.id
+                        );
+
+
+                    postsSalvos[
+                        index
+                    ].curtidas++;
+
+
+                    salvarPosts();
+
+
+                    mostrarPosts(
+                        categoriaSelecionada
+                    );
+
+                }
+            );
+
+
+            // =================================
+            // COMENTAR
+            // =================================
+
+            const botaoComentar =
+                card.querySelector(
+                    ".comentar"
+                );
+
+
+            botaoComentar.addEventListener(
+                "click",
+                (evento) => {
+
+                    evento.stopPropagation();
+
+
+                    abrirPost(
+                        post.id
+                    );
+
+                }
+            );
+
+
+            // =================================
+            // SALVAR
+            // =================================
+
+            const botaoSalvar =
+                card.querySelector(
+                    ".salvar"
+                );
+
+
+            botaoSalvar.addEventListener(
+                "click",
+                (evento) => {
+
+                    evento.stopPropagation();
+
+
+                    if (
+                        botaoSalvar.classList.contains(
+                            "salvo"
+                        )
+                    ) {
+
+                        botaoSalvar.classList.remove(
+                            "salvo"
+                        );
+
+
+                        botaoSalvar.innerHTML =
+                            "🔖 Salvar";
+
+                    } else {
+
+                        botaoSalvar.classList.add(
+                            "salvo"
+                        );
+
+
+                        botaoSalvar.innerHTML =
+                            "📌 Salvo";
+
+                    }
+
+                }
+            );
+
+
+            areaPosts.appendChild(
+                card
+            );
+
+        }
+    );
 
 }
 
 
-// =========================================
-// 9. CARREGAR POST NA PÁGINA POST.HTML
-// =========================================
+// ========================================
+// ABRIR POST
+// ========================================
 
-const paginaPost =
-    document.querySelector(".post-detalhe");
+function abrirPost(id) {
 
-
-if (paginaPost) {
-
-    const titulo =
-        localStorage.getItem("postTitulo");
-
-
-    const texto =
-        localStorage.getItem("postTexto");
-
-
-    const categoria =
-        localStorage.getItem("postCategoria");
-
-
-    const nome =
-        localStorage.getItem("postNome");
-
-
-    const tempo =
-        localStorage.getItem("postTempo");
-
-
-    const avatar =
-        localStorage.getItem("postAvatar");
-
-
-    // Coloca as informações na página
-
-    if (titulo) {
-
-        document.getElementById(
-            "titulo-post"
-        ).textContent = titulo;
-
-    }
-
-
-    if (texto) {
-
-        document.getElementById(
-            "texto-post"
-        ).textContent = texto;
-
-    }
-
-
-    if (categoria) {
-
-        const categoriaPost =
-            paginaPost.querySelector(
-                ".post-categoria"
-            );
-
-
-        if (categoriaPost) {
-
-            categoriaPost.textContent =
-                categoria;
-
-        }
-
-    }
-
-
-    if (nome) {
-
-        const nomePost =
-            paginaPost.querySelector(
-                ".nome-usuario"
-            );
-
-
-        if (nomePost) {
-
-            nomePost.textContent =
-                nome;
-
-        }
-
-    }
-
-
-    if (tempo) {
-
-        const tempoPost =
-            paginaPost.querySelector(
-                ".tempo-post"
-            );
-
-
-        if (tempoPost) {
-
-            tempoPost.textContent =
-                tempo;
-
-        }
-
-    }
-
-
-    if (avatar) {
-
-        const avatarPost =
-            paginaPost.querySelector(
-                ".avatar"
-            );
-
-
-        if (avatarPost) {
-
-            avatarPost.textContent =
-                avatar;
-
-        }
-
-    }
+    window.location.href =
+        `post.html?id=${id}`;
 
 }
 
 
-// =========================================
-// 10. COMENTÁRIOS DA PÁGINA DO POST
-// =========================================
+// ========================================
+// CATEGORIAS
+// ========================================
 
-const botaoEnviarComentario =
+botoesCategoria.forEach(
+    (botao) => {
+
+        botao.addEventListener(
+            "click",
+            () => {
+
+                // Remove seleção anterior
+
+                botoesCategoria.forEach(
+                    (categoria) => {
+
+                        categoria.classList.remove(
+                            "ativa"
+                        );
+
+                    }
+                );
+
+
+                // Seleciona botão
+
+                botao.classList.add(
+                    "ativa"
+                );
+
+
+                const categoria =
+                    botao.dataset.categoria;
+
+
+                mostrarPosts(
+                    categoria
+                );
+
+
+                // Vai até os posts
+
+                document
+                    .getElementById("posts")
+                    ?.scrollIntoView({
+                        behavior: "smooth",
+                        block: "start"
+                    });
+
+            }
+        );
+
+    }
+);
+
+
+// ========================================
+// PUBLICAR POST
+// ========================================
+
+const botaoPublicar =
     document.getElementById(
-        "enviar-comentario"
+        "publicar-post"
     );
 
 
-const inputComentario =
-    document.getElementById(
-        "input-comentario"
-    );
+if (botaoPublicar) {
 
-
-const listaComentarios =
-    document.getElementById(
-        "lista-comentarios"
-    );
-
-
-if (
-    botaoEnviarComentario &&
-    inputComentario &&
-    listaComentarios
-) {
-
-    botaoEnviarComentario.addEventListener(
+    botaoPublicar.addEventListener(
         "click",
         () => {
 
+            const titulo =
+                document
+                    .getElementById(
+                        "titulo"
+                    )
+                    .value
+                    .trim();
+
+
             const texto =
-                inputComentario.value.trim();
+                document
+                    .getElementById(
+                        "texto"
+                    )
+                    .value
+                    .trim();
 
 
-            if (texto === "") {
+            const categoria =
+                document
+                    .getElementById(
+                        "categoria-post"
+                    )
+                    .value;
+
+
+            // VERIFICAÇÃO
+
+            if (
+                titulo === "" ||
+                texto === "" ||
+                categoria === ""
+            ) {
+
+                alert(
+                    "Preencha o título, a história e a categoria ♡"
+                );
 
                 return;
 
             }
 
 
-            const comentario =
-                document.createElement("div");
+            // NOVO ID
+
+            const novoId =
+                Date.now();
 
 
-            comentario.classList.add(
-                "comentario"
+            // NOVO POST
+
+            const novoPost = {
+
+                id: novoId,
+
+                categoria: categoria,
+
+                emoji: pegarEmojiCategoria(
+                    categoria
+                ),
+
+                avatar: "🩷",
+
+                nome: "Você",
+
+                tempo: "agora mesmo",
+
+                titulo: titulo,
+
+                texto: texto,
+
+                curtidas: 0,
+
+                comentarios: 0
+
+            };
+
+
+            // ADICIONA
+
+            postsSalvos.unshift(
+                novoPost
             );
 
 
-            comentario.innerHTML = `
-
-                <strong>
-                    🩷 Você
-                </strong>
-
-                <p>
-                    ${texto}
-                </p>
-
-            `;
+            salvarPosts();
 
 
-            listaComentarios.appendChild(
-                comentario
+            // LIMPA OS CAMPOS
+
+            document.getElementById(
+                "titulo"
+            ).value = "";
+
+
+            document.getElementById(
+                "texto"
+            ).value = "";
+
+
+            document.getElementById(
+                "categoria-post"
+            ).value = "";
+
+
+            // MOSTRA TODOS
+
+            mostrarPosts(
+                "Tudo"
             );
 
 
-            inputComentario.value = "";
+            // ATIVA "TUDO"
+
+            botoesCategoria.forEach(
+                (botao) => {
+
+                    botao.classList.remove(
+                        "ativa"
+                    );
+
+
+                    if (
+                        botao.dataset.categoria ===
+                        "Tudo"
+                    ) {
+
+                        botao.classList.add(
+                            "ativa"
+                        );
+
+                    }
+
+                }
+            );
+
+
+            alert(
+                "Seu post foi publicado! ♡"
+            );
 
         }
     );
 
 }
+
+
+// ========================================
+// EMOJIS DAS CATEGORIAS
+// ========================================
+
+function pegarEmojiCategoria(
+    categoria
+) {
+
+    const emojis = {
+
+        "Término": "💔",
+
+        "Paixão": "🩷",
+
+        "Ele gosta de mim?": "🤷",
+
+        "Preciso de conselho": "🫂",
+
+        "Primeiro amor": "🌷",
+
+        "Relacionamento complicado": "🕸️"
+
+    };
+
+
+    return emojis[categoria] || "💌";
+
+}
+
+
+// ========================================
+// PÁGINA POST.HTML
+// ========================================
+
+function carregarPaginaPost() {
+
+    const paginaPost =
+        document.querySelector(
+            ".post-detalhe"
+        );
+
+
+    if (!paginaPost) return;
+
+
+    // PEGA ID DA URL
+
+    const parametros =
+        new URLSearchParams(
+            window.location.search
+        );
+
+
+    const id =
+        parametros.get("id");
+
+
+    // PROCURA O POST
+
+    const post =
+        postsSalvos.find(
+            (p) =>
+                String(p.id) ===
+                String(id)
+        );
+
+
+    // SE NÃO ENCONTRAR
+
+    if (!post) {
+
+        document.getElementById(
+            "titulo-post"
+        ).textContent =
+            "Post não encontrado";
+
+        return;
+
+    }
+
+
+    // PREENCHE INFORMAÇÕES
+
+    document.getElementById(
+        "titulo-post"
+    ).textContent =
+        post.titulo;
+
+
+    document.getElementById(
+        "texto-post"
+    ).textContent =
+        post.texto;
+
+
+    const categoriaElemento =
+        paginaPost.querySelector(
+            ".post-categoria"
+        );
+
+
+    if (categoriaElemento) {
+
+        categoriaElemento.textContent =
+            `${post.emoji} ${post.categoria}`;
+
+    }
+
+
+    const nomeElemento =
+        paginaPost.querySelector(
+            ".nome-usuario"
+        );
+
+
+    if (nomeElemento) {
+
+        nomeElemento.textContent =
+            post.nome;
+
+    }
+
+
+    const tempoElemento =
+        paginaPost.querySelector(
+            ".tempo-post"
+        );
+
+
+    if (tempoElemento) {
+
+        tempoElemento.textContent =
+            post.tempo;
+
+    }
+
+
+    const avatarElemento =
+        paginaPost.querySelector(
+            ".avatar"
+        );
+
+
+    if (avatarElemento) {
+
+        avatarElemento.textContent =
+            post.avatar;
+
+    }
+
+
+    // CURTIDAS
+
+    const botaoCurtir =
+        paginaPost.querySelector(
+            ".curtir"
+        );
+
+
+    if (botaoCurtir) {
+
+        botaoCurtir.innerHTML =
+            `♡ <span>${post.curtidas}</span>`;
+
+
+        botaoCurtir.addEventListener(
+            "click",
+            () => {
+
+                post.curtidas++;
+
+
+                salvarPosts();
+
+
+                botaoCurtir.innerHTML =
+                    `♥ <span>${post.curtidas}</span>`;
+
+            }
+        );
+
+    }
+
+}
+
+
+// ========================================
+// INICIAR
+// ========================================
+
+if (areaPosts) {
+
+    mostrarPosts();
+
+}
+
+
+carregarPaginaPost();
