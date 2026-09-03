@@ -1,65 +1,46 @@
-```html
 <!DOCTYPE html>
 <html lang="pt-BR">
 
 <head>
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Entre Nós ♡</title>
 
-    <!-- Conecta o HTML ao CSS -->
     <link rel="stylesheet" href="style.css">
 </head>
 
-
 <body>
 
-    <!-- =========================
-         CABEÇALHO
-    ========================== -->
-
+    <!-- CABEÇALHO -->
     <header>
-
         <div class="header-container">
 
-            <a href="#" class="logo">Entre Nós ♡</a>
-
+            <a href="index.html" class="logo">
+                Entre Nós ♡
+            </a>
 
             <nav>
-
-                <a href="#inicio">Início</a>
-
+                <a href="index.html">Início</a>
                 <a href="#explorar">Explorar</a>
-
                 <a href="#categorias">Categorias</a>
-
                 <a href="#posts">Posts</a>
-
             </nav>
 
-
-            <button class="btn btn-principal">
+            <button
+                class="btn btn-principal"
+                id="botao-perfil"
+            >
                 Meu perfil
             </button>
 
         </div>
-
     </header>
 
 
-    <!-- =========================
-         CONTEÚDO PRINCIPAL
-    ========================== -->
+    <main>
 
-    <main id="inicio">
-
-
-        <!-- =========================
-             BOAS-VINDAS
-        ========================== -->
-
+        <!-- BOAS-VINDAS -->
         <section class="hero">
 
             <h1>
@@ -67,13 +48,11 @@
                 que fica preso no coração.
             </h1>
 
-
             <p>
                 Compartilhe suas histórias, peça conselhos,
-                desabafe e encontre pessoas que talvez
-                estejam sentindo exatamente a mesma coisa que você.
+                desabafe e encontre pessoas que talvez estejam
+                sentindo exatamente a mesma coisa que você.
             </p>
-
 
             <div class="frase">
                 ♡ Você não precisa entender tudo sozinha.
@@ -82,45 +61,48 @@
         </section>
 
 
-        <!-- =========================
-             CATEGORIAS
-        ========================== -->
-
+        <!-- CATEGORIAS -->
         <section id="categorias">
 
             <div class="categorias">
 
-                <button class="categoria ativa">
+                <button class="categoria ativa" data-categoria="Tudo">
                     💌 Tudo
                 </button>
 
-
-                <button class="categoria">
+                <button class="categoria" data-categoria="Término">
                     💔 Término
                 </button>
 
-
-                <button class="categoria">
+                <button class="categoria" data-categoria="Paixão">
                     🩷 Paixão
                 </button>
 
-
-                <button class="categoria">
+                <button
+                    class="categoria"
+                    data-categoria="Ele gosta de mim?"
+                >
                     🤷 Ele gosta de mim?
                 </button>
 
-
-                <button class="categoria">
+                <button
+                    class="categoria"
+                    data-categoria="Preciso de conselho"
+                >
                     🫂 Preciso de conselho
                 </button>
 
-
-                <button class="categoria">
+                <button
+                    class="categoria"
+                    data-categoria="Primeiro amor"
+                >
                     🌷 Primeiro amor
                 </button>
 
-
-                <button class="categoria">
+                <button
+                    class="categoria"
+                    data-categoria="Relacionamento complicado"
+                >
                     🕸️ Relacionamento complicado
                 </button>
 
@@ -129,99 +111,90 @@
         </section>
 
 
-        <!-- =========================
-             ÁREA DE CRIAR POST
-        ========================== -->
-
+        <!-- CRIAR POST -->
         <section class="criar-post">
 
             <h2>
                 O que está acontecendo no seu coração? ♡
             </h2>
 
-
             <input
                 type="text"
+                id="titulo"
                 placeholder="Dê um título para o seu post..."
             >
 
-
-            <br>
-            <br>
-
+            <br><br>
 
             <textarea
+                id="texto"
                 placeholder="Compartilhe algo que está sentindo..."
             ></textarea>
 
 
             <div class="post-opcoes">
 
+                <select id="categoria-post">
 
-                <select>
-
-                    <option>
+                    <option value="">
                         🏷️ Escolher categoria
                     </option>
 
-                    <option>
+                    <option value="Término">
                         💔 Término
                     </option>
 
-                    <option>
+                    <option value="Paixão">
                         🩷 Paixão
                     </option>
 
-                    <option>
+                    <option value="Ele gosta de mim?">
                         🤷 Ele gosta de mim?
                     </option>
 
-                    <option>
+                    <option value="Preciso de conselho">
                         🫂 Preciso de conselho
                     </option>
 
-                    <option>
+                    <option value="Primeiro amor">
                         🌷 Primeiro amor
                     </option>
 
-                    <option>
+                    <option value="Relacionamento complicado">
                         🕸️ Relacionamento complicado
                     </option>
 
                 </select>
 
 
-                <button class="btn btn-principal">
-
+                <button
+                    class="btn btn-principal"
+                    id="publicar-post"
+                >
                     Publicar ♡
-
                 </button>
-
 
             </div>
 
         </section>
 
 
-        <!-- =========================
-             LAYOUT POSTS + SIDEBAR
-        ========================== -->
-
+        <!-- POSTS -->
         <div class="layout" id="explorar">
 
-
-            <!-- POSTS -->
 
             <section class="posts" id="posts">
 
 
                 <!-- POST 1 -->
 
-                <article class="post-card">
-
+                <article
+                    class="post-card"
+                    data-id="1"
+                    data-categoria="Ele gosta de mim?"
+                >
 
                     <div class="post-topo">
-
 
                         <div class="usuario">
 
@@ -229,13 +202,11 @@
                                 🌸
                             </div>
 
-
                             <div>
 
                                 <div class="nome-usuario">
                                     Anônima
                                 </div>
-
 
                                 <div class="tempo-post">
                                     há 2 horas
@@ -245,14 +216,11 @@
 
                         </div>
 
-
                     </div>
 
 
                     <div class="post-categoria">
-
                         🤷 Ele gosta de mim?
-
                     </div>
 
 
@@ -272,43 +240,38 @@
 
                     <div class="post-acoes">
 
-
-                        <button class="acao">
-                            ♡ 128
+                        <button class="acao curtir">
+                            ♡ <span>128</span>
                         </button>
 
-
-                        <button class="acao">
-                            💬 34
+                        <button class="acao comentar">
+                            💬 <span>34</span>
                         </button>
 
-
-                        <button class="acao">
+                        <button class="acao salvar">
                             🔖 Salvar
                         </button>
 
-
                     </div>
-
 
                 </article>
 
 
                 <!-- POST 2 -->
 
-                <article class="post-card">
-
+                <article
+                    class="post-card"
+                    data-id="2"
+                    data-categoria="Paixão"
+                >
 
                     <div class="post-topo">
 
-
                         <div class="usuario">
-
 
                             <div class="avatar">
                                 💌
                             </div>
-
 
                             <div>
 
@@ -316,24 +279,19 @@
                                     Coração Confuso
                                 </div>
 
-
                                 <div class="tempo-post">
                                     há 4 horas
                                 </div>
 
                             </div>
 
-
                         </div>
-
 
                     </div>
 
 
                     <div class="post-categoria">
-
                         🩷 Paixão
-
                     </div>
 
 
@@ -353,43 +311,38 @@
 
                     <div class="post-acoes">
 
-
-                        <button class="acao">
-                            ♡ 96
+                        <button class="acao curtir">
+                            ♡ <span>96</span>
                         </button>
 
-
-                        <button class="acao">
-                            💬 21
+                        <button class="acao comentar">
+                            💬 <span>21</span>
                         </button>
 
-
-                        <button class="acao">
+                        <button class="acao salvar">
                             🔖 Salvar
                         </button>
 
-
                     </div>
-
 
                 </article>
 
 
                 <!-- POST 3 -->
 
-                <article class="post-card">
-
+                <article
+                    class="post-card"
+                    data-id="3"
+                    data-categoria="Término"
+                >
 
                     <div class="post-topo">
 
-
                         <div class="usuario">
-
 
                             <div class="avatar">
                                 🌙
                             </div>
-
 
                             <div>
 
@@ -397,24 +350,19 @@
                                     Lua Perdida
                                 </div>
 
-
                                 <div class="tempo-post">
                                     ontem
                                 </div>
 
                             </div>
 
-
                         </div>
-
 
                     </div>
 
 
                     <div class="post-categoria">
-
                         💔 Término
-
                     </div>
 
 
@@ -434,42 +382,32 @@
 
                     <div class="post-acoes">
 
-
-                        <button class="acao">
-                            ♡ 203
+                        <button class="acao curtir">
+                            ♡ <span>203</span>
                         </button>
 
-
-                        <button class="acao">
-                            💬 58
+                        <button class="acao comentar">
+                            💬 <span>58</span>
                         </button>
 
-
-                        <button class="acao">
+                        <button class="acao salvar">
                             🔖 Salvar
                         </button>
 
-
                     </div>
 
-
                 </article>
-
 
             </section>
 
 
-            <!-- =========================
-                 SIDEBAR
-            ========================== -->
+            <!-- SIDEBAR -->
 
             <aside class="sidebar">
-
 
                 <h3>
                     Bem-vinda ♡
                 </h3>
-
 
                 <p>
                     Aqui você pode falar sobre seus sentimentos
@@ -505,19 +443,14 @@
                     🫂 Preciso de conselho
                 </p>
 
-
             </aside>
 
-
         </div>
-
 
     </main>
 
 
-    <!-- =========================
-         RODAPÉ
-    ========================== -->
+    <!-- RODAPÉ -->
 
     <footer>
 
@@ -531,11 +464,8 @@
     </footer>
 
 
-    <!-- Conecta o JavaScript -->
-
     <script src="script.js"></script>
 
 </body>
 
 </html>
-```
