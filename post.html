@@ -1,170 +1,864 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Post • Entre Nós ♡</title>
+    <title>Entre Nós ♡ Post</title>
 
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        .post-page {
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 35px 20px 80px;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #6E1424;
+            text-decoration: none;
+            font-weight: 700;
+            margin-bottom: 22px;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        .post-full-card {
+            background: #fff8f5;
+            border-radius: 28px;
+            padding: 30px;
+            box-shadow: 0 12px 35px rgba(110, 20, 36, 0.10);
+            border: 1px solid rgba(110, 20, 36, 0.08);
+        }
+
+        .post-author {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            margin-bottom: 25px;
+        }
+
+        .post-avatar {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: #f5e7e3;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 25px;
+        }
+
+        .post-author strong {
+            display: block;
+            color: #29171B;
+            font-size: 16px;
+        }
+
+        .post-author small {
+            color: #765C61;
+        }
+
+        .post-category {
+            display: inline-flex;
+            background: #f5e7e3;
+            color: #6E1424;
+            padding: 8px 13px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .post-title {
+            font-size: clamp(25px, 5vw, 38px);
+            line-height: 1.15;
+            color: #29171B;
+            margin: 0 0 18px;
+        }
+
+        .post-text {
+            color: #4e393d;
+            font-size: 17px;
+            line-height: 1.75;
+            white-space: pre-wrap;
+        }
+
+        .post-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #ead9d5;
+            color: #765C61;
+            font-size: 14px;
+        }
+
+        .post-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 22px;
+        }
+
+        .post-action {
+            border: 0;
+            background: #f5e7e3;
+            color: #6E1424;
+            padding: 11px 16px;
+            border-radius: 14px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: .2s;
+        }
+
+        .post-action:hover {
+            transform: translateY(-2px);
+            background: #ead4d0;
+        }
+
+        .post-action.active {
+            background: #6E1424;
+            color: white;
+        }
+
+        .comments-section {
+            margin-top: 25px;
+            background: #fff8f5;
+            border-radius: 28px;
+            padding: 30px;
+            box-shadow: 0 12px 35px rgba(110, 20, 36, 0.08);
+        }
+
+        .comments-section h2 {
+            margin-top: 0;
+            color: #29171B;
+        }
+
+        .comment-form {
+            margin: 20px 0 30px;
+        }
+
+        .comment-form textarea {
+            width: 100%;
+            min-height: 110px;
+            resize: vertical;
+            box-sizing: border-box;
+            border: 1px solid #dfc8c4;
+            border-radius: 18px;
+            padding: 15px;
+            font: inherit;
+            outline: none;
+            background: white;
+            color: #29171B;
+        }
+
+        .comment-form textarea:focus {
+            border-color: #8F1D32;
+            box-shadow: 0 0 0 3px rgba(143, 29, 50, .10);
+        }
+
+        .comment-form-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .anonymous-label {
+            color: #765C61;
+            font-size: 14px;
+        }
+
+        .send-comment {
+            border: 0;
+            background: #6E1424;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 14px;
+            cursor: pointer;
+            font-weight: 700;
+        }
+
+        .send-comment:hover {
+            background: #8F1D32;
+        }
+
+        .comment {
+            border-top: 1px solid #ead9d5;
+            padding: 20px 0;
+        }
+
+        .comment:first-child {
+            border-top: 0;
+        }
+
+        .comment-head {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .comment-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: #f5e7e3;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .comment-head strong {
+            color: #29171B;
+        }
+
+        .comment-head small {
+            display: block;
+            color: #765C61;
+        }
+
+        .comment-text {
+            margin: 12px 0 12px 48px;
+            color: #4e393d;
+            line-height: 1.6;
+        }
+
+        .comment-actions {
+            margin-left: 48px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .comment-actions button {
+            border: 0;
+            background: transparent;
+            color: #765C61;
+            cursor: pointer;
+        }
+
+        .comment-actions button:hover {
+            color: #6E1424;
+        }
+
+        .empty-comments {
+            color: #765C61;
+            padding: 15px 0;
+        }
+
+        .error-box {
+            text-align: center;
+            padding: 50px 20px;
+            background: #fff8f5;
+            border-radius: 28px;
+        }
+
+        .error-box h1 {
+            color: #6E1424;
+        }
+
+        @media (max-width: 600px) {
+            .post-page {
+                padding: 20px 12px 70px;
+            }
+
+            .post-full-card,
+            .comments-section {
+                padding: 20px;
+                border-radius: 22px;
+            }
+
+            .post-text {
+                font-size: 16px;
+            }
+
+            .comment-form-bottom {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .send-comment {
+                width: 100%;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-    <!-- CABEÇALHO -->
-    <header>
-        <div class="header-container">
+    <main class="post-page">
 
-            <a href="index.html" class="logo">
-                Entre Nós ♡
-            </a>
-
-            <nav>
-                <a href="index.html">Início</a>
-                <a href="index.html#explorar">Explorar</a>
-                <a href="index.html#categorias">Categorias</a>
-            </nav>
-
-            <button class="btn btn-principal">
-                Meu perfil
-            </button>
-
-        </div>
-    </header>
-
-
-    <main>
-
-        <!-- BOTÃO VOLTAR -->
-        <a href="index.html" class="voltar">
+        <a href="index.html" class="back-link">
             ← Voltar para os posts
         </a>
 
+        <div id="postContainer">
+            <div class="post-full-card">
+                <p>Carregando publicação...</p>
+            </div>
+        </div>
 
-        <!-- POST PRINCIPAL -->
-        <article class="post-card post-detalhe">
+        <section class="comments-section" id="commentsSection">
 
-            <div class="post-topo">
+            <h2>Comentários ♡</h2>
 
-                <div class="usuario">
+            <form class="comment-form" id="commentForm">
 
-                    <div class="avatar">
-                        🌸
-                    </div>
+                <textarea
+                    id="commentInput"
+                    placeholder="Escreva um conselho, conte sua experiência ou deixe uma mensagem...">
+                </textarea>
 
-                    <div>
+                <div class="comment-form-bottom">
 
-                        <div class="nome-usuario">
-                            Anônima
-                        </div>
+                    <label class="anonymous-label">
+                        <input type="checkbox" id="anonymousComment" checked>
+                        Comentar anonimamente
+                    </label>
 
-                        <div class="tempo-post">
-                            há 2 horas
-                        </div>
-
-                    </div>
+                    <button type="submit" class="send-comment">
+                        Enviar comentário
+                    </button>
 
                 </div>
 
-            </div>
+            </form>
 
-
-            <div class="post-categoria">
-                🤷 Ele gosta de mim?
-            </div>
-
-
-            <h1 id="titulo-post">
-                Carregando...
-            </h1>
-
-
-            <p id="texto-post">
-                Carregando...
-            </p>
-
-
-            <div class="post-acoes">
-
-                <button class="acao curtir">
-                    ♡ <span id="numero-curtidas">0</span>
-                </button>
-
-                <button class="acao">
-                    💬 Comentários
-                </button>
-
-                <button class="acao salvar">
-                    🔖 Salvar
-                </button>
-
-            </div>
-
-        </article>
-
-
-        <!-- COMENTÁRIOS -->
-        <section class="comentarios-area">
-
-            <h2>
-                Comentários ♡
-            </h2>
-
-
-            <div id="lista-comentarios">
-
-                <div class="comentario">
-
-                    <strong>🌸 Anônima</strong>
-
-                    <p>
-                        Você não está sozinha nisso 🩷
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <!-- ADICIONAR COMENTÁRIO -->
-
-            <div class="adicionar-comentario">
-
-                <input
-                    type="text"
-                    id="input-comentario"
-                    placeholder="Escreva um comentário..."
-                >
-
-                <button
-                    class="btn btn-principal"
-                    id="enviar-comentario"
-                >
-                    Enviar
-                </button>
-
-            </div>
+            <div id="commentsList"></div>
 
         </section>
 
     </main>
 
+    <div id="toast" class="toast"></div>
 
-    <footer>
+    <script src="js/app.js"></script>
 
-        Feito com <span>♡</span>
-        para quem precisa de um lugar para falar.
+    <script>
 
-        <br><br>
+        const posts = {
+            1: {
+                id: 1,
+                categoria: "🤷 Ele gosta de mim?",
+                avatar: "🌸",
+                nome: "Anônima",
+                tempo: "há 2 horas",
+                titulo: "Eu não consigo entender os sinais dele...",
+                texto: "Gente, eu realmente não consigo entender os sinais dele. Às vezes parece que ele gosta de mim, conversa comigo e demonstra interesse, mas em outros momentos fica completamente distante. Não sei se estou criando expectativas ou se realmente existe alguma coisa ali. O que vocês acham?",
+                views: 128
+            },
 
-        © 2026 Entre Nós
+            2: {
+                id: 2,
+                categoria: "🆘 Preciso de conselho",
+                avatar: "🌷",
+                nome: "Anônima",
+                tempo: "há 5 horas",
+                titulo: "Vocês fariam o quê no meu lugar?",
+                texto: "Estou passando por uma situação complicada e não sei se devo continuar insistindo ou simplesmente seguir em frente. Preciso muito de uma opinião sincera.",
+                views: 94
+            },
 
-    </footer>
+            3: {
+                id: 3,
+                categoria: "💕 Paixão",
+                avatar: "🌙",
+                nome: "Lua",
+                tempo: "ontem",
+                titulo: "Acho que estou começando a gostar dele...",
+                texto: "Eu não queria me apaixonar, mas acho que já era. Toda vez que ele aparece eu fico completamente diferente. Só não sei se devo falar alguma coisa.",
+                views: 76
+            }
+        };
 
 
-    <script src="script.js"></script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const postId = Number(urlParams.get("id")) || 1;
+
+        const post = posts[postId];
+
+        const postContainer = document.getElementById("postContainer");
+        const commentsList = document.getElementById("commentsList");
+        const commentForm = document.getElementById("commentForm");
+        const commentInput = document.getElementById("commentInput");
+        const anonymousComment = document.getElementById("anonymousComment");
+
+
+        function getComments() {
+
+            try {
+                return JSON.parse(
+                    localStorage.getItem("entreNos_comments_" + postId)
+                ) || [];
+            } catch {
+                return [];
+            }
+
+        }
+
+
+        function saveComments(comments) {
+
+            localStorage.setItem(
+                "entreNos_comments_" + postId,
+                JSON.stringify(comments)
+            );
+
+        }
+
+
+        function showToast(message) {
+
+            const toast = document.getElementById("toast");
+
+            if (!toast) return;
+
+            toast.textContent = message;
+            toast.classList.add("show");
+
+            setTimeout(() => {
+                toast.classList.remove("show");
+            }, 2500);
+
+        }
+
+
+        function renderPost() {
+
+            if (!post) {
+
+                postContainer.innerHTML = `
+                    <div class="error-box">
+                        <h1>Ops! ♡</h1>
+                        <p>Essa publicação não foi encontrada.</p>
+                        <a href="index.html" class="back-link">
+                            Voltar para o início
+                        </a>
+                    </div>
+                `;
+
+                document.getElementById("commentsSection").style.display = "none";
+
+                return;
+            }
+
+
+            postContainer.innerHTML = `
+
+                <article class="post-full-card">
+
+                    <div class="post-author">
+
+                        <div class="post-avatar">
+                            ${post.avatar}
+                        </div>
+
+                        <div>
+                            <strong>${post.nome}</strong>
+                            <small>${post.tempo}</small>
+                        </div>
+
+                    </div>
+
+
+                    <div class="post-category">
+                        ${post.categoria}
+                    </div>
+
+
+                    <h1 class="post-title">
+                        ${post.titulo}
+                    </h1>
+
+
+                    <div class="post-text">
+                        ${post.texto}
+                    </div>
+
+
+                    <div class="post-meta">
+
+                        <span>👁️ ${post.views} visualizações</span>
+
+                        <span>💬 <span id="commentCount">0</span> comentários</span>
+
+                    </div>
+
+
+                    <div class="post-actions">
+
+                        <button
+                            class="post-action"
+                            id="supportButton"
+                            type="button">
+                            ♡ Apoiar
+                        </button>
+
+                        <button
+                            class="post-action"
+                            id="saveButton"
+                            type="button">
+                            🔖 Salvar
+                        </button>
+
+                        <button
+                            class="post-action"
+                            id="shareButton"
+                            type="button">
+                            ↗ Compartilhar
+                        </button>
+
+                    </div>
+
+                </article>
+
+            `;
+
+
+            setupPostButtons();
+            updateCommentCount();
+
+        }
+
+
+        function setupPostButtons() {
+
+            const supportButton = document.getElementById("supportButton");
+            const saveButton = document.getElementById("saveButton");
+            const shareButton = document.getElementById("shareButton");
+
+
+            supportButton.addEventListener("click", () => {
+
+                const reactions = JSON.parse(
+                    localStorage.getItem("entreNos_reactions") || "{}"
+                );
+
+                if (reactions[postId]) {
+
+                    delete reactions[postId];
+
+                    supportButton.innerHTML = "♡ Apoiar";
+                    supportButton.classList.remove("active");
+
+                    showToast("Apoio removido.");
+
+                } else {
+
+                    reactions[postId] = "❤️";
+
+                    supportButton.innerHTML = "❤️ Apoiado";
+                    supportButton.classList.add("active");
+
+                    showToast("Você apoiou essa publicação ❤️");
+
+                }
+
+                localStorage.setItem(
+                    "entreNos_reactions",
+                    JSON.stringify(reactions)
+                );
+
+            });
+
+
+            saveButton.addEventListener("click", () => {
+
+                let saved = JSON.parse(
+                    localStorage.getItem("entreNos_savedPosts") || "[]"
+                );
+
+                if (saved.includes(postId)) {
+
+                    saved = saved.filter(id => id !== postId);
+
+                    saveButton.innerHTML = "🔖 Salvar";
+                    saveButton.classList.remove("active");
+
+                    showToast("Publicação removida dos salvos.");
+
+                } else {
+
+                    saved.push(postId);
+
+                    saveButton.innerHTML = "🔖 Salvo";
+                    saveButton.classList.add("active");
+
+                    showToast("Publicação salva ❤️");
+
+                }
+
+                localStorage.setItem(
+                    "entreNos_savedPosts",
+                    JSON.stringify(saved)
+                );
+
+            });
+
+
+            shareButton.addEventListener("click", async () => {
+
+                const shareUrl =
+                    window.location.origin +
+                    window.location.pathname +
+                    "?id=" +
+                    postId;
+
+                try {
+
+                    if (navigator.share) {
+
+                        await navigator.share({
+                            title: post.titulo,
+                            text: "Olha essa publicação no Entre Nós ♡",
+                            url: shareUrl
+                        });
+
+                    } else {
+
+                        await navigator.clipboard.writeText(shareUrl);
+
+                        showToast("Link copiado! ♡");
+
+                    }
+
+                } catch {
+
+                    // usuário cancelou o compartilhamento
+
+                }
+
+            });
+
+
+            restorePostState();
+
+        }
+
+
+        function restorePostState() {
+
+            const reactions = JSON.parse(
+                localStorage.getItem("entreNos_reactions") || "{}"
+            );
+
+            const saved = JSON.parse(
+                localStorage.getItem("entreNos_savedPosts") || "[]"
+            );
+
+
+            const supportButton =
+                document.getElementById("supportButton");
+
+            const saveButton =
+                document.getElementById("saveButton");
+
+
+            if (reactions[postId]) {
+
+                supportButton.innerHTML = "❤️ Apoiado";
+                supportButton.classList.add("active");
+
+            }
+
+
+            if (saved.includes(postId)) {
+
+                saveButton.innerHTML = "🔖 Salvo";
+                saveButton.classList.add("active");
+
+            }
+
+        }
+
+
+        function renderComments() {
+
+            const comments = getComments();
+
+            commentsList.innerHTML = "";
+
+
+            if (comments.length === 0) {
+
+                commentsList.innerHTML = `
+                    <p class="empty-comments">
+                        Ainda não há comentários. Seja a primeira a responder ♡
+                    </p>
+                `;
+
+                updateCommentCount();
+
+                return;
+
+            }
+
+
+            comments.forEach((comment, index) => {
+
+                const div = document.createElement("div");
+
+                div.className = "comment";
+
+                div.innerHTML = `
+
+                    <div class="comment-head">
+
+                        <div class="comment-avatar">
+                            ${comment.anonymous ? "🌸" : "💗"}
+                        </div>
+
+                        <div>
+                            <strong>
+                                ${comment.anonymous ? "Anônima" : "Você"}
+                            </strong>
+
+                            <small>
+                                ${comment.time}
+                            </small>
+                        </div>
+
+                    </div>
+
+
+                    <div class="comment-text">
+                        ${escapeHTML(comment.text)}
+                    </div>
+
+
+                    <div class="comment-actions">
+
+                        <button
+                            type="button"
+                            onclick="likeComment(${index})">
+                            ♡ Apoiar
+                        </button>
+
+                        <button
+                            type="button"
+                            onclick="deleteComment(${index})">
+                            Excluir
+                        </button>
+
+                    </div>
+
+                `;
+
+                commentsList.appendChild(div);
+
+            });
+
+
+            updateCommentCount();
+
+        }
+
+
+        function updateCommentCount() {
+
+            const count = getComments().length;
+
+            const element =
+                document.getElementById("commentCount");
+
+            if (element) {
+                element.textContent = count;
+            }
+
+        }
+
+
+        function escapeHTML(text) {
+
+            const div = document.createElement("div");
+
+            div.textContent = text;
+
+            return div.innerHTML;
+
+        }
+
+
+        commentForm.addEventListener("submit", (event) => {
+
+            event.preventDefault();
+
+            const text = commentInput.value.trim();
+
+
+            if (!text) {
+
+                showToast("Escreva alguma coisa primeiro ♡");
+
+                return;
+
+            }
+
+
+            const comments = getComments();
+
+
+            comments.push({
+
+                text: text,
+
+                anonymous: anonymousComment.checked,
+
+                time: "agora"
+
+            });
+
+
+            saveComments(comments);
+
+            commentInput.value = "";
+
+            renderComments();
+
+            showToast("Comentário enviado! ♡");
+
+        });
+
+
+        window.likeComment = function(index) {
+
+            showToast("Apoio enviado ❤️");
+
+        };
+
+
+        window.deleteComment = function(index) {
+
+            if (!confirm("Excluir este comentário?")) {
+                return;
+            }
+
+
+            const comments = getComments();
+
+            comments.splice(index, 1);
+
+            saveComments(comments);
+
+            renderComments();
+
+            showToast("Comentário excluído.");
+
+        };
+
+
+        renderPost();
+        renderComments();
+
+    </script>
 
 </body>
-
 </html>
